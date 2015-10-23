@@ -3,7 +3,7 @@ function Get-NSLBStat {
     param(
         $Session = $script:nitroSession,
 
-        [parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
+        [parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Name
     )
 

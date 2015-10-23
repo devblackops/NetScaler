@@ -1,4 +1,4 @@
-function New-NSLBServer {
+function New-NSLBMonitor {
     [cmdletbinding(SupportsShouldProcess, ConfirmImpact='Low')]
     param(
         $Session = $script:nitroSession,
@@ -26,7 +26,7 @@ function New-NSLBServer {
         [int]$ResponseTimeout = 2, #resptimeout
 
         [ValidateSet('SEC', 'MSEC', 'MIN')]
-        [int]$ResponseTimeoutType = 'SEC', #units4
+        [string]$ResponseTimeoutType = 'SEC', #units4
 
         [int]$DestinationPort, #destport
 
@@ -46,7 +46,7 @@ function New-NSLBServer {
         [int]$ResponseTimeoutThreshold, #resptimeoutthresh
 
         [ValidateRange(0, 32)]
-        [int]$NSMPAlertRetries, #alertretries
+        [int]$AlertRetries, #alertretries
 
         [ValidateRange(0, 32)]
         [int]$SuccessRetries = 1, # successretries 
@@ -88,7 +88,9 @@ function New-NSLBServer {
 
         [int]$DispatcherPort, #dispatcherport
 
-        [string]$ScriptArgs #scriptargs
+        [string]$ScriptArgs, #scriptargs
+
+        [switch]$PassThru
     )
 
     begin {
@@ -96,14 +98,67 @@ function New-NSLBServer {
     }
 
     process {
-
-        # com.citrix.netscaler.nitro.resource.config.lb.lbmonitor
-
-
         foreach ($item in $Name) {
+            if ($PSCmdlet.ShouldProcess($item, 'Create Server')) {
+                $m = New-Object com.citrix.netscaler.nitro.resource.config.lb.lbmonitor
+                $m.monitorname = $name
+                $m.type = $Type
+                $m.interval = $Interval
+                $m.units3 = $IntervalType
+                if ($PSBoundParameters.ContainsKey('DestinationIP')) {
+                    $m.destip = $DestinationIP
+                }
+                $m.resptimeout = $ResponseTimeout
+                $m.units4 = $ResponseTimeoutType
+                if ($PSBoundParameters.ContainsKey('DestinationPort')) {
+                    $m.destport = $DestinationPort
+                }
+                $m.downtime = $Downtime
+                $m.units2 = $DowntimeType
+                if ($PSBoundParameters.ContainsKey('Deviation')) {
+                    $m.deviation = $Deviation
+                }
+                $m.retries = $Retries
+                if ($PSBoundParameters.ContainsKey('ResponseTimeoutThreshold')) {
+                    $m.resptimeoutthresh = $ResponseTimeoutThreshold
+                }
+                if ($PSBoundParameters.ContainsKey('AlertRetries')) {
+                    $m.alertretries = $AlertRetries
+                }
+                $m.successretries = $SuccessRetries
+                if ($PSBoundParameters.ContainsKey('FailureRetries')) {
+                    $m.failureretries = $FailureRetries
+                }
+                if ($PSBoundParameters.ContainsKey('NetProfile')) {
+                    $m.netprofile = $NetProfile
+                }
+                $m.tos = $TOS
+                if ($PSBoundParameters.ContainsKey('TOSID')) {
+                    $m.tosid = $TOSID
+                }
+                $m.state = $state
+                $m.reverse = $Reverse
+                $m.transparent = $Transparent
+                $m.lrtm = $LRTM
+                $m.secure = $Secure
+                $m.iptunnel = $IPTunnel
+                if ($PSBoundParameters.ContainsKey('ScriptName')) {
+                    $m.scriptname = $ScriptName
+                }
+                if ($PSBoundParameters.ContainsKey('DispatcherIP')) {
+                    $m.dispatcherip = $DispatcherIP
+                }
+                if ($PSBoundParameters.ContainsKey('ScriptArgs')) {
+                    $m.scriptargs = $ScriptArgs
+                }
+                
+                $result = [com.citrix.netscaler.nitro.resource.config.lb.lbmonitor]::add($session, $m)
+                if ($result.errorcode -ne 0) { throw $result }
 
-
-
+                if ($PSBoundParameters.ContainsKey('PassThru')) {
+                    return Get-NSLBMonitor -Name $item
+                }
+            }
         }
     }
 }
