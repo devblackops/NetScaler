@@ -15,6 +15,22 @@ limitations under the License.
 #>
 
 function Disconnect-NetScaler {
+    <#
+    .SYNOPSIS
+        Disconnect session with NetScaler.
+
+    .DESCRIPTION
+        Disconnect session with NetScaler.
+
+    .EXAMPLE
+        Disconnet-NetScaler
+
+    .EXAMPLE
+        Disconnet-NetScaler -Session $session
+
+    .PARAMETER Session
+        The NetScaler session object
+    #>
     [cmdletbinding()]
     param(
         $Session = $script:nitroSession

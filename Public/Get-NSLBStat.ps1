@@ -15,6 +15,29 @@ limitations under the License.
 #>
 
 function Get-NSLBStat {
+    <#
+    .SYNOPSIS
+        Gets the specified load balancer stat object.
+
+    .DESCRIPTION
+        Gets the specified load balancer stat object.
+
+    .EXAMPLE
+        Get-NSLBStat
+
+        Get all load balancer stat objects.
+
+    .EXAMPLE
+        Get-NSLBStat -Name 'stat01'
+    
+        Get the load balancer stat named 'stat01'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer stat to get.
+    #>
     [cmdletbinding()]
     param(
         $Session = $script:nitroSession,

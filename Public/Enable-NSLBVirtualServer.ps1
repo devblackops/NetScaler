@@ -15,6 +15,40 @@ limitations under the License.
 #>
 
 function Enable-NSLBVirtualServer {
+    <#
+    .SYNOPSIS
+        Enable load balancer virtual server object.
+
+    .DESCRIPTION
+        Enable load balancer virtual server object.
+
+    .EXAMPLE
+        Enable-NSLBVirtualServer -Name 'vserver01'
+
+        Enable the load balancer virtual server 'vserver01'.
+
+    .EXAMPLE
+        'vserver01', 'vserver02' | Enable-NSLBVirtualServer -Force
+    
+        Enable the load balancer virtual servers 'vserver01' and 'vserver02' without confirmation.
+
+    .EXAMPLE
+        $vserver = Enable-NSLBVirtualServer -Name 'vserver01' -Force -PassThru
+
+        Enable the load balancer virtual server 'vserver01' without confirmation and return the resulting object.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer virtual servers to enable.
+
+    .PARAMETER Force
+        Suppress confirmation when enabling the virtual server.
+
+    .PARAMETER PassThru
+        Return the load balancer virtual server object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:nitroSession,

@@ -15,6 +15,40 @@ limitations under the License.
 #>
 
 function Enable-NSLBServer {
+    <#
+    .SYNOPSIS
+        Enable load balancer server object.
+
+    .DESCRIPTION
+        Enable load balancer server object.
+
+    .EXAMPLE
+        Enable-NSLBServer -Name 'server01'
+
+        Enable the load balancer server 'server01'.
+
+    .EXAMPLE
+        'server01', 'server02' | Enable-NSLBServer -Force
+    
+        Enable the monitors 'monitor01' and 'monitor02' without confirmation.
+
+    .EXAMPLE
+        $server = Enable-NSLBServer -Name 'server01' -Force -PassThru
+
+        Enable the load balancer server 'server01' without confirmation and return the resulting object.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer servers to enable.
+
+    .PARAMETER Force
+        Suppress confirmation when enabling the server.
+
+    .PARAMETER PassThru
+        Return the load balancer server object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:nitroSession,

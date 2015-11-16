@@ -15,6 +15,97 @@ limitations under the License.
 #>
 
 function Set-NSLBServiceGroup {
+    <#
+    .SYNOPSIS
+        Updates an existing load balancer virtual server.
+
+    .DESCRIPTION
+        Updates an existing load balancer virtual server.
+
+    .EXAMPLE
+        Set-NSLBServiceGroup -Name 'sg01' -Comment 'This is a comment'
+
+        Sets the comment for virtual server 'sg01'.
+
+    .EXAMPLE
+        Set-NSLBServiceGroup -Name 'sg01' HTTPCompression = 'ON'
+    
+        Enable the HTTP compression feature for service group 'sg01'.
+
+    .EXAMPLE
+        Set-NSLBVirtualServer -Name 'sg01' MaxBandwithKbps 819200
+    
+        Set the maximum bandwidth for service group 'sg01' to 819200 Kbps.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the service groups to update.
+
+    .PARAMETER Cachable
+        Use the transparent cache redirection virtual server to forward the request to the cache server.
+
+    .PARAMETER HealthMonitor
+        Monitor the health of this service.
+
+    .PARAMETER AppFlowLog
+        Enable logging of AppFlow information.
+
+    .PARAMETER Comment
+        The comment associated with the virtual server.
+
+    .PARAMETER SureConnet
+        State of the SureConnect feature.
+
+    .PARAMETER SurgeProtection
+        Enable surge protection.
+
+    .PARAMETER UseProxyPort
+        Use the proxy port as the source port when initiating connections with the server.
+
+    .PARAMETER DownStateFlush
+        Flush all active transactions associated with all the services in the service group whose state transitions from UP to DOWN. 
+
+    .PARAMETER UseClientIP
+        Use client's IP address as the source IP address when initiating connection to the server.
+
+    .PARAMETER TCPBuffering
+        Enable TCP buffering for the service group.
+
+    .PARAMETER HTTPCompression
+        Enable compression.
+
+    .PARAMETER ClientIP
+        Insert the Client IP header in requests forwarded to the service.
+
+    .PARAMETER ClientIPHeader
+        Name of the HTTP header whose value must be set to the IP address of the client.
+
+    .PARAMETER MaxBandwithKbps
+        Maximum bandwidth, in Kbps, allocated for all the services in the service group.
+
+    .PARAMETER MonitorThreshold
+        Minimum sum of weights of the monitors that are bound to this service.
+
+    .PARAMETER MaxRequests
+        Maximum number of requests that can be sent on a persistent connection to the service group.
+
+    .PARAMETER MaxClients
+        Maximum number of simultaneous open connections for the service group.
+
+    .PARAMETER ClientIdleTimeout
+        Time, in seconds, after which to terminate an idle client connection.
+
+    .PARAMETER ServerIdleTimeout
+        Time, in seconds, after which to terminate an idle server connection.
+
+    .PARAMETER Force
+        Suppress confirmation when updating a service group.
+
+    .PARAMETER Passthru
+        Return the service group object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Medium')]
     param(
         $Session = $script:nitroSession,

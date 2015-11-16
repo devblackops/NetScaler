@@ -15,6 +15,29 @@ limitations under the License.
 #>
 
 function Get-NSLBServer {
+    <#
+    .SYNOPSIS
+        Gets the specified load balancer server object.
+
+    .DESCRIPTION
+        Gets the specified load balancer server object.
+
+    .EXAMPLE
+        Get-NSLBServer
+
+        Get all load balancer server objects.
+
+    .EXAMPLE
+        Get-NSLBServer -Name 'server01'
+    
+        Get the load balancer server named 'server01'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer servers to get.
+    #>
     [cmdletbinding()]
     param(
         $Session = $script:nitroSession,

@@ -15,6 +15,22 @@ limitations under the License.
 #>
 
 function Save-NSConfig {
+    <#
+    .SYNOPSIS
+        Save NetScaler configuration.
+
+    .DESCRIPTION
+        Save NetScaler configuration.
+
+    .EXAMPLE
+        Save-NSConfig
+
+    .EXAMPLE
+        Save-NSConfig -Session $session
+
+    .PARAMETER Session
+        The NetScaler session object.
+    #>
     [cmdletbinding()]
     param(
         $Session = $script:nitroSession

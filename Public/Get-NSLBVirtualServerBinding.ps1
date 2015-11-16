@@ -15,6 +15,29 @@ limitations under the License.
 #>
 
 function Get-NSLBVirtualServerBinding {
+    <#
+    .SYNOPSIS
+        Gets the specified load balancer virtual server binding object.
+
+    .DESCRIPTION
+        Gets the specified load balancer virtual server binding object.
+
+    .EXAMPLE
+        Get-NSLBVirtualServer
+
+        Get all load balancer virtual server objects.
+
+    .EXAMPLE
+        Get-NSLBVirtualServer -Name 'vserver01'
+    
+        Get the load balancer virtual server named 'vserver01'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer virtual server to get.
+    #>
     [cmdletbinding()]
     param(
         $Session = $script:nitroSession,

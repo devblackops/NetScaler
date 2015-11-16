@@ -15,6 +15,41 @@ limitations under the License.
 #>
 
 function Set-NSLBServer {
+    <#
+    .SYNOPSIS
+        Updates an existing load balancer server.
+
+    .DESCRIPTION
+        Updates an existing load balancer server.
+
+    .EXAMPLE
+        Set-NSLBServer -Name 'server01' -IPAddress '10.10.10.10'
+
+        Sets the IP address of the load balancer server named 'server01' to 10.10.10.10.
+
+    .EXAMPLE
+        Set-NSLBServer -Name 'server01' -Comment 'this is a comment' -PassThru
+    
+        Sets the comment for load balancer server 'server01' and returns the updated object.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer servers to set.
+
+    .PARAMETER IPAddress
+        The IP Address of the load balancer server.
+
+    .PARAMETER Comment
+        The comment associated with the load balancer server.
+
+    .PARAMETER Force
+        Suppress confirmation when updating an load balancer server.
+
+    .PARAMETER Passthru
+        Return the load balancer server object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Medium')]
     param(
         $Session = $script:nitroSession,

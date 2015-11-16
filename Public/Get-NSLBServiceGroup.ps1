@@ -15,6 +15,29 @@ limitations under the License.
 #>
 
 function Get-NSLBServiceGroup {
+    <#
+    .SYNOPSIS
+        Gets the specified load balancer service group object.
+
+    .DESCRIPTION
+        Gets the specified load balancer service group object.
+
+    .EXAMPLE
+        Get-NSLBServiceGroup
+
+        Get all load balancer service group objects.
+
+    .EXAMPLE
+        Get-NSLBServiceGroup -Name 'sg01'
+    
+        Get the load balancer service group named 'sg01'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer service group to get.
+    #>
     [cmdletbinding()]
     param(
         $Session = $script:nitroSession,

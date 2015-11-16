@@ -15,6 +15,29 @@ limitations under the License.
 #>
 
 function Get-NSLBMonitor {
+    <#
+    .SYNOPSIS
+        Gets the specified load balancer monitoring object.
+
+    .DESCRIPTION
+        Gets the specified load balancer monitoring object.
+
+    .EXAMPLE
+        Get-NSLBMonitor
+
+        Get all load balancer monitor objects.
+
+    .EXAMPLE
+        Get-NSLBMonitor -Name 'monitor01'
+    
+        Get the load balancer monitor named 'monitor01'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer monitors to get.
+    #>
     [cmdletbinding()]
     param(
         $Session = $script:nitroSession,

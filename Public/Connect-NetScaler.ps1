@@ -15,6 +15,30 @@ limitations under the License.
 #>
 
 function Connect-NetScaler {
+    <#
+    .SYNOPSIS
+        Establish a session with Citrix NetScaler.
+
+    .DESCRIPTION
+        Establish a session with Citrix NetScaler.
+
+    .EXAMPLE
+        Connect-NetScaler -NSIP '10.10.10.10' -Credential (Get-Credential)
+
+        Connect to the NetScaler with IP address 10.10.10.10 and prompt for credentials.
+
+    .PARAMETER NSIP
+        The IP or hostname of the NetScaler.
+
+    .PARAMETER Credential
+        The credential to authenticate to the NetScaler with.
+
+    .PARAMETER Https
+        Use HTTPs to connect to the NetScaler.
+
+    .PARAMETER PassThru
+        Return the NetScaler session object.
+    #>
     [cmdletbinding()]
     param(
         [parameter(mandatory = $true)]
@@ -23,7 +47,9 @@ function Connect-NetScaler {
         [parameter(mandatory = $true)]
         [pscredential]$Credential = (Get-Credential -Message 'NetScaler credential'),
 
-        [switch]$Https
+        [switch]$Https,
+
+        [switch]$PassThru
     )
 
     Write-Verbose -Message "Connecting to $NSIP..."
@@ -36,6 +62,10 @@ function Connect-NetScaler {
         }
         $script:session = $script:nitroSession.Login($Credential.UserName, $Credential.GetNetworkCredential().Password)
         Write-Verbose -Message "Connecting to $NSIP successfully"
+
+        if ($PSBoundParameters.ContainsKey('PassThru')) {
+            return $script:nitroSession
+        }
     } catch {
         throw $_
     }    

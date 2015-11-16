@@ -15,6 +15,38 @@ limitations under the License.
 #>
 
 function New-NSLBVirtualServerBinding {
+     <#
+    .SYNOPSIS
+        Creates a new load balancer server binding to a service group.
+
+    .DESCRIPTION
+        Creates a new load balancer server binding to a service group.
+
+    .EXAMPLE
+        New-NSLBVirtualServerBinding -VirtualServerName 'vserver01' -ServiceGroupName 'sg01'
+
+        Bind the service group 'sg01' to virtual server 'vserver01'.
+
+    .EXAMPLE
+        $x = New-NSLBVirtualServerBinding -VirtualServerName 'vserver01' -ServiceGroupName 'sg01' -Force -PassThru
+    
+        Bind the service group 'sg01' to virtual server 'vserver01', suppress the confirmation and returl the result.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER VitualServerName
+        The name of the virtual server to bind the service group to.
+
+    .PARAMETER ServiceGroupName
+        The name of the service group to bind the virtual server to.
+
+    .PARAMETER Force
+        Suppress confirmation when binding the service group to the virtual server.
+
+    .PARAMETER Passthru
+        Return the load balancer server object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Medium')]
     param(
         $Session = $script:nitroSession,
@@ -25,8 +57,8 @@ function New-NSLBVirtualServerBinding {
         [parameter(Mandatory = $true)]
         [string]$ServiceGroupName = (Read-Host -Prompt 'LB service group name'),
 
-        [ValidateRange(1, 100)]
-        [int]$Weight = 1,
+        #[ValidateRange(1, 100)]
+        #[int]$Weight = 1,
 
         [Switch]$Force,
 

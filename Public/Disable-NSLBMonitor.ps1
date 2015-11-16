@@ -18,6 +18,40 @@ limitations under the License.
 #Doesn't work yet
 #
 function Disable-NSLBMonitor {
+    <#
+    .SYNOPSIS
+        Disable load balancer monitoring object.
+
+    .DESCRIPTION
+        Disable load balancer monitoring object.
+
+    .EXAMPLE
+        Disable-NSLBMonitor -Name 'monitor01'
+
+        Disable the monitor 'monitor01'.
+
+    .EXAMPLE
+        'monitor01', 'monitor02' | Disable-NSLBMonitor -Force
+    
+        Disable the monitors 'monitor01' and 'monitor02' without confimation.
+
+    .EXAMPLE
+        $monitor = Disable-NSLBMonitor -Name 'monitor01' -Force -PassThru
+
+        Disable the monitor 'monitor01' without confimation and return the resulting object.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer monitors to disable.
+
+    .PARAMETER Force
+        Suppress confirmation when disabling the monitor.
+
+    .PARAMETER PassThru
+        Return the load balancer monitor object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:nitroSession,

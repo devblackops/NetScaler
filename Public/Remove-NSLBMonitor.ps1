@@ -15,6 +15,32 @@ limitations under the License.
 #>
 
 function Remove-NSLBMonitor {
+    <#
+    .SYNOPSIS
+        Removes a load balancer monitor.
+
+    .DESCRIPTION
+        Removes a load balancer monitor.
+
+    .EXAMPLE
+        Remove-NSLBMonitor -Name 'monitor01'
+
+        Removes the load balancer monitor named 'monitor01'.
+
+    .EXAMPLE
+        'monitor01', 'monitor02' | Remove-NSLBMonitor
+    
+        Removes the load balancer monitors named 'monitor01' and 'monitor02'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer monitor to get.
+
+    .PARAMETER Force
+        Suppress confirmation when removing a load balancer monitor.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:nitroSession,

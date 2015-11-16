@@ -15,6 +15,32 @@ limitations under the License.
 #>
 
 function Remove-NSLBVirtualServerBinding {
+    <#
+    .SYNOPSIS
+        Removes a load balancer virtual server binding.
+
+    .DESCRIPTION
+        Removes a load balancer virtual server binding.
+
+    .EXAMPLE
+        Remove-NSLBVirtualServerBinding -Name 'binding01'
+
+        Removes the load balancer virtual server named 'binding01'.
+
+    .EXAMPLE
+        'binding01', 'binding02' | Remove-NSLBVirtualServerBinding
+    
+        Removes the load balancer virtual servers named 'binding01' and 'binding02'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer bindings to get.
+
+    .PARAMETER Force
+        Suppress confirmation when removing a load balancer binding.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:nitroSession,

@@ -15,6 +15,50 @@ limitations under the License.
 #>
 
 function New-NSLBServiceGroupMember {
+    <#
+    .SYNOPSIS
+        Adds a load balancer server to a service group.
+
+    .DESCRIPTION
+        Adds a load balancer server to a service group.
+
+    .EXAMPLE
+        New-NSLBServiceGroupMember -Name 'sg01' -ServerName 'server01'
+
+        Associates server 'server01' with service group 'sg01'
+
+    .EXAMPLE
+        $x = New-NSLBServiceGroupMember -Name 'sg01' -ServerName 'server01' -State 'DISABLED' -PassThru
+    
+        Associates server 'server01' with service group 'sg01' initially in a DISABLED state and return the object.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name of the service group to associated the server with.
+
+    .PARAMETER ServerName
+        The name of the server to attach to the service group.
+
+    .PARAMETER Port
+        The port of the server.
+
+    .PARAMETER Weight
+        Weight to assign to the server in the service group.
+
+    .PARAMETER ServerId
+        The identifier for the service.
+
+    .PARAMETER HashId
+        The hash identifier for the service.
+
+    .PARAMETER State
+        The initial state of the server in the service group.
+
+    .PARAMETER Passthru
+        Return the service group binding object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
         $Session = $script:nitroSession,
@@ -27,7 +71,7 @@ function New-NSLBServiceGroupMember {
         [string[]]$ServerName,
 
         [ValidateRange(1, 65535)]
-        [int]$Port,
+        [int]$Port = 80,
 
         [ValidateRange(1, 100)]
         [int]$Weight = 1,
@@ -49,9 +93,7 @@ function New-NSLBServiceGroupMember {
 
     process {
         foreach ($item in $Name) {
-
             foreach ($member in $ServerName) {
-
                 if ($PSCmdlet.ShouldProcess($item, "Add Service Group Member: $Member")) {
                     $b = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.basic.servicegroup_servicegroupmember_binding
                     $b.servicegroupname = $item

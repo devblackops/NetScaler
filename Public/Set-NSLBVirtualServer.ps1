@@ -15,6 +15,49 @@ limitations under the License.
 #>
 
 function Set-NSLBVirtualServer {
+    <#
+    .SYNOPSIS
+        Updates an existing load balancer virtual server.
+
+    .DESCRIPTION
+        Updates an existing load balancer virtual server.
+
+    .EXAMPLE
+        Set-NSLBVirtualServer -Name 'vserver01' -LBMethod 'ROUNDROBIN'
+
+        Sets the load balancing method for virtual server 'vserver01' to 'ROUNDROBIN'.
+
+    .EXAMPLE
+        Set-NSLBVirtualServer -Name 'vserver01' -Comment 'this is a comment' -PassThru
+    
+        Sets the comment for virtual server 'vserver01' and returns the updated object.
+
+    .EXAMPLE
+        Set-NSLBVirtualServer -Name 'vserver01' -IPAddress '11.11.11.11' -Force
+    
+        Sets the IP address for virtual server 'vserver01' to '11.11.11.11' and suppresses confirmation.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer virtual servers to set.
+
+    .PARAMETER LBMethod
+        The load balancing method of the virtual server.
+
+    .PARAMETER IPAddress
+        The IP Address of the virtual server.
+
+    .PARAMETER Comment
+        The comment associated with the virtual server.
+
+    .PARAMETER Force
+        Suppress confirmation when updating a virtual server.
+
+    .PARAMETER Passthru
+        Return the virtual server object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Medium')]
     param(
         $Session = $script:nitroSession,

@@ -15,6 +15,45 @@ limitations under the License.
 #>
 
 function New-NSLBServer {
+    <#
+    .SYNOPSIS
+        Creates a new load balancer server.
+
+    .DESCRIPTION
+        Creates a new load balancer server.
+
+    .EXAMPLE
+        New-NSLBServer -Name 'server01' -IPAddress '10.10.10.10'
+
+        Creates a new load balancer server named 'server01' with an IP address of '10.10.10.10'.
+
+    .EXAMPLE
+        $x = New-NSLBServer -Name 'server01' -IPAddress '10.10.10.10' -State 'DISABLED' -PassThru
+    
+        Creates a new load balancer server named 'server01' with an initial state of 'DISABLED'
+        and returns the newly created object.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer servers to create.
+
+    .PARAMETER IPAddress
+        The IP Address of the load balancer server.
+
+    .PARAMETER Comment
+        The comment associated with the load balancer server.
+
+    .PARAMETER TrafficDomainId
+        The traffic domain ID for the server.
+
+    .PARAMETER State
+        The initial state of the newly created load balancer server.
+
+    .PARAMETER Passthru
+        Return the load balancer server object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
         $Session = $script:nitroSession,

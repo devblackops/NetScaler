@@ -15,6 +15,32 @@ limitations under the License.
 #>
 
 function Remove-NSLBServiceGroup {
+    <#
+    .SYNOPSIS
+        Removes a load balancer service group.
+
+    .DESCRIPTION
+        Removes a load balancer service group.
+
+    .EXAMPLE
+        Remove-NSLBServiceGroup -Name 'sg01'
+
+        Removes the load balancer service group named 'sg01'.
+
+    .EXAMPLE
+        'sg01', 'sg02' | Remove-NSLBServiceGroup
+    
+        Removes the load balancer service groups named 'sg01' and 'sg02'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer service group to get.
+
+    .PARAMETER Force
+        Suppress confirmation when removing a load balancer service group.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:nitroSession,

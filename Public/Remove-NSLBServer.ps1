@@ -15,6 +15,32 @@ limitations under the License.
 #>
 
 function Remove-NSLBServer {
+    <#
+    .SYNOPSIS
+        Removes a load balancer server.
+
+    .DESCRIPTION
+        Removes a load balancer server.
+
+    .EXAMPLE
+        Remove-NSLBServer -Name 'server01'
+
+        Removes the load balancer server named 'server01'.
+
+    .EXAMPLE
+        'server01', 'server02' | Remove-NSLBServer
+    
+        Removes the load balancer servers named 'server01' and 'server02'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer server to get.
+
+    .PARAMETER Force
+        Suppress confirmation when removing a load balancer server.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:nitroSession,

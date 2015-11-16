@@ -15,6 +15,47 @@ limitations under the License.
 #>
 
 function New-NSLBVirtualServer {
+    <#
+    .SYNOPSIS
+        Creates a new load balancer virtual server.
+
+    .DESCRIPTION
+        Creates a new load balancer virtual server.
+
+    .EXAMPLE
+        New-NSLBVirtualServer -Name 'vserver01' -IPAddress '10.10.10.10'
+
+        Create a new virtual server named 'vserver01' with an IP address of '10.10.10.10'
+
+    .EXAMPLE
+        New-NSLBVirtualServer -Name 'vserver01' -IPAddress '10.10.10.10' -Port 8080 -ServiceType 'HTTP' -LBMethod 'ROUNDROBIN'
+    
+        Create a new virtual server named 'vserver01' listening on port 8080 with a load balancing method of 'ROUNDROBIN'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the virtual servers to create.
+
+    .PARAMETER IPAddress
+        The IP address for the new virtual server.
+
+    .PARAMETER Comment
+        The comment associated with the new virtual server.
+
+    .PARAMETER Port
+        The port the new virtual server will listen on.
+
+    .PARAMETER ServiceType
+        The service type for the virtual server.
+
+    .PARAMETER LBMethod
+        The load balancing method for the new virtual server.
+
+    .PARAMETER Passthru
+        Return the load balancer server object.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
         $Session = $script:nitroSession,
@@ -22,12 +63,12 @@ function New-NSLBVirtualServer {
         [parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB virtual server name'),
 
-        [ValidateLength(0, 256)]
-        [string]$Comment = '',
-
         [parameter(Mandatory)]
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string]$IPAddress,
+
+        [ValidateLength(0, 256)]
+        [string]$Comment = '',
 
         [ValidateRange(1, 65534)]
         [int]$Port = 80,

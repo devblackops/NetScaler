@@ -15,6 +15,32 @@ limitations under the License.
 #>
 
 function Remove-NSLBVirtualServer {
+    <#
+    .SYNOPSIS
+        Removes a load balancer virtual server.
+
+    .DESCRIPTION
+        Removes a load balancer virtual server.
+
+    .EXAMPLE
+        Remove-NSLBVirtualServer -Name 'vserver01'
+
+        Removes the load balancer virtual server named 'vserver01'.
+
+    .EXAMPLE
+        'vserver01', 'vserver02' | Remove-NSLBVirtualServer
+    
+        Removes the load balancer virtual servers named 'vserver01' and 'vserver02'.
+
+    .PARAMETER Session
+        The NetScaler session object.
+
+    .PARAMETER Name
+        The name or names of the load balancer virtual servers to get.
+
+    .PARAMETER Force
+        Suppress confirmation when removing a load balancer virtual server.
+    #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:nitroSession,
