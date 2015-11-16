@@ -1,0 +1,15 @@
+﻿TOPIC
+    about_NetScaler
+
+SHORT DESCRIPTION
+    PowerShell module for interacting with Citrix NetScaler with the NITRO REST API.
+
+LONG DESCRIPTION
+    PowerShell module for interacting with Citrix NetScaler with the NITRO REST API.
+
+EXAMPLES
+
+KEYWORDS
+    Citrix, NetScaler, Load Balancer
+
+SEE ALSO

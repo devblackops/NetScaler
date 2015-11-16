@@ -1,10 +1,26 @@
+<#
+Copyright 2015 Brandon Olin
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#>
+
 function New-NSLBVirtualServer {
-    [cmdletbinding(SupportsShouldProcess, ConfirmImpact='Low')]
+    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
         $Session = $script:nitroSession,
 
         [parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
-        [string[]]$Name,
+        [string[]]$Name = (Read-Host -Prompt 'LB virtual server name'),
 
         [ValidateLength(0, 256)]
         [string]$Comment = '',
@@ -32,7 +48,7 @@ function New-NSLBVirtualServer {
     process {
         foreach ($item in $Name) {
             if ($PSCmdlet.ShouldProcess($item, 'Create Virtual Server')) {
-                $vs = New-Object com.citrix.netscaler.nitro.resource.config.lb.lbvserver
+                $vs = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.lb.lbvserver
                 $vs.name = $item
                 $vs.comment = $comment
                 $vs.servicetype = $ServiceType

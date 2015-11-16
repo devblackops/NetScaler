@@ -1,10 +1,26 @@
+<#
+Copyright 2015 Brandon Olin
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#>
+
 function New-NSLBServiceGroup {
-    [cmdletbinding(SupportsShouldProcess, ConfirmImpact='Low')]
+    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
         $Session = $script:nitroSession,
 
         [parameter(Mandatory = $true)]
-        [string[]]$Name,
+        [string[]]$Name = (Read-Host -Prompt 'LB service group name'),
 
         [ValidateSet('ADNS','ADNS_TCP','ANY','DHCPRA','DIAMETER','DNS','DNS_TCP','DTLS','FTP','HTTP','MSSQL','MYSQL','NNTP','RADIUS','RDP','RPCSVR','RTSP','SIP_UDP','SNMP','SSL','SSL_BRIDGE','SSL_DIAMETER','SSL_TCP','TCP','TFTP','UDP')]
         [Alias('Protocol')]
@@ -91,7 +107,7 @@ function New-NSLBServiceGroup {
     process {
         foreach ($item in $Name) {
             if ($PSCmdlet.ShouldProcess($item, 'Create Service Group')) {
-                $sg = New-Object com.citrix.netscaler.nitro.resource.config.basic.servicegroup
+                $sg = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.basic.servicegroup
                 $sg.servicegroupname = $item
                 $sg.servicetype = $ServiceType
                 if ($PSBoundParameters.ContainsKey('TrafficDomainId')) {

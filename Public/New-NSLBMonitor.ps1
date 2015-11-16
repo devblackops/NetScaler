@@ -1,94 +1,110 @@
+<#
+Copyright 2015 Brandon Olin
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#>
+
 function New-NSLBMonitor {
-    [cmdletbinding(SupportsShouldProcess, ConfirmImpact='Low')]
+    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
         $Session = $script:nitroSession,
 
         [parameter(Mandatory = $true)]
-        [string[]]$Name, #monitorname
+        [string[]]$Name = (Read-Host -Prompt 'Monitor name'),
 
         [ValidateSet('PING', 'TCP', 'HTTP', 'TCP-ECV', 'HTTP-ECV', 'UDP-ECV', 'DNS', 'FTP', 'LDNS-PING', 
             'LDNS-TCP', 'RADIUS', 'USER', 'HTTP-INLINE', 'SIP-UDP', 'LOAD', 'FTP-EXTENDED', 'SMTP', 'SNMP', 
             'NNTP', 'MYSQL', 'MYSQL-ECV', 'MSSQL-ECV', 'ORACLE-ECV', 'LDAP', 'POP3', 'CITRIX-XML-SERVICE', 
             'CITRIX-WEB-INTERFACE', 'DNS-TCP', 'RTSP', 'ARP', 'CITRIX-AG', 'CITRIX-AAC-LOGINPAGE', 'CITRIX-AAC-LAS', 
             'CITRIX-XD-DDC', 'ND6', 'CITRIX-WI-EXTENDED', 'DIAMETER', 'RADIUS_ACCOUNTING', 'STOREFRONT')]
-        [string]$Type = 'PING', #type
+        [string]$Type = 'PING',
 
         [ValidateRange(1, 20940000)]
-        [int]$Interval = 5, #interval
+        [int]$Interval = 5,
 
         [ValidateSet('SEC', 'MSEC', 'MIN')]
-        [string]$IntervalType = 'SEC', #units3
+        [string]$IntervalType = 'SEC',
 
         [ValidateScript({$_ -match [IPAddress]$_ })]
-        [string]$DestinationIP, #destip
+        [string]$DestinationIP,
 
         [ValidateRange(1, 20939000)]
-        [int]$ResponseTimeout = 2, #resptimeout
+        [int]$ResponseTimeout = 2,
 
         [ValidateSet('SEC', 'MSEC', 'MIN')]
-        [string]$ResponseTimeoutType = 'SEC', #units4
+        [string]$ResponseTimeoutType = 'SEC',
 
-        [int]$DestinationPort, #destport
+        [int]$DestinationPort,
 
         [ValidateRange(1, 20939000)]
-        [int]$Downtime = 30, #downtime 
+        [int]$Downtime = 30,
 
         [ValidateSet('SEC', 'MSEC', 'MIN')]
-        [string]$DowntimeType = 'SEC', #units2
+        [string]$DowntimeType = 'SEC',
 
         [ValidateRange(0, 20939000)]
-        [int]$Deviation, #deviation
+        [int]$Deviation,
 
         [ValidateRange(1, 127)]
-        [int]$Retries = 3, #retries
+        [int]$Retries = 3,
 
         [ValidateRange(0, 100)]
-        [int]$ResponseTimeoutThreshold, #resptimeoutthresh
+        [int]$ResponseTimeoutThreshold,
 
         [ValidateRange(0, 32)]
-        [int]$AlertRetries, #alertretries
+        [int]$AlertRetries,
 
         [ValidateRange(0, 32)]
-        [int]$SuccessRetries = 1, # successretries 
+        [int]$SuccessRetries = 1, 
 
         [ValidateRange(0, 32)]
-        [int]$FailureRetries, #failureretries
+        [int]$FailureRetries,
 
         [ValidateRange(1, 127)]
-        [string]$NetProfile, #netprofile
+        [string]$NetProfile,
 
         [ValidateSet('YES', 'NO')]
-        [string]$TOS = 'NO', #tos
+        [string]$TOS = 'NO',
 
         [ValidateRange(1, 63)]
-        [int]$TOSID, #tosid
+        [int]$TOSID,
 
         [ValidateSet('ENABLED', 'DISABLED')]
-        [string]$state = 'ENABLED', #state
+        [string]$state = 'ENABLED',
 
         [ValidateSet('Yes', 'NO')]
-        [string]$Reverse = 'NO', #reverse
+        [string]$Reverse = 'NO',
 
         [ValidateSet('YES', 'NO')]
-        [string]$Transparent = 'NO', #transparent 
+        [string]$Transparent = 'NO', 
 
         [ValidateSet('ENABLED', 'DISABLED')]
-        [string]$LRTM = 'DISABLED', #lrtm
+        [string]$LRTM = 'DISABLED',
 
         [ValidateSet('YES', 'NO')]
-        [string]$Secure = 'NO', #secure
+        [string]$Secure = 'NO',
 
         [ValidateSet('YES', 'NO')]
-        [string]$IPTunnel = 'NO', #iptunnel
+        [string]$IPTunnel = 'NO',
 
-        [string]$ScriptName, #scriptname
+        [string]$ScriptName,
 
         [ValidateScript({$_ -match [IPAddress]$_ })]
-        [string]$DispatcherIP, #dispatcherip 
+        [string]$DispatcherIP, 
 
-        [int]$DispatcherPort, #dispatcherport
+        [int]$DispatcherPort,
 
-        [string]$ScriptArgs, #scriptargs
+        [string]$ScriptArgs,
 
         [switch]$PassThru
     )
@@ -100,7 +116,7 @@ function New-NSLBMonitor {
     process {
         foreach ($item in $Name) {
             if ($PSCmdlet.ShouldProcess($item, 'Create Server')) {
-                $m = New-Object com.citrix.netscaler.nitro.resource.config.lb.lbmonitor
+                $m = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.lb.lbmonitor
                 $m.monitorname = $name
                 $m.type = $Type
                 $m.interval = $Interval
