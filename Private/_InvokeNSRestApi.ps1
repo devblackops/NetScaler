@@ -46,16 +46,15 @@ function _InvokeNSRestApi {
 
         [string]$Action,
 
-        #[ValidateScript({($Method -eq 'GET') -And (-Not $Stat)})]
         [hashtable]$Arguments = @{},
 
-        [ValidateScript({($Method -eq 'GET') -and (-Not $Stat)})]
+        [switch]$Stat = $false,
+
+        [ValidateScript({$Method -eq 'GET'})]
         [hashtable]$Filters = @{},
 
-        [ValidateScript({($Method -ne 'GET') -and (-Not $Stat)})]
+        [ValidateScript({$Method -ne 'GET'})]
         [hashtable]$Payload = @{},
-
-        [switch]$Stat = $false,
 
         [switch]$GetWarning = $false,
 

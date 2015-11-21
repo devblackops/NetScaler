@@ -43,7 +43,7 @@ function Get-NSLBStat {
         $Session = $script:session,
 
         [parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name
+        [string[]]$Name = @()
     )
 
     begin {

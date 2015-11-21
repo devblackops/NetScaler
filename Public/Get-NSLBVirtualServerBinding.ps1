@@ -43,25 +43,31 @@ function Get-NSLBVirtualServerBinding {
         $Session = $script:session,
 
         [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name
+        [string[]]$Name = @()
     )
 
     begin {
         _AssertSessionActive
-        $bindings = @()
+        $response = @()
     }
 
     process {
         if ($Name.Count -gt 0) {
             foreach ($item in $Name) {
-                $bindings = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_servicegroup_binding -Resource $item
-                $bindings.lbvserver_servicegroup_binding
-            }
+                $response = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_servicegroup_binding -Resource $item
+                if ($response.errorcode -ne 0) { throw $response }
+                if ($response.PSobject.Properties.name -contains 'lbvserver_servicegroup_binding') {
+                    $response.lbvserver_servicegroup_binding
+                }                
+            }    
         } else {
-            $vServers = Get-NSLBVirtualServer -Session $Session
+            $vServers = Get-NSLBVirtualServer -Session $Session -Verbose:$false
             foreach ($item in $vServers) {
                 $bindings = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_servicegroup_binding -Resource $item.name
-                $bindings.lbvserver_servicegroup_binding
+                if ($bindings.errorcode -ne 0) { throw $bindings }
+                if ($bindings.PSobject.Properties.name -contains 'lbvserver_servicegroup_binding') {
+                    $bindings.lbvserver_servicegroup_binding
+                }
             }
         }
     }

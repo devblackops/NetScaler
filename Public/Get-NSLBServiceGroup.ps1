@@ -43,7 +43,7 @@ function Get-NSLBServiceGroup {
         $Session = $script:session,
 
         [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
-        [string[]]$Name
+        [string[]]$Name = @()
     )
 
     begin {

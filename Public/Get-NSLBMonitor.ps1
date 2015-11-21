@@ -43,7 +43,7 @@ function Get-NSLBMonitor {
         $Session = $script:session,
 
         [parameter(Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name
+        [string[]]$Name = @()
     )
 
     begin {

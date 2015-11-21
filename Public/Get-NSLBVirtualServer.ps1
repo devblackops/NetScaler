@@ -56,7 +56,7 @@ function Get-NSLBVirtualServer {
 
     begin {
         _AssertSessionActive
-        $vservers = @()
+        $response = @()
     }
 
     process {
@@ -78,11 +78,11 @@ function Get-NSLBVirtualServer {
         # If we specified any filters, filter based on them
         # Otherwise, get everything
         if ($filters.count -gt 0) {
-            $vservers = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver -Action Get -Filters $filters
+            $response = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver -Action Get -Filters $filters
         } else {
-            $vservers = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver -Action Get
+            $response = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver -Action Get
         }
-
-        $vservers.lbvserver
+        if ($response.errorcode -ne 0) { throw $response }
+        $response.lbvserver
     }
 }
