@@ -51,7 +51,7 @@ function Disable-NSLBVirtualServer {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB virtual server name'),
@@ -68,11 +68,18 @@ function Disable-NSLBVirtualServer {
     process {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Disable Virtual Server')) {
-                $result = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver]::disable($Session, $item)
-                if ($result.errorcode -ne 0) { throw $result }
-
-                if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBVirtualServer -Name $item
+                try {
+                    $params = @{
+                        name = $item
+                    }
+                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action disable
+                    if ($response.errorcode -ne 0) { throw $response }
+                    
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSLBVirtualServer -Session $Session -Name $item
+                    }
+                } catch {
+                    throw $_
                 }
             }
         }

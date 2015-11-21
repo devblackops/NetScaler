@@ -36,29 +36,68 @@ function New-NSLBVirtualServer {
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the virtual servers to create.
+        Name for the virtual server. Must begin with an ASCII alphanumeric or underscore (_) character, 
+        and must contain only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at sign (@),
+        equal sign (=), and hyphen (-) characters. Can be changed after the virtual server is created. 
+    
+        Minimum length = 1
 
     .PARAMETER IPAddress
-        The IP address for the new virtual server.
+        IPv4 or IPv6 address to assign to the virtual server.
 
     .PARAMETER Comment
-        The comment associated with the new virtual server.
+        Any comments that you might want to associate with the virtual server.
 
     .PARAMETER Port
-        The port the new virtual server will listen on.
+        Port number for the virtual server.
+
+        Range 1 - 65535
 
     .PARAMETER ServiceType
-        The service type for the virtual server.
+        Protocol used by the service (also called the service type).
+
+        Possible values = HTTP, FTP, TCP, UDP, SSL, SSL_BRIDGE, SSL_TCP, DTLS, NNTP, DNS, DHCPRA, ANY, SIP_UDP, 
+        DNS_TCP, RTSP, PUSH, SSL_PUSH, RADIUS, RDP, MYSQL, MSSQL, DIAMETER, SSL_DIAMETER, TFTP, ORACLE
 
     .PARAMETER LBMethod
-        The load balancing method for the new virtual server.
+        Load balancing method. 
+    
+        The available settings function as follows: 
+        * ROUNDROBIN - Distribute requests in rotation, regardless of the load. Weights can be assigned to services 
+        to enforce weighted round robin distribution.
+        * LEASTCONNECTION (default) - Select the service with the fewest connections. 
+        * LEASTRESPONSETIME - Select the service with the lowest average response time. 
+        * LEASTBANDWIDTH - Select the service currently handling the least traffic. 
+        * LEASTPACKETS - Select the service currently serving the lowest number of packets per second. 
+        * CUSTOMLOAD - Base service selection on the SNMP metrics obtained by custom load monitors. 
+        * LRTM - Select the service with the lowest response time. Response times are learned through monitoring probes. 
+            This method also takes the number of active connections into account. Also available are a number of hashing methods, 
+            in which the appliance extracts a predetermined portion of the request, creates a hash of the portion, and then checks
+            whether any previous requests had the same hash value. If it finds a match, it forwards the request to the service 
+            that served those previous requests. Following are the hashing methods: 
+        * URLHASH - Create a hash of the request URL (or part of the URL).
+        * DOMAINHASH - Create a hash of the domain name in the request (or part of the domain name). The domain name is taken from
+            either the URL or the Host header. If the domain name appears in both locations, the URL is preferred. If the request
+            does not contain a domain name, the load balancing method defaults to LEASTCONNECTION.
+        * DESTINATIONIPHASH - Create a hash of the destination IP address in the IP header.
+        * SOURCEIPHASH - Create a hash of the source IP address in the IP header.
+        * TOKEN - Extract a token from the request, create a hash of the token, and then select the service to which any previous
+            requests with the same token hash value were sent. 
+        * SRCIPDESTIPHASH - Create a hash of the string obtained by concatenating the source IP address and destination IP address
+            in the IP header.
+        * SRCIPSRCPORTHASH - Create a hash of the source IP address and source port in the IP header.
+        * CALLIDHASH - Create a hash of the SIP Call-ID header.
+        
+        Default value: LEASTCONNECTION
+        Possible values = ROUNDROBIN, LEASTCONNECTION, LEASTRESPONSETIME, URLHASH, DOMAINHASH, DESTINATIONIPHASH, SOURCEIPHASH,
+        SRCIPDESTIPHASH, LEASTBANDWIDTH, LEASTPACKETS, TOKEN, SRCIPSRCPORTHASH, LRTM, CALLIDHASH, CUSTOMLOAD, LEASTREQUEST
 
     .PARAMETER Passthru
         Return the load balancer server object.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB virtual server name'),
@@ -89,19 +128,23 @@ function New-NSLBVirtualServer {
     process {
         foreach ($item in $Name) {
             if ($PSCmdlet.ShouldProcess($item, 'Create Virtual Server')) {
-                $vs = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.lb.lbvserver
-                $vs.name = $item
-                $vs.comment = $comment
-                $vs.servicetype = $ServiceType
-                $vs.ipv46 = $IPAddress
-                $vs.port = $Port
-                $vs.lbmethod = $LBMethod
+                try {
+                    $params = @{
+                        name = $item
+                        comment = $comment
+                        servicetype = $ServiceType
+                        ipv46 = $IPAddress
+                        port = $Port
+                        lbmethod = $LBMethod
+                    }
+                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action add
+                    if ($response.errorcode -ne 0) { throw $response }
 
-                $result = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver]::add($session, $vs)
-                if ($result.errorcode -ne 0) { throw $result }
-
-                if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBVirtualServer -Name $item
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSLBVirtualServer -Session $Session -Name $item
+                    }
+                } catch {
+                    throw $_
                 }
             }
         }

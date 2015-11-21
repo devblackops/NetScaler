@@ -40,10 +40,10 @@ function Get-NSLBMonitor {
     #>
     [cmdletbinding()]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name = (Read-Host -Prompt 'Monitor name')        
+        [string[]]$Name
     )
 
     begin {
@@ -54,12 +54,12 @@ function Get-NSLBMonitor {
     process {
         if ($Name.Count -gt 0) {
             foreach ($item in $Name) {
-                $monitors = [com.citrix.netscaler.nitro.resource.config.lb.lbmonitor]::get($Session, $item)
-                $monitors
+                $monitors = _InvokeNSRestApi -Session $Session -Method Get -Type lbmonitor -Action Get -Resource $item
+                return $monitors.lbmonitor
             }
         } else {
-            $monitors = [com.citrix.netscaler.nitro.resource.config.lb.lbmonitor]::get($Session)
-            $monitors
+            $monitors = _InvokeNSRestApi -Session $Session -Method Get -Type lbmonitor -Action Get
+            return $monitors.lbmonitor
         }
     }
 }

@@ -43,7 +43,7 @@ function Remove-NSLBMonitor {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Alias('MonitorName')]
@@ -60,12 +60,15 @@ function Remove-NSLBMonitor {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Monitor')) {
                 try {
-                    $m = Get-NSLBMonitor -Name $item
-                    $result = [com.citrix.netscaler.nitro.resource.config.lb.lbmonitor]::delete($Session, $m)
+                    $m = Get-NSLBMonitor -Session $Session -Name $item
+                    $params = @{
+                        type = $m.lbmonitor.type
+                    }
+                    $response = _InvokeNSRestApi -Session $Session -Method DELETE -Type lbmonitor -Resource $item -Arguments $params -Action delete
+                    if ($response.errorcode -ne 0) { throw $response }
                 } catch {
                     throw $_
                 }
-                if ($result.errorcode -ne 0) { throw $result }
             }
         }
     }

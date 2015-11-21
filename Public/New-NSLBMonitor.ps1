@@ -26,98 +26,207 @@ function New-NSLBMonitor {
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the load balancer monitors to create.
+        Name for the monitor. 
+        Must begin with an ASCII alphanumeric or underscore (_) character, and must contain
+        only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at (@),
+        equals (=), and hyphen (-) characters. 
+
+        Minimum length = 1
 
     .PARAMETER Type
-        Type of monitor.
+        Type of monitor that you want to create.
+        
+        Possible values = PING, TCP, HTTP, TCP-ECV, HTTP-ECV, UDP-ECV, DNS, FTP, LDNS-PING,
+        LDNS-TCP, LDNS-DNS, RADIUS, USER, HTTP-INLINE, SIP-UDP, LOAD, FTP-EXTENDED, SMTP,
+        SNMP, NNTP, MYSQL, MYSQL-ECV, MSSQL-ECV, ORACLE-ECV, LDAP, POP3, CITRIX-XML-SERVICE,
+        CITRIX-WEB-INTERFACE, DNS-TCP, RTSP, ARP, CITRIX-AG, CITRIX-AAC-LOGINPAGE, CITRIX-AAC-LAS,
+        CITRIX-XD-DDC, ND6, CITRIX-WI-EXTENDED, DIAMETER, RADIUS_ACCOUNTING, STOREFRONT, APPC,
+        CITRIX-XNC-ECV, CITRIX-XDM
 
     .PARAMETER Interval
-        Time interval between two successive probes.
+        Time interval between two successive probes. Must be greater than the value of Response Time-out.
+
+        Default value: 5
+        Minimum value = 1
+        Maximum value = 20940000
 
     .PARAMETER IntervalType
-        Time unit for interval type.
+        Monitor interval units.
+
+        Default value: SEC
+        Possible values = SEC, MSEC, MIN
 
     .PARAMETER DestinationIP
-        IP address of the service to which to send probes.
+        IP address of the service to which to send probes. 
+        If the parameter is set to 0, the IP address of the server to which the monitor is bound is 
+        considered the destination IP address.
 
     .PARAMETER DestinationPort
         TCP or UDP port to which to send the probe.
+        If the parameter is set to 0, the port number of the service to which the monitor is bound is 
+        considered the destination port. For a monitor of type USER, however, the destination port is
+        the port number that is included in the HTTP request sent to the dispatcher. Does not apply to
+        monitors of type PING.
 
     .PARAMETER ResponseTimeout
         Amount of time for which the appliance must wait before it marks a probe as FAILED.
 
     .PARAMETER ResponseTimeoutType
-        Time unit for monitor response timeout.    
+        Amount of time for which the appliance must wait before it marks a probe as FAILED. 
+        Must be less than the value specified for the Interval parameter. 
+    
+        Note: For UDP-ECV monitors for which a receive string is not configured, response timeout 
+        does not apply. For UDP-ECV monitors with no receive string, probe failure is indicated by 
+        an ICMP port unreachable error received from the service.
+
+        Default value: 2
+        Minimum value = 1
+        Maximum value = 20939000
 
     .PARAMETER Downtime
         Time duration for which to wait before probing a service that has been marked as DOWN.
 
     .PARAMETER DowntimeType
-        Time unit for the Downtime parameter. 
+        Time duration for which to wait before probing a service that has been marked as DOWN.
+        Expressed in milliseconds, seconds, or minutes.
+
+        Default value: 30
+        Minimum value = 1
+        Maximum value = 20939000
 
     .PARAMETER Deviation
-        Time value added to the learned average response time in dynamic response time monitoring (DRTM). 
+        Time value added to the learned average response time in dynamic response time monitoring (DRTM).
+        When a deviation is specified, the appliance learns the average response time of bound services
+        and adds the deviation to the average. The final value is then continually adjusted to accommodate
+        response time variations over time. Specified in milliseconds, seconds, or minutes.
+
+        Minimum value = 0
+        Maximum value = 20939000
 
     .PARAMETER Retries
         Maximum number of probes to send to establish the state of a service for which a monitoring probe failed.
 
+        Default value: 3
+        Minimum value = 1
+        Maximum value = 127
+
     .PARAMETER ResponseTimeoutThreshold
         Response time threshold, specified as a percentage of the Response Time-out parameter.
+        If the response to a monitor probe has not arrived when the threshold is reached, the appliance generates
+        an SNMP trap called monRespTimeoutAboveThresh. After the response time returns to a value below the threshold, 
+        the appliance generates a monRespTimeoutBelowThresh SNMP trap. For the traps to be generated, 
+        the "MONITOR-RTO-THRESHOLD" alarm must also be enabled.
+
+        Minimum value = 0
+        Maximum value = 100
 
     .PARAMETER AlertRetries
-        Number of consecutive probe failures after which the appliance generates an SNMP trap called monProbeFailed. 
+        Number of consecutive probe failures after which the appliance generates an SNMP trap called monProbeFailed.
+
+        Minimum value = 0
+        Maximum value = 32
 
     .PARAMETER SuccessRetries
-        Number of consecutive successful probes required to transition a service's state from DOWN to UP. 
+        Number of consecutive successful probes required to transition a service's state from DOWN to UP.
+
+        Default value: 1
+        Minimum value = 1
+        Maximum value = 32
 
     .PARAMETER FailureRetries
         Number of retries that must fail, out of the number specified for the Retries parameter, for a service to be marked as DOWN.
+        For example, if the Retries parameter is set to 10 and the Failure Retries parameter is set to 6, out of the ten probes
+        sent, at least six probes must fail if the service is to be marked as DOWN. The default value of 0 means that all the retries
+        must fail if the service is to be marked as DOWN.
+
+        Minimum value = 0
+        Maximum value = 32
 
     .PARAMETER NetProfile
         Name of the network profile.
 
+        Minimum length = 1
+        Maximum length = 127
+
     .PARAMETER TOS
         Probe the service by encoding the destination IP address in the IP TOS (6) bits.
 
+        Possible values = YES, NO
+
     .PARAMETER TOSID
         The TOS ID of the specified destination IP.
+        Applicable only when the TOS parameter is set.
+
+        Minimum value = 1
+        Maximum value = 63
 
     .PARAMETER State
-        State of the monitor.
+        State of the monitor. 
+        The DISABLED setting disables not only the monitor being configured, but all monitors of the same type, until the parameter 
+        is set to ENABLED. If the monitor is bound to a service, the state of the monitor is not taken into account when the state
+        of the service is determined.
+
+        Default value: ENABLED
+        Possible values = ENABLED, DISABLED
 
     .PARAMETER Reverse
-        Mark a service as DOWN, instead of UP, when probe criteria are satisfied, and as UP instead of DOWN when probe criteria are not satisfied.
+        Mark a service as DOWN, instead of UP, when probe criteria are satisfied, and as UP instead of DOWN when probe criteria are
+        not satisfied.
+
+        Default value: NO
+        Possible values = YES, NO
 
     .PARAMETER Transparent
         The monitor is bound to a transparent device such as a firewall or router.
+        The state of a transparent device depends on the responsiveness of the services behind it. If a transparent device is being
+        monitored, a destination IP address must be specified. The probe is sent to the specified IP address by using the MAC address
+        of the transparent device.
+
+        Default value: NO
+        Possible values = YES, NO
 
     .PARAMETER LRTM
         Calculate the least response times for bound services.
+        If this parameter is not enabled, the appliance does not learn the response times of the bound services. Also used for LRTM
+        load balancing.
+
+        Possible values = ENABLED, DISABLED
 
     .PARAMETER Secure
         Use a secure SSL connection when monitoring a service.
+        Applicable only to TCP based monitors. The secure option cannot be used with a CITRIX-AG monitor, because a CITRIX-AG monitor
+        uses a secure connection by default.
+
+        Default value: NO
+        Possible values = YES, NO
 
     .PARAMETER IPTunnel
-        Send the monitoring probe to the service through an IP tunnel.
+        Send the monitoring probe to the service through an IP tunnel. A destination IP address must be specified.
+
+        Default value: NO
+        Possible values = YES, NO
 
     .PARAMETER ScriptName
         Path and name of the script to execute.
+        The script must be available on the NetScaler appliance, in the /nsconfig/monitors/ directory.
+
+        Minimum length = 1
 
     .PARAMETER DispatcherIP
         IP address of the dispatcher to which to send the probe.
 
     .PARAMETER DispatcherPort
-        Port number on which the dispatcher listens for the monitoring probe.
+        IP address of the dispatcher to which to send the probe.
 
     .PARAMETER ScriptArgs
-        String of arguments for the script.
+        String of arguments for the script. The string is copied verbatim into the request.
 
     .PARAMETER Passthru
-        Return the load balancer server object.
+        Return the load balancer monitor object.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory = $true)]
         [string[]]$Name = (Read-Host -Prompt 'Monitor name'),
@@ -216,63 +325,67 @@ function New-NSLBMonitor {
     process {
         foreach ($item in $Name) {
             if ($PSCmdlet.ShouldProcess($item, 'Create Server')) {
-                $m = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.lb.lbmonitor
-                $m.monitorname = $name
-                $m.type = $Type
-                $m.interval = $Interval
-                $m.units3 = $IntervalType
-                if ($PSBoundParameters.ContainsKey('DestinationIP')) {
-                    $m.destip = $DestinationIP
-                }
-                $m.resptimeout = $ResponseTimeout
-                $m.units4 = $ResponseTimeoutType
-                if ($PSBoundParameters.ContainsKey('DestinationPort')) {
-                    $m.destport = $DestinationPort
-                }
-                $m.downtime = $Downtime
-                $m.units2 = $DowntimeType
-                if ($PSBoundParameters.ContainsKey('Deviation')) {
-                    $m.deviation = $Deviation
-                }
-                $m.retries = $Retries
-                if ($PSBoundParameters.ContainsKey('ResponseTimeoutThreshold')) {
-                    $m.resptimeoutthresh = $ResponseTimeoutThreshold
-                }
-                if ($PSBoundParameters.ContainsKey('AlertRetries')) {
-                    $m.alertretries = $AlertRetries
-                }
-                $m.successretries = $SuccessRetries
-                if ($PSBoundParameters.ContainsKey('FailureRetries')) {
-                    $m.failureretries = $FailureRetries
-                }
-                if ($PSBoundParameters.ContainsKey('NetProfile')) {
-                    $m.netprofile = $NetProfile
-                }
-                $m.tos = $TOS
-                if ($PSBoundParameters.ContainsKey('TOSID')) {
-                    $m.tosid = $TOSID
-                }
-                $m.state = $State
-                $m.reverse = $Reverse
-                $m.transparent = $Transparent
-                $m.lrtm = $LRTM
-                $m.secure = $Secure
-                $m.iptunnel = $IPTunnel
-                if ($PSBoundParameters.ContainsKey('ScriptName')) {
-                    $m.scriptname = $ScriptName
-                }
-                if ($PSBoundParameters.ContainsKey('DispatcherIP')) {
-                    $m.dispatcherip = $DispatcherIP
-                }
-                if ($PSBoundParameters.ContainsKey('ScriptArgs')) {
-                    $m.scriptargs = $ScriptArgs
-                }
-                
-                $result = [com.citrix.netscaler.nitro.resource.config.lb.lbmonitor]::add($session, $m)
-                if ($result.errorcode -ne 0) { throw $result }
+                try {
+                    $params = @{
+                        monitorname = $item
+                        type = $Type
+                        interval = $Interval
+                        units3 = $IntervalType
+                        resptimeout = $ResponseTimeout
+                        units4 = $ResponseTimeoutType
+                        downtime = $Downtime
+                        units2 = $DowntimeType
+                        retries = $Retries
+                        successretries = $SuccessRetries
+                        tos = $TOS
+                        state = $State
+                        reverse = $Reverse
+                        transparent = $Transparent
+                        lrtm = $LRTM
+                        secure = $Secure
+                        iptunnel = $IPTunnel
+                    }
+                    if ($PSBoundParameters.ContainsKey('DestinationIP')) {
+                        $params.Add('destip', $DestinationIP)
+                    }
+                    if ($PSBoundParameters.ContainsKey('DestinationPort')) {
+                        $params.Add('destport', $DestinationPort)
+                    }
+                    if ($PSBoundParameters.ContainsKey('Deviation')) {
+                        $params.Add('deviation', $Deviation)
+                    }
+                    if ($PSBoundParameters.ContainsKey('ResponseTimeoutThreshold')) {
+                        $params.Add('resptimeoutthresh', $ResponseTimeoutThreshold)
+                    }
+                    if ($PSBoundParameters.ContainsKey('AlertRetries')) {
+                        $params.Add('alertretries', $AlertRetries)
+                    }
+                    if ($PSBoundParameters.ContainsKey('FailureRetries')) {
+                        $params.Add('failureretries', $FailureRetries)
+                    }
+                    if ($PSBoundParameters.ContainsKey('NetProfile')) {
+                        $params.Add('netprofile', $NetProfile)
+                    }
+                    if ($PSBoundParameters.ContainsKey('TOSID')) {
+                        $params.Add('tosid', $TOSID)
+                    }
+                    if ($PSBoundParameters.ContainsKey('ScriptName')) {
+                        $params.Add('scriptname', $ScriptName)
+                    }
+                    if ($PSBoundParameters.ContainsKey('DispatcherIP')) {
+                        $params.Add('dispatcherip', $DispatcherIP)
+                    }
+                    if ($PSBoundParameters.ContainsKey('ScriptArgs')) {
+                        $params.Add('scriptargs', $ScriptArgs)
+                    }
+                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action add
+                    if ($response.errorcode -ne 0) { throw $response }
 
-                if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBMonitor -Name $item
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSLBMonitor -Session $session -Name $item
+                    }
+                } catch {
+                    throw $_
                 }
             }
         }

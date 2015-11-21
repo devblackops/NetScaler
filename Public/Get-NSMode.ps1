@@ -14,52 +14,58 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSLBStat {
+function Get-NSMode {
     <#
     .SYNOPSIS
-        Gets the specified load balancer stat object.
+        Gets the mode status for the NetScaler appliance.
 
     .DESCRIPTION
-        Gets the specified load balancer stat object.
+        Gets the mode status for the NetScaler appliance.
 
     .EXAMPLE
-        Get-NSLBStat
+        Get-NSMode
 
-        Get all load balancer stat objects.
+        Get status for all the NetScaler modes.
 
     .EXAMPLE
-        Get-NSLBStat -Name 'stat01'
+        Get-NSMode -Name 'l3'
     
-        Get the load balancer stat named 'stat01'.
+        Get the status of NetScaler mode 'l3'.
+
+    .EXAMPLE
+        'l3', 'fr' | Get-NSMode
+    
+        Get the status of NetScaler feature 'l3' and 'fr'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the load balancer stat to get.
+        The name or names of NetScaler modes to get.
     #>
     [cmdletbinding()]
     param(
         $Session = $script:session,
 
-        [parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
         [string[]]$Name
     )
 
     begin {
         _AssertSessionActive
-        $stats = @()
+        $modes = @()
     }
 
     process {
         if ($Name.Count -gt 0) {
+            $all = _InvokeNSRestApi -Session $Session -Method Get -Type nsmode -Action Get
             foreach ($item in $Name) {
-                $stats = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Stat -Resource $item
-                return $stats.servicegroup
+                $modes += $all.nsmode.$item
             }
+            return $modes
         } else {
-            $stats = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Stat
-            return $stats.servicegroup
+            $modes = _InvokeNSRestApi -Session $Session -Method Get -Type nsmode -Action Get
+            return $modes.nsmode
         }
     }
 }

@@ -14,52 +14,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSLBStat {
+function Get-NSLBServiceGroupMemberBinding {
     <#
     .SYNOPSIS
-        Gets the specified load balancer stat object.
+        Gets the service group binding for a service group.
 
     .DESCRIPTION
-        Gets the specified load balancer stat object.
+        Gets the service group binding for a service group.
 
     .EXAMPLE
-        Get-NSLBStat
+        Get-NSLBServiceGroupMemberBinding -Name $sg
 
-        Get all load balancer stat objects.
-
-    .EXAMPLE
-        Get-NSLBStat -Name 'stat01'
-    
-        Get the load balancer stat named 'stat01'.
+        Gets the service group bindings for the 'sg' service group.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the load balancer stat to get.
+        The name or names of the service group to get the service group member binding for.
     #>
     [cmdletbinding()]
     param(
         $Session = $script:session,
 
-        [parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
         [string[]]$Name
     )
 
     begin {
         _AssertSessionActive
-        $stats = @()
     }
 
     process {
-        if ($Name.Count -gt 0) {
-            foreach ($item in $Name) {
-                $stats = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Stat -Resource $item
-                return $stats.servicegroup
+        foreach ($item in $Name) {
+            try {
+                $bindings = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup_servicegroupmember_binding -Resource $item -Action Get 
+                return $bindings.servicegroup_servicegroupmember_binding
+            } catch {
+                throw $_
             }
-        } else {
-            $stats = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Stat
-            return $stats.servicegroup
         }
     }
 }

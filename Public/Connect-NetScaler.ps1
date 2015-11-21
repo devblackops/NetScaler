@@ -41,32 +41,74 @@ function Connect-NetScaler {
     #>
     [cmdletbinding()]
     param(
-        [parameter(mandatory = $true)]
-        [string]$NSIP = (Read-Host -Prompt 'NetScaler IP or hostname'),
+        [parameter(Mandatory, ParameterSetName='IP')]
+        [ValidateScript({$_ -match [IPAddress]$_ })]
+        [Alias('NSIP')]
+        [string]$IPAddress,
 
-        [parameter(mandatory = $true)]
+        [parameter(Mandatory, ParameterSetName='Hostname')]
+        [string]$Hostname,
+
+        [parameter(Mandatory)]
         [pscredential]$Credential = (Get-Credential -Message 'NetScaler credential'),
+
+        [int]$Timeout = 900,
 
         [switch]$Https,
 
         [switch]$PassThru
     )
 
-    Write-Verbose -Message "Connecting to $NSIP..."
+    if ($PSCmdlet.ParameterSetName -eq 'IP') {
+        $endpoint = $IPAddress
+    } else {
+        $endpoint = $Hostname
+    }
+
+    if ($PSBoundParameters.ContainsKey('Https')) {
+        $Script:protocol = 'https'
+    } else {
+        $script:protocol = 'http'
+    }
+
+    Write-Verbose -Message "Connecting to $endpoint..."
 
     try {
-        if ($PSBoundParameters.ContainsKey('Https')) {
-            $script:nitroSession = New-Object -TypeName com.citrix.netscaler.nitro.service.nitro_service -ArgumentList @($NSIP, 'https')
-        } else {
-            $script:nitroSession = New-Object -TypeName com.citrix.netscaler.nitro.service.nitro_service -ArgumentList @($NSIP, 'http')
+        $login = @{
+            login = @{
+                username = $Credential.UserName;
+                password = $Credential.GetNetworkCredential().Password
+                timeout = $Timeout
+            }
         }
-        $script:session = $script:nitroSession.Login($Credential.UserName, $Credential.GetNetworkCredential().Password)
-        Write-Verbose -Message "Connecting to $NSIP successfully"
+        $loginJson = ConvertTo-Json -InputObject $login
 
-        if ($PSBoundParameters.ContainsKey('PassThru')) {
-            return $script:nitroSession
+        $saveSession = @{}
+        $params = @{
+            Uri = "$($Script:protocol)://$endpoint/nitro/v1/config/login"
+            Method = 'POST'
+            Body = $loginJson
+            SessionVariable = 'saveSession'
+            ContentType = 'application/json'
         }
-    } catch {
+        $response = Invoke-RestMethod @params
+
+        if ($response.severity -eq 'ERROR') {
+            throw "Error. See response: `n$($response | Format-List -Property * | Out-String)"
+        } else {
+            Write-Verbose -Message "Response:`n$(ConvertTo-Json -InputObject $response | Out-String)"
+        }
+    } catch [Exception] {
         throw $_
-    }    
+    }
+
+    $session = New-Object -TypeName PSObject
+    $session | Add-Member -NotePropertyName Endpoint -NotePropertyValue $endpoint -TypeName String
+    $session | Add-Member -NotePropertyName WebSession  -NotePropertyValue $saveSession -TypeName Microsoft.PowerShell.Commands.WebRequestSession   
+
+    $script:session = $session
+
+    if ($PSBoundParameters.ContainsKey('PassThru')) {
+        return $session
+    }
 }

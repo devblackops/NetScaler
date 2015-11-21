@@ -52,7 +52,7 @@ function Set-NSLBServer {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Medium')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB server name'),
@@ -75,21 +75,20 @@ function Set-NSLBServer {
     process {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Edit Server')) {
-                $s = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.basic.server
-                $s.name = $Name
+                $params = @{
+                    name = $Name
+                }
                 if ($PSBoundParameters.ContainsKey('IPAddress')) {
-                    $s.ipaddress = $IPAddress
+                    $params.Add('ipaddress', $IPAddress)
                 }
                 if ($PSBoundParameters.ContainsKey('Comment')) {
-                    $s.comment = $Comment
+                    $params.Add('comment', $Comment)
                 }
-                $result = [com.citrix.netscaler.nitro.resource.config.basic.server]::update($session, $s)
-                if ($result.errorcode -ne 0) {
-                    throw $result
-                }
+                $response = _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver -Payload $params -Action update
+                if ($response.errorcode -ne 0) { throw $response }
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBServer -Name $item
+                    return Get-NSLBServer -Session $Session -Name $item
                 }
             }
         }

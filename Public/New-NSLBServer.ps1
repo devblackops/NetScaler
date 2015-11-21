@@ -37,26 +37,43 @@ function New-NSLBServer {
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the load balancer servers to create.
+        Name for the server. 
+    
+        Must begin with an ASCII alphabetic or underscore (_) character, and must contain only 
+        ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at (@), equals (=), 
+        and hyphen (-) characters. Can be changed after the name is created.
+        
+        Minimum length = 1
 
     .PARAMETER IPAddress
-        The IP Address of the load balancer server.
+        IPv4 or IPv6 address of the server. If you create an IP address based server, you can specify 
+        the name of the server, instead of its IP address, when creating a service. 
+        
+        Note: If you do not create a server entry, the server IP address that you enter when you create 
+        a service becomes the name of the server.
 
     .PARAMETER Comment
-        The comment associated with the load balancer server.
+        Any information about the server.
 
     .PARAMETER TrafficDomainId
-        The traffic domain ID for the server.
+        Integer value that uniquely identifies the traffic domain in which you want to configure the entity.
+        If you do not specify an ID, the entity becomes part of the default traffic domain, which has an ID of 0.
+
+        Minimum value = 0
+        Maximum value = 4094
 
     .PARAMETER State
-        The initial state of the newly created load balancer server.
+        Initial state of the server.
+        
+        Default value: ENABLED
+        Possible values = ENABLED, DISABLED
 
     .PARAMETER Passthru
         Return the load balancer server object.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory = $true)]
         [string[]]$Name = (Read-Host -Prompt 'LB server name'),
@@ -66,7 +83,7 @@ function New-NSLBServer {
         [string]$IPAddress,
 
         [ValidateLength(0, 256)]
-        [string]$Comment = '',
+        [string]$Comment = [string]::Empty,
 
         [ValidateRange(0, 4094)]
         [int]$TrafficDomainId,
@@ -84,18 +101,22 @@ function New-NSLBServer {
     process {
         foreach ($item in $Name) {
             if ($PSCmdlet.ShouldProcess($item, 'Create Server')) {
-                $s = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.basic.server
-                $s.name = $item
-                $s.ipaddress = $IPAddress
-                $s.comment = $Comment
-                $s.td = $TrafficDomainId
-                $s.state = $State
+                try {
+                    $params = @{
+                        name = $item
+                        ipaddress = $IPAddress
+                        comment = $Comment
+                        td = $TrafficDomainId
+                        state = $State
+                    }
+                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action add
+                    if ($response.errorcode -ne 0) { throw $response }
 
-                $result = [com.citrix.netscaler.nitro.resource.config.basic.server]::add($session, $s)
-                if ($result.errorcode -ne 0) { throw $result }
-
-                if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBServer -Name $item
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSLBServer -Session $session -Name $item
+                    }
+                } catch {
+                    throw $_
                 }
             }
         }

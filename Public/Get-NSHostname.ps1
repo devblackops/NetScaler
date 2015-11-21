@@ -14,9 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function _AssertSessionActive {
-    $s = $script:session
-    if ($null -eq $s ) {
-        throw 'Must be logged into NetScaler appliance first!'
+function Get-NSHostname {
+    <#
+    .SYNOPSIS
+        Get NetScaler hostname
+
+    .DESCRIPTION
+        Get NetScaler hostname
+
+    .EXAMPLE
+        Get-NSHostname
+
+    .EXAMPLE
+        Get-NSHostname -Session $session
+
+    .PARAMETER Session
+        The NetScaler session object.
+    #>
+    [cmdletbinding()]
+    param(
+        $Session = $script:session
+    )
+
+    begin {
+        _AssertSessionActive
+    }
+
+    process {
+        $response = _InvokeNSRestApi -Session $Session -Method Get -Type nshostname -Action Get
+        return $response.nshostname
     }
 }

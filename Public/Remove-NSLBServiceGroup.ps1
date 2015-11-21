@@ -43,7 +43,7 @@ function Remove-NSLBServiceGroup {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
         [Alias('servicegroupname')]
@@ -60,11 +60,11 @@ function Remove-NSLBServiceGroup {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Service Group')) {
                 try {
-                    $result = [com.citrix.netscaler.nitro.resource.config.basic.servicegroup]::delete($Session, $item)
+                    $response = _InvokeNSRestApi -Session $Session -Method DELETE -Type servicegroup -Resource $item -Action delete
+                    if ($response.errorcode -ne 0) { throw $response }
                 } catch {
                     throw $_
                 }
-                if ($result.errorcode -ne 0) { throw $result }
             }
         }
     }

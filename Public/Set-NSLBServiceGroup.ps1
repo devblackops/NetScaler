@@ -108,7 +108,7 @@ function Set-NSLBServiceGroup {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Medium')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
         [Alias('ServiceGroupName')]
@@ -169,9 +169,9 @@ function Set-NSLBServiceGroup {
         [ValidateRange(0, 31536000)]
         [int]$ServerIdleTimeout = 360,
 
-        [Switch]$PassThru,
+        [Switch]$Force,
 
-        [Switch]$Force
+        [Switch]$PassThru
     )
 
     begin {
@@ -181,71 +181,72 @@ function Set-NSLBServiceGroup {
     process {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Edit Service Group')) {
-                $sg = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.basic.servicegroup
-                $sg.servicegroupname = $item
+                $params = @{
+                    servicegroupname = $item
+                }
                 if ($PSBoundParameters.ContainsKey('Cacheable')) {
-                    $sg.cacheable = $Cacheable
+                    $params.Add('cachable', $Cacheable)
                 }
                 if ($PSBoundParameters.ContainsKey('HealthMonitor')) {
-                    $sg.healthmonitor = $HealthMonitor
+                    $params.Add('healthmonitor', $HealthMonitor)
                 }
                 if ($PSBoundParameters.ContainsKey('AppFlowLog')) {
-                    $sg.appflowlog = $AppFlowLog
+                    $params.Add('appflowlog', $AppFlowLog)
                 }
                 if ($PSBoundParameters.ContainsKey('Comment')) {
-                    $sg.comment = $Comment
+                    $params.Add('comment', $Comment)
                 }
                 if ($PSBoundParameters.ContainsKey('SureConnect')) {
-                    $sg.sc = $SureConnect
+                    $params.Add('sc', $SureConnect)
                 }
                 if ($PSBoundParameters.ContainsKey('SurgeProtection')) {
-                    $sg.sp = $SurgeProtection
+                    $params.Add('sp', $SurgeProtection)
                 }
                 if ($PSBoundParameters.ContainsKey('UseProxyPort')) {
-                    $sg.useproxyport = $UseProxyPort
+                    $params.Add('useproxyport', $UseProxyPort)
                 }
                 if ($PSBoundParameters.ContainsKey('DownStateFlush')) {
-                    $sg.downstateflush = $DownStateFlush
+                    $params.Add('downstateflush', $DownStateFlush)
                 }
                 if ($PSBoundParameters.ContainsKey('UseClientIP')) {
-                    $sg.usip = $UseClientIP
+                    $params.Add('usip', $UseClientIP)
                 }
                 if ($PSBoundParameters.ContainsKey('TCPBuffering')) {
-                    $sg.tcpb = $TCPBuffering
+                    $params.Add('tcpb', $TCPBuffering)
                 }
                 if ($PSBoundParameters.ContainsKey('HTTPCompression')) {
-                    $sg.cmp = $HTTPCompression
+                    $params.Add('cmp', $HTTPCompression)
                 }
                 if ($PSBoundParameters.ContainsKey('ClientIP')) {
-                    $sg.cip = $ClientIP
+                    $params.Add('cip', $ClientIP)
                 }
                 if ($ClientIP -eq 'ENABLED') {
-                    $sg.cipheader = $ClientIPHeader
+                    $params.Add('cipheader', $ClientIPHeader)
                 }
                 if ($PSBoundParameters.ContainsKey('MaxBandwithKbps')) {
-                    $sg.maxbandwidth = $MaxBandwithKbps
+                    $params.Add('maxbandwitch', $MaxBandwithKbps)
                 }
                 if ($PSBoundParameters.ContainsKey('MonitorThreshold')) {
-                    $sg.monthreshold = $MonitorThreshold
+                    $params.Add('monthreshold', $MonitorThreshold)
                 }
                 if ($PSBoundParameters.ContainsKey('MaxRequests')) {
-                    $sg.maxreq = $MaxRequests
+                    $params.Add('maxreq', $MaxRequests)
                 }
                 if ($PSBoundParameters.ContainsKey('MaxClients')) {
-                    $sg.maxclient = $MaxClients
+                    $params.Add('maxclient', $MaxClients)
                 }
                 if ($PSBoundParameters.ContainsKey('ClientIdleTimeout')) {
-                    $sg.clttimeout = $ClientIdleTimeout
+                    $params.Add('clttimeout', $ClientIdleTimeout)
                 }
                 if ($PSBoundParameters.ContainsKey('ServerIdleTimeout')) {
-                    $sg.svrtimeout = $ServerIdleTimeout
+                    $params.Add('svrtimeout', $ServerIdleTimeout)
                 }
 
-                $result = [com.citrix.netscaler.nitro.resource.config.basic.servicegroup]::update($session, $sg)
-                if ($result.errorcode -ne 0) { throw $result }
+                $response = _InvokeNSRestApi -Session $Session -Method PUT -Type servicegroup -Payload $params -Action update
+                if ($response.errorcode -ne 0) { throw $response }
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBServiceGroup -Name $item
+                    return Get-NSLBServiceGroup -Session $Session -Name $item
                 }
             }
         }

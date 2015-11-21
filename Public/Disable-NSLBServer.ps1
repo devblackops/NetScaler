@@ -51,7 +51,7 @@ function Disable-NSLBServer {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB server name'),
@@ -68,11 +68,18 @@ function Disable-NSLBServer {
     process {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Disable Server')) {
-                $result = [com.citrix.netscaler.nitro.resource.config.basic.server]::disable($Session, $item)
-                if ($result.errorcode -ne 0) { throw $result }
+                try {
+                    $params = @{
+                        name = $item
+                    }
+                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action disable
+                    if ($response.errorcode -ne 0) { throw $response }
 
-                if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBServer -Name $item
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSLBServer -Session $Session -Name $item
+                    }
+                } catch {
+                    throw $_
                 }
             }
         }

@@ -43,7 +43,7 @@ function Remove-NSLBVirtualServer {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB virtual server name'),
@@ -58,8 +58,12 @@ function Remove-NSLBVirtualServer {
     process {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Virtual Server')) {
-                $result = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver]::delete($Session, $item)
-                if ($result.errorcode -ne 0) { throw $result }
+                try {
+                    $response = _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver -Resource $item -Action delete
+                    if ($response.errorcode -ne 0) { throw $response }
+                } catch {
+                    throw $_
+                }                
             }
         }
     }

@@ -36,10 +36,23 @@ function New-NSLBVirtualServerBinding {
         The NetScaler session object.
 
     .PARAMETER VitualServerName
-        The name of the virtual server to bind the service group to.
+        Name for the virtual server. Must begin with an ASCII alphanumeric or underscore (_) character, and must contain
+        only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at sign (@), equal sign (=),
+        and hyphen (-) characters. Can be changed after the virtual server is created.
+
+        Minimum length = 1
 
     .PARAMETER ServiceGroupName
-        The name of the service group to bind the virtual server to.
+        The service group name bound to the selected load balancing virtual server.
+
+    .PARAMETER Weight
+        Integer specifying the weight of the service. A larger number specifies a greater weight. Defines the capacity
+        of the service relative to the other services in the load balancing configuration. Determines the priority given
+        to the service in load balancing decisions.
+
+        Default value: 1
+        Minimum value = 1
+        Maximum value = 100
 
     .PARAMETER Force
         Suppress confirmation when binding the service group to the virtual server.
@@ -49,7 +62,7 @@ function New-NSLBVirtualServerBinding {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Medium')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory = $true)]
         [string]$VirtualServerName = (Read-Host -Prompt 'LB virtual server name'),
@@ -57,8 +70,8 @@ function New-NSLBVirtualServerBinding {
         [parameter(Mandatory = $true)]
         [string]$ServiceGroupName = (Read-Host -Prompt 'LB service group name'),
 
-        #[ValidateRange(1, 100)]
-        #[int]$Weight = 1,
+        [ValidateRange(1, 100)]
+        [int]$Weight = 1,
 
         [Switch]$Force,
 
@@ -71,16 +84,20 @@ function New-NSLBVirtualServerBinding {
 
     process {
         if ($Force -or $PSCmdlet.ShouldProcess($VirtualServerName, 'New Virtual Server Binding')) {
-            $b = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.lb.lbvserver_servicegroup_binding
-            $b.name = $VirtualServerName
-            $b.servicegroupname = $ServiceGroupName
-            #$b.weight = $Weight
+            try {
+                $params = @{
+                    name = $VirtualServerName
+                    servicegroupname = $ServiceGroupName
+                    weight = $Weight
+                }
+                $response = _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_servicegroup_binding -Payload $params -Action add
+                if ($response.errorcode -ne 0) { throw $response }
 
-            $result = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver_servicegroup_binding]::add($session, $b)
-            if ($result.errorcode -ne 0) { throw $result }
-
-            if ($PSBoundParameters.ContainsKey('PassThru')) {
-                return Get-NSLBServer -Name $result
+                if ($PSBoundParameters.ContainsKey('PassThru')) {
+                    return Get-NSLBVirtualServiceBinding -Session $Session -Name $VirtualServerName
+                }
+            } catch {
+                throw $_
             }
         }
     }

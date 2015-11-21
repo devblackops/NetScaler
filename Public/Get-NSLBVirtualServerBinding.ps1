@@ -40,10 +40,10 @@ function Get-NSLBVirtualServerBinding {
     #>
     [cmdletbinding()]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name = (Read-Host -Prompt 'LB virtual server binding name')
+        [string[]]$Name
     )
 
     begin {
@@ -54,14 +54,14 @@ function Get-NSLBVirtualServerBinding {
     process {
         if ($Name.Count -gt 0) {
             foreach ($item in $Name) {
-                $bindings = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver_servicegroup_binding]::get($Session, $item)
-                $bindings
+                $bindings = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_servicegroup_binding -Resource $item
+                $bindings.lbvserver_servicegroup_binding
             }
         } else {
-            $vServers = Get-NSLBVirtualServer
+            $vServers = Get-NSLBVirtualServer -Session $Session
             foreach ($item in $vServers) {
-                $bindings = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver_servicegroup_binding]::get($Session, $item.name)
-                $bindings
+                $bindings = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_servicegroup_binding -Resource $item.name
+                $bindings.lbvserver_servicegroup_binding
             }
         }
     }

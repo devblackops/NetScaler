@@ -54,7 +54,7 @@ function Disable-NSLBMonitor {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Alias('MonitorName')]
@@ -72,12 +72,22 @@ function Disable-NSLBMonitor {
     process {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Disable Monitor')) {
-                $m = Get-NSLBMonitor -Name $item
-                $result = [com.citrix.netscaler.nitro.resource.config.lb.lbmonitor]::disable($Session, $m)
-                if ($result.errorcode -ne 0) { throw $result }
+                try {
+                    $m = Get-NSLBMonitor -Session $Session -Name $item
 
-                if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBMonitor -Name $item
+                    $params = @{
+                        servicename = $m.servicename
+                        servicegroupname = $m.servicegroupname
+                        monitorname = $m.monitorname
+                    }
+                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action disable
+                    if ($response.errorcode -ne 0) { throw $response }
+
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSLBMonitor -Session $Session -Name $item
+                    }
+                } catch {
+                    throw $_
                 }
             }
         }

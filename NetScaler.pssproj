@@ -28,29 +28,44 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="DLL\" />
+    <Folder Include="en-US\" />
     <Folder Include="Private\" />
     <Folder Include="Public\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DLL\Newtonsoft.Json.dll" />
     <Compile Include="DLL\nitro.dll" />
+    <Compile Include="en-US\about_NetScaler.help.txt" />
     <Compile Include="NetScaler.psd1" />
     <Compile Include="NetScaler.psm1" />
-    <Compile Include="NetScaler.tests.ps1" />
     <Compile Include="Private\_AssertSessionActive.ps1" />
+    <Compile Include="Private\_InvokeNSRestApi.ps1" />
+    <Compile Include="Public\Add-NSCertKeyPair.ps1" />
+    <Compile Include="Public\Add-NSRSAKey.ps1" />
+    <Compile Include="Public\Add-NSServerCertificate.ps1" />
     <Compile Include="Public\Connect-NetScaler.ps1" />
+    <Compile Include="Public\Disable-NSFeature.ps1" />
     <Compile Include="Public\Disable-NSLBMonitor.ps1" />
     <Compile Include="Public\Disable-NSLBServer.ps1" />
     <Compile Include="Public\Disable-NSLBVirtualServer.ps1" />
+    <Compile Include="Public\Disable-NSMode.ps1" />
     <Compile Include="Public\Disconnect-NetScaler.ps1" />
+    <Compile Include="Public\Enable-NSFeature.ps1" />
     <Compile Include="Public\Enable-NSLBServer.ps1" />
     <Compile Include="Public\Enable-NSLBVirtualServer.ps1" />
+    <Compile Include="Public\Enable-NSMode.ps1" />
+    <Compile Include="Public\Get-NSAvailableTimeZones.ps1" />
+    <Compile Include="Public\Get-NSFeature.ps1" />
+    <Compile Include="Public\Get-NSHostname.ps1" />
     <Compile Include="Public\Get-NSLBMonitor.ps1" />
     <Compile Include="Public\Get-NSLBServer.ps1" />
     <Compile Include="Public\Get-NSLBServiceGroup.ps1" />
+    <Compile Include="Public\Get-NSLBServiceGroupMemberBinding.ps1" />
     <Compile Include="Public\Get-NSLBStat.ps1" />
     <Compile Include="Public\Get-NSLBVirtualServer.ps1" />
     <Compile Include="Public\Get-NSLBVirtualServerBinding.ps1" />
+    <Compile Include="Public\Get-NSMode.ps1" />
+    <Compile Include="Public\Install-NSLicense.ps1" />
     <Compile Include="Public\New-NSLBMonitor.ps1" />
     <Compile Include="Public\New-NSLBServer.ps1" />
     <Compile Include="Public\New-NSLBServiceGroup.ps1" />
@@ -62,10 +77,15 @@
     <Compile Include="Public\Remove-NSLBServiceGroup.ps1" />
     <Compile Include="Public\Remove-NSLBVirtualServer.ps1" />
     <Compile Include="Public\Remove-NSLBVirtualServerBinding.ps1" />
+    <Compile Include="Public\Restart-NetScaler.ps1" />
     <Compile Include="Public\Save-NSConfig.ps1" />
     <Compile Include="Public\Enable-NSLBMonitor.ps1" />
+    <Compile Include="Public\Add-NSDnsNameServer.ps1" />
+    <Compile Include="Public\Add-NSIPResource.ps1" />
+    <Compile Include="Public\Set-NSHostname.ps1" />
     <Compile Include="Public\Set-NSLBServer.ps1" />
     <Compile Include="Public\Set-NSLBServiceGroup.ps1" />
+    <Compile Include="Public\Set-NSTimeZone.ps1" />
     <Compile Include="Public\Set-NSLBVirtualServer.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

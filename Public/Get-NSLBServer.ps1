@@ -40,10 +40,10 @@ function Get-NSLBServer {
     #>
     [cmdletbinding()]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
-        [string[]]$Name = (Read-Host -Prompt 'LB server name')
+        [string[]]$Name
     )
 
     begin {
@@ -54,12 +54,12 @@ function Get-NSLBServer {
     process {
         if ($Name.Count -gt 0) {
             foreach ($item in $Name) {
-                $servers = [com.citrix.netscaler.nitro.resource.config.basic.server]::get($Session, $item)
-                $servers
+                $servers = _InvokeNSRestApi -Session $Session -Method Get -Type server -Resource $item -Action Get 
+                return $servers.server
             }
         } else {
-            $servers = [com.citrix.netscaler.nitro.resource.config.basic.server]::get($Session)
-            $servers
+            $servers = _InvokeNSRestApi -Session $Session -Method Get -Type server -Action Get
+            return $servers.server
         }
     }
 }

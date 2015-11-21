@@ -40,10 +40,10 @@ function Get-NSLBServiceGroup {
     #>
     [cmdletbinding()]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
-        [string[]]$Name = (Read-Host -Prompt 'LB service group name')
+        [string[]]$Name
     )
 
     begin {
@@ -54,12 +54,12 @@ function Get-NSLBServiceGroup {
     process {
         if ($Name.Count -gt 0) {
             foreach ($item in $Name) {
-                $serviceGroups = [com.citrix.netscaler.nitro.resource.config.basic.servicegroup]::get($Session, $item)
-                $serviceGroups
+                $serviceGroups = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Action Get -Resource $item
+                return $serviceGroups.servicegroup
             }
         } else {
-            $serviceGroups = [com.citrix.netscaler.nitro.resource.config.basic.servicegroup]::get($Session)
-            $serviceGroups
+            $serviceGroups = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Action Get
+            return $serviceGroups.servicegroup
         }
     }
 }

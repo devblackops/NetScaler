@@ -30,10 +30,13 @@ function Save-NSConfig {
 
     .PARAMETER Session
         The NetScaler session object.
+
+    .PARAMETER Passthru
+        Return the response.
     #>
     [cmdletbinding()]
     param(
-        $Session = $script:nitroSession
+        $Session = $script:session
     )
 
     begin {
@@ -41,6 +44,11 @@ function Save-NSConfig {
     }
 
     process {
-        $Session.save_config() | Out-Null
+        $response = _InvokeNSRestApi -Session $Session -Method POST -Type nsconfig -Action save
+        if ($response.errorcode -ne 0) { throw $response }
+
+        if ($PSBoundParameters.ContainsKey('PassThru')) {
+            return $response
+        }
     }
 }

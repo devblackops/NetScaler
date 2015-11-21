@@ -14,47 +14,46 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Enable-NSLBServer {
+function Disable-NSMode {
     <#
     .SYNOPSIS
-        Enable load balancer server object.
+        Disable mode on NetScaler appliance.
 
     .DESCRIPTION
-        Enable load balancer server object.
+        Disable mode on NetScaler appliance.
 
     .EXAMPLE
-        Enable-NSLBServer -Name 'server01'
+        Disable-NSMode -Name 'l3'
 
-        Enable the load balancer server 'server01'.
-
-    .EXAMPLE
-        'server01', 'server02' | Enable-NSLBServer -Force
-    
-        Enable the monitors 'monitor01' and 'monitor02' without confirmation.
+        Disable the mode 'l3' on the NetScaler appliance.
 
     .EXAMPLE
-        $server = Enable-NSLBServer -Name 'server01' -Force -PassThru
+        'fr', 'l3' | Disable-NSMode -Force
 
-        Enable the load balancer server 'server01' without confirmation and return the resulting object.
+        Disable the modes 'fr' and 'l3' on the NetScaler appliance.    
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        Name for the server.
+        The name or names of the NetScaler modes to disable.
 
     .PARAMETER Force
-        Suppress confirmation when enabling the server.
+        Suppress confirmation when disabling the mode.
 
     .PARAMETER PassThru
-        Return the load balancer server object.
+        Return the status of the NetScaler modes.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:session,
 
         [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
-        [string[]]$Name = (Read-Host -Prompt 'LB server name'),
+        [ValidateSet(
+                'bridgebpbus', 'cka', 'dradv', 'dradv6', 'edge', 'fr', 'iradv', 'l2', 'l3', 'mbf',
+                'pmtud', 'rise_apbr', 'rise_rhi', 'sradv', 'sradv6', 'tcpb', 'usip', 'usnip'
+        )]
+        [string[]]$Name = (Read-Host -Prompt 'Netscaler mode'),
 
         [switch]$Force,
 
@@ -67,20 +66,21 @@ function Enable-NSLBServer {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Enable Server')) {
-                try {
+            try {
+                $item = $item.ToLower()
+                if ($Force -or $PSCmdlet.ShouldProcess($item, 'Disable NetScaler mode')) {
                     $params = @{
-                        name = $item
+                        mode = $item
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action enable
+                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type nsmode -Payload $params -Action disable
                     if ($response.errorcode -ne 0) { throw $response }
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
-                        return Get-NSLBServer -Session $Session -Name $item
+                        return Get-NSMode -Session $Session -Name $item
                     }
-                } catch {
-                    throw $_
                 }
+            } catch {
+                throw $_
             }
         }
     }

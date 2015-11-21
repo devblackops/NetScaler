@@ -33,14 +33,22 @@ function Disconnect-NetScaler {
     #>
     [cmdletbinding()]
     param(
-        $Session = $script:nitroSession
+        $Session = $script:session
     )
 
     _AssertSessionActive
 
     try {
-        $Session.logout()
-        Write-Verbose -Message "Disconnected from NetScaler"
+        Write-Verbose -Message 'Logging out of NetScaler'
+        $params = @{
+            Uri =  "$($script:protocol)://$($Session.Endpoint)/nitro/v1/config/logout"
+            Body = ConvertTo-Json -InputObject @{logout = @{}}
+            Method = 'POST'
+            ContentType = 'application/json'
+            WebSession = $session.WebSession
+        }
+        $response = Invoke-RestMethod @params
+        if ($response.errorcode -ne 0) { throw $response }
     } catch {
         throw $_
     }    

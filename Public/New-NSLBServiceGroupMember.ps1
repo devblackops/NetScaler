@@ -39,19 +39,29 @@ function New-NSLBServiceGroupMember {
         The name of the service group to associated the server with.
 
     .PARAMETER ServerName
-        The name of the server to attach to the service group.
+        Name of the server to which to bind the service group.
 
     .PARAMETER Port
-        The port of the server.
+        Server port number.
+
+        Range 1 - 65535
 
     .PARAMETER Weight
-        Weight to assign to the server in the service group.
+        Weight to assign to the servers in the service group. 
+        Specifies the capacity of the servers relative to the other servers in the load balancing configuration. 
+        The higher the weight, the higher the percentage of requests sent to the service.
+
+        Minimum value = 1
+        Maximum value = 100
 
     .PARAMETER ServerId
-        The identifier for the service.
+        The identifier for the service. This is used when the persistency type is set to Custom Server ID.
 
     .PARAMETER HashId
-        The hash identifier for the service.
+        The hash identifier for the service. This must be unique for each service. 
+        This parameter is used by hash based load balancing methods.
+
+        Minimum value = 1
 
     .PARAMETER State
         The initial state of the server in the service group.
@@ -61,13 +71,13 @@ function New-NSLBServiceGroupMember {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
-        [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
+        [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
         [Alias('ServiceGroupName')]
         [string[]]$Name,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory)]
         [string[]]$ServerName,
 
         [ValidateRange(1, 65535)]
@@ -95,18 +105,22 @@ function New-NSLBServiceGroupMember {
         foreach ($item in $Name) {
             foreach ($member in $ServerName) {
                 if ($PSCmdlet.ShouldProcess($item, "Add Service Group Member: $Member")) {
-                    $b = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.basic.servicegroup_servicegroupmember_binding
-                    $b.servicegroupname = $item
-                    $b.servername = $Member
-                    $b.port = $Port
-                    $b.weight = $Weight
-                    $b.state = $State
+                    try {
+                        $params = @{
+                            servicegroupname = $item
+                            servername = $member
+                            port = $Port
+                            weight = $Weight
+                            state = $State
+                        }
+                        $response = _InvokeNSRestApi -Session $Session -Method POST -Type servicegroup_servicegroupmember_binding -Payload $params -Action add
+                        if ($response.errorcode -ne 0) { throw $response }
 
-                    $result = [com.citrix.netscaler.nitro.resource.config.basic.servicegroup_servicegroupmember_binding]::add($session, $b)
-                    if ($result.errorcode -ne 0) { throw $result }
-
-                    if ($PSBoundParameters.ContainsKey('PassThru')) {
-                        return [com.citrix.netscaler.nitro.resource.config.basic.servicegroup_servicegroupmember_binding]::get($session, $item)
+                        if ($PSBoundParameters.ContainsKey('PassThru')) {
+                            return Get-NSLBServiceGroupMemberBinding -Session $session -Name $item
+                        }
+                    } catch {
+                        throw $_
                     }
                 }
             }

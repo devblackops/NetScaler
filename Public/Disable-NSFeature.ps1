@@ -14,47 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Enable-NSLBVirtualServer {
+function Disable-NSFeature {
     <#
     .SYNOPSIS
-        Enable load balancer virtual server object.
+        Disable feature on NetScaler appliance.
 
     .DESCRIPTION
-        Enable load balancer virtual server object.
+        Disable feature on NetScaler appliance.
 
     .EXAMPLE
-        Enable-NSLBVirtualServer -Name 'vserver01'
+        Disable-NSFeature -Name 'lb'
 
-        Enable the load balancer virtual server 'vserver01'.
+        Disable the feature 'lb' on the NetScaler appliance.
 
     .EXAMPLE
-        'vserver01', 'vserver02' | Enable-NSLBVirtualServer -Force
+        'sslvpn', 'lb' | Disable-NSFeature -Force
     
-        Enable the load balancer virtual servers 'vserver01' and 'vserver02' without confirmation.
-
-    .EXAMPLE
-        $vserver = Enable-NSLBVirtualServer -Name 'vserver01' -Force -PassThru
-
-        Enable the load balancer virtual server 'vserver01' without confirmation and return the resulting object.
+        Disable the features 'sslvpn' and 'lb' on the NetScaler appliance.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        Name for the virtual server.
+        The name or names of the NetScaler features to disable.
 
     .PARAMETER Force
-        Suppress confirmation when enabling the virtual server.
+        Suppress confirmation when disabling the feature.
 
     .PARAMETER PassThru
-        Return the load balancer virtual server object.
+        Return the status of the NetScaler features.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:session,
 
         [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
-        [string[]]$Name = (Read-Host -Prompt 'LB virtual server name'),
+        [string[]]$Name = (Read-Host -Prompt 'NetScaler feature'),
 
         [switch]$Force,
 
@@ -67,16 +62,17 @@ function Enable-NSLBVirtualServer {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Enable Virtual Server')) {
+            $item = $item.ToLower()
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Disable NetScaler feature')) {
                 try {
                     $params = @{
-                        name = $item
+                        feature = $item
                     }
-                    $reponse = _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action enable
-                    if ($reponse.errorcode -ne 0) { throw $reponse }
+                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type nsfeature -Payload $params -Action disable
+                    if ($response.errorcode -ne 0) { throw $response }
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
-                        return Get-NSLBVirtualServer -Session $Session -Name $item
+                        return Get-NSFeature -Session $Session -Name $item
                     }
                 } catch {
                     throw $_

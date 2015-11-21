@@ -14,52 +14,58 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSLBStat {
+function Get-NSFeature {
     <#
     .SYNOPSIS
-        Gets the specified load balancer stat object.
+        Gets the feature status for the NetScaler appliance.
 
     .DESCRIPTION
-        Gets the specified load balancer stat object.
+        Gets the feature status for the NetScaler appliance.
 
     .EXAMPLE
-        Get-NSLBStat
+        Get-NSFeature
 
-        Get all load balancer stat objects.
+        Get status for all the NetScaler features.
 
     .EXAMPLE
-        Get-NSLBStat -Name 'stat01'
+        Get-NSFeature -Name 'sslvpn'
     
-        Get the load balancer stat named 'stat01'.
+        Get the status of NetScaler feature 'sslvpn'.
+
+    .EXAMPLE
+        'sslvpn', 'lb' | Get-NSFeature
+    
+        Get the status of NetScaler feature 'sslvpn' and 'lb'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the load balancer stat to get.
+        The name or names of NetScaler features to get.
     #>
     [cmdletbinding()]
     param(
         $Session = $script:session,
 
-        [parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
         [string[]]$Name
     )
 
     begin {
         _AssertSessionActive
-        $stats = @()
+        $features = @()
     }
 
     process {
         if ($Name.Count -gt 0) {
+            $all = _InvokeNSRestApi -Session $Session -Method Get -Type nsfeature -Action Get
             foreach ($item in $Name) {
-                $stats = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Stat -Resource $item
-                return $stats.servicegroup
+                $features += $all.nsfeature.$item
             }
+            return $features
         } else {
-            $stats = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Stat
-            return $stats.servicegroup
+            $features = _InvokeNSRestApi -Session $Session -Method Get -Type nsfeature -Action Get
+            return $features.nsfeature
         }
     }
 }

@@ -40,10 +40,10 @@ function Get-NSLBVirtualServer {
     #>
     [cmdletbinding()]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [Parameter(Position=0)]
-        [string]$Name = (Read-Host -Prompt 'LB virtual server name'),
+        [string]$Name,
 
         [int]$Port,
 
@@ -56,33 +56,33 @@ function Get-NSLBVirtualServer {
 
     begin {
         _AssertSessionActive
-        $virtualServers = @()
+        $vservers = @()
     }
 
     process {
-        # Contruct a filter array if we specified any filters
-        [com.citrix.netscaler.nitro.util.filtervalue[]] $filters = @()
+        # Contruct a filter hash if we specified any filters
+        $filters = @{}
         if ($PSBoundParameters.ContainsKey('Name')) {
-            $filters += New-Object -TypeName com.citrix.netscaler.nitro.util.filtervalue -ArgumentList @('name', $Name)
+            $filters.'name' = $Name
         }
         if ($PSBoundParameters.ContainsKey('Port')) {
-            $filters += New-Object -TypeName com.citrix.netscaler.nitro.util.filtervalue -ArgumentList @('port', $Port)
+            $filters.'port' = $Port
         }
         if ($PSBoundParameters.ContainsKey('ServiceType')) {
-            $filters += New-Object -TypeName com.citrix.netscaler.nitro.util.filtervalue -ArgumentList @('servicetype', $ServiceType)
+            $filters.'servicetype' = $ServiceType
         }
         if ($PSBoundParameters.ContainsKey('LBMethod')) {
-            $filters += New-Object -TypeName com.citrix.netscaler.nitro.util.filtervalue -ArgumentList @('lbmethod', $LBMethod)
+            $filters.'lbmethod' = $LBMethod
         }
 
         # If we specified any filters, filter based on them
-        # Otherwise, get everything        
+        # Otherwise, get everything
         if ($filters.count -gt 0) {
-            $virtualServers = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver]::get_filtered($Session, $filters)
+            $vservers = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver -Action Get -Filters $filters
         } else {
-            $virtualServers = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver]::get($Session)
+            $vservers = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver -Action Get
         }
 
-        $virtualServers
+        $vservers.lbvserver
     }
 }

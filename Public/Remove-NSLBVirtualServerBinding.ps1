@@ -43,7 +43,7 @@ function Remove-NSLBVirtualServerBinding {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
-        $Session = $script:nitroSession,
+        $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Name,
@@ -59,12 +59,14 @@ function Remove-NSLBVirtualServerBinding {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Virtual Server Binding')) {
                 try {
-                    $binding = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver_servicegroup_binding]::get($Session, $item)
-                    $b = New-Object -TypeName com.citrix.netscaler.nitro.resource.config.lb.lbvserver_servicegroup_binding
-                    $b.name = $binding.name
-                    $b.servicegroupname = $binding.servicegroupname
-                    $result = [com.citrix.netscaler.nitro.resource.config.lb.lbvserver_servicegroup_binding]::delete($Session, $b)
-                    if ($result.errorcode -ne 0) { throw $result }
+                    $binding = _InvokeNSRestApi -Session $Session -Method GET -Type lbvserver_servicegroup_binding -Resource $item -Action get
+                    $params = @{
+                        name = $binding.name
+                        servicegroupname = $binding.lbvserver_servicegroup_binding.servicegroupname
+                    }
+
+                    $response = _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver_sevicegroup_binding -Arguments $params -Action delete
+                    if ($response.errorcode -ne 0) { throw $response }
                 } catch {
                     throw $_
                 }
