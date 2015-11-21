@@ -64,8 +64,7 @@ function Set-NSHostname {
             $params = @{
                 hostname = $Hostname
             }
-            $response = _InvokeNSRestApi -Session $Session -Method PUT -Type nshostname -Payload $params -Action update
-            if ($response.errorcode -ne 0) { throw $response }
+            _InvokeNSRestApi -Session $Session -Method PUT -Type nshostname -Payload $params -Action update
         
             if ($PSBoundParameters.ContainsKey('PassThru')) {
                 return _InvokeNSRestApi -Session $Session -Method GET -Type nshostname -Action get

@@ -59,8 +59,7 @@ function Remove-NSLBVirtualServer {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Virtual Server')) {
                 try {
-                    $response = _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver -Resource $item -Action delete
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver -Resource $item -Action delete
                 } catch {
                     throw $_
                 }                

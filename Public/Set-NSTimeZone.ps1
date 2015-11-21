@@ -65,8 +65,7 @@ function Set-NSTimeZone {
             $params = @{
                 timezone = $TimeZone
             }
-            $response = _InvokeNSRestApi -Session $Session -Method PUT -Type nsconfig -Payload $params -Action update
-            if ($response.errorcode -ne 0) { throw $response }
+            _InvokeNSRestApi -Session $Session -Method PUT -Type nsconfig -Payload $params -Action update
 
             if ($PSBoundParameters.ContainsKey('PassThru')) {
                 $config = _InvokeNSRestApi -Session $Session -Method GET -Type nsconfig -Action get

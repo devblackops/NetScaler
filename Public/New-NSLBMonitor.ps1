@@ -378,8 +378,7 @@ function New-NSLBMonitor {
                     if ($PSBoundParameters.ContainsKey('ScriptArgs')) {
                         $params.Add('scriptargs', $ScriptArgs)
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action add
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSLBMonitor -Session $session -Name $item

@@ -90,7 +90,6 @@ function Add-NSDnsNameServer {
                         type = $Type
                     }
                     $response = _InvokeNSRestApi -Session $Session -Method POST -Type dnsnameserver -Payload $params -Action add
-                    if ($response.errorcode -ne 0) { throw $response }
                 } catch {
                     throw $_
                 }

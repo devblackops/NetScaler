@@ -81,7 +81,6 @@ function Add-NSRSAKey {
                     bits = $KeyFileBits
                 }
                 $response = _InvokeNSRestApi -Session $Session -Method POST -Type sslrsakey -Payload $params -Action create
-                if ($response.errorcode -ne 0) { throw $response }
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
                     return $response

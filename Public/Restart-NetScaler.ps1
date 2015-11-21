@@ -86,8 +86,7 @@ function Restart-NetScaler {
             $params = @{
                 warm=$WarmReboot.ToBool() 
             }
-            $response = _InvokeNSRestApi -Session $Session -Method POST -Type reboot -Payload $params -Action reboot
-            if ($response.errorcode -ne 0) { throw $response }
+            _InvokeNSRestApi -Session $Session -Method POST -Type reboot -Payload $params -Action reboot
 
             $canWait = $true
             $ping = New-Object -TypeName System.Net.NetworkInformation.Ping

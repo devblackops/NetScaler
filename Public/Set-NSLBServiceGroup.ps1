@@ -242,8 +242,7 @@ function Set-NSLBServiceGroup {
                     $params.Add('svrtimeout', $ServerIdleTimeout)
                 }
 
-                $response = _InvokeNSRestApi -Session $Session -Method PUT -Type servicegroup -Payload $params -Action update
-                if ($response.errorcode -ne 0) { throw $response }
+                _InvokeNSRestApi -Session $Session -Method PUT -Type servicegroup -Payload $params -Action update
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
                     return Get-NSLBServiceGroup -Session $Session -Name $item

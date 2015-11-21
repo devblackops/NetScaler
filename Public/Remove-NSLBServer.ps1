@@ -59,8 +59,7 @@ function Remove-NSLBServer {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Server')) {
                 try {
-                    $response = _InvokeNSRestApi -Session $Session -Method DELETE -Type server -Resource $item -Action delete
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type server -Resource $item -Action delete
                 } catch {
                     throw $_
                 }

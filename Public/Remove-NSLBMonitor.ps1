@@ -64,8 +64,7 @@ function Remove-NSLBMonitor {
                     $params = @{
                         type = $m.lbmonitor.type
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method DELETE -Type lbmonitor -Resource $item -Arguments $params -Action delete
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type lbmonitor -Resource $item -Arguments $params -Action delete
                 } catch {
                     throw $_
                 }

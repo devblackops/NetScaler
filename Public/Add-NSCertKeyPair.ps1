@@ -98,7 +98,6 @@ function Add-NSCertKeyPair {
                     $params.Add("passcrypt",$unsecurePassword)
                 }
                 $response = _InvokeNSRestApi  -Session $Session -Method POST -Type sslcertkey -Payload $params -Action add 
-                if ($response.errorcode -ne 0) { throw $response }
             } catch {
                 throw $_
             }

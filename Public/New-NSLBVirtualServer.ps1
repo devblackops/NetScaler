@@ -137,8 +137,7 @@ function New-NSLBVirtualServer {
                         port = $Port
                         lbmethod = $LBMethod
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action add
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSLBVirtualServer -Session $Session -Name $item

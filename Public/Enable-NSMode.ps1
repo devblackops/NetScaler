@@ -76,8 +76,7 @@ function Enable-NSMode {
                     $params = @{
                         mode = $item
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type nsmode -Payload $params -Action enable
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type nsmode -Payload $params -Action enable
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSMode -Session $Session -Name $item

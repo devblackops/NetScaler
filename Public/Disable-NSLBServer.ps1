@@ -72,8 +72,7 @@ function Disable-NSLBServer {
                     $params = @{
                         name = $item
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action disable
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action disable
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSLBServer -Session $Session -Name $item

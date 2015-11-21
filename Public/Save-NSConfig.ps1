@@ -45,7 +45,6 @@ function Save-NSConfig {
 
     process {
         $response = _InvokeNSRestApi -Session $Session -Method POST -Type nsconfig -Action save
-        if ($response.errorcode -ne 0) { throw $response }
 
         if ($PSBoundParameters.ContainsKey('PassThru')) {
             return $response

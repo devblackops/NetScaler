@@ -113,8 +113,7 @@ function New-NSLBServiceGroupMember {
                             weight = $Weight
                             state = $State
                         }
-                        $response = _InvokeNSRestApi -Session $Session -Method POST -Type servicegroup_servicegroupmember_binding -Payload $params -Action add
-                        if ($response.errorcode -ne 0) { throw $response }
+                        _InvokeNSRestApi -Session $Session -Method POST -Type servicegroup_servicegroupmember_binding -Payload $params -Action add
 
                         if ($PSBoundParameters.ContainsKey('PassThru')) {
                             return Get-NSLBServiceGroupMemberBinding -Session $session -Name $item

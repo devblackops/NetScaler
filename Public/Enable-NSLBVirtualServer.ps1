@@ -72,8 +72,7 @@ function Enable-NSLBVirtualServer {
                     $params = @{
                         name = $item
                     }
-                    $reponse = _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action enable
-                    if ($reponse.errorcode -ne 0) { throw $reponse }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action enable
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSLBVirtualServer -Session $Session -Name $item

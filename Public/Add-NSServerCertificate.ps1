@@ -106,8 +106,7 @@ function Add-NSServerCertificate {
                     countryname = $CountryName
                     statename = $StateName
                 }
-                $createCsrResponse = _InvokeNSRestApi -Session $Session -Method POST -Type sslcertreq -Payload $csrParams -Action create
-                if ($createCsrResponse.errorcode -ne 0) { throw $createCsrResponse }
+                _InvokeNSRestApi -Session $Session -Method POST -Type sslcertreq -Payload $csrParams -Action create
 
                 Write-Verbose -Message 'Downloading certificate request'
                 $downloadParams = @{
@@ -139,8 +138,7 @@ function Add-NSServerCertificate {
                         filelocation = '/nsconfig/ssl/'
                         fileencoding = 'BASE64'
                     }
-                    $uploadCertResponse = _InvokeNSRestApi -Session $Session -Method POST -Type systemfile -Payload $certUploadParams -Action add
-                    if ($uploadCertResponse.errorcode -ne 0) { throw $uploadCertResponse }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type systemfile -Payload $certUploadParams -Action add
 
                     Write-Verbose -Message 'Creating certificate request'
                     Add-NSCertKeyPair -Session $Session -CertKeyName $fileName -CertPath $certFileName -KeyPath $certKeyFileName

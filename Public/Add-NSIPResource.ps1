@@ -107,7 +107,6 @@ function Add-NSIPResource {
                         mgmtaccess = if ($PSBoundParameters.ContainsKey('MgmtAccess')) { 'ENABLED' } else { 'DISABLED' }
                     }
                     $response = _InvokeNSRestApi -Session $Session -Method POST -Type nsip -Payload $params -Action add
-                    if ($response.errorcode -ne 0) { throw $response }
                 } catch {
                     throw $_
                 }

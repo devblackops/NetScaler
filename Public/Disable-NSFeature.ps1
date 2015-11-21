@@ -68,8 +68,7 @@ function Disable-NSFeature {
                     $params = @{
                         feature = $item
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type nsfeature -Payload $params -Action disable
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type nsfeature -Payload $params -Action disable
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSFeature -Session $Session -Name $item

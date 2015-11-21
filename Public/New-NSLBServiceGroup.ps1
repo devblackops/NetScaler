@@ -302,8 +302,7 @@ function New-NSLBServiceGroup {
                     if ($PSBoundParameters.ContainsKey('MaxClients')) {
                         $params.Add('maxclient', $MaxClients)
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type servicegroup -Payload $params -Action add                   
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type servicegroup -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSLBServiceGroup -Session $Session -Name $item

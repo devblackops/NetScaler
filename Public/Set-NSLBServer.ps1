@@ -84,8 +84,7 @@ function Set-NSLBServer {
                 if ($PSBoundParameters.ContainsKey('Comment')) {
                     $params.Add('comment', $Comment)
                 }
-                $response = _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver -Payload $params -Action update
-                if ($response.errorcode -ne 0) { throw $response }
+                _InvokeNSRestApi -Session $Session -Method PUT -Type server -Payload $params -Action update
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
                     return Get-NSLBServer -Session $Session -Name $item

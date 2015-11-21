@@ -80,8 +80,7 @@ function Enable-NSLBMonitor {
                         servicegroupname = $m.servicegroupname
                         monitorname = $m.monitorname
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action enable
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action enable
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSLBMonitor -Session $Session -Name $item

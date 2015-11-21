@@ -75,7 +75,6 @@ function Install-NSLicense {
                     fileencodingv = 'BASE64'
                 }
                 $response = _InvokeNSRestApi -Session $Session -Method POST -Type systemfile systemfile -Payload $params -Action add
-                if ($response.errorcode -ne 0) { throw $response }
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
                    return $response 

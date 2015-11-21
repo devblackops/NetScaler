@@ -64,9 +64,7 @@ function Remove-NSLBVirtualServerBinding {
                         name = $binding.name
                         servicegroupname = $binding.lbvserver_servicegroup_binding.servicegroupname
                     }
-
-                    $response = _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver_sevicegroup_binding -Arguments $params -Action delete
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver_sevicegroup_binding -Arguments $params -Action delete
                 } catch {
                     throw $_
                 }

@@ -109,8 +109,7 @@ function New-NSLBServer {
                         td = $TrafficDomainId
                         state = $State
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action add
-                    if ($response.errorcode -ne 0) { throw $response }
+                    _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSLBServer -Session $session -Name $item
