@@ -5,6 +5,8 @@
 skip_commits:
   message: /updated readme.*/
 
+os: WMF 5
+
 install:
   - cinst -y pester --version 3.3.13
 
