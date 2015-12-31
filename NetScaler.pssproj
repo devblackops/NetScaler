@@ -27,14 +27,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="DLL\" />
     <Folder Include="en-US\" />
     <Folder Include="Private\" />
     <Folder Include="Public\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DLL\Newtonsoft.Json.dll" />
-    <Compile Include="DLL\nitro.dll" />
     <Compile Include="en-US\about_NetScaler.help.txt" />
     <Compile Include="NetScaler.psd1" />
     <Compile Include="NetScaler.psm1" />
@@ -54,7 +51,7 @@
     <Compile Include="Public\Enable-NSLBServer.ps1" />
     <Compile Include="Public\Enable-NSLBVirtualServer.ps1" />
     <Compile Include="Public\Enable-NSMode.ps1" />
-    <Compile Include="Public\Get-NSAvailableTimeZones.ps1" />
+    <Compile Include="Public\Get-NSAvailableTimeZone.ps1" />
     <Compile Include="Public\Get-NSFeature.ps1" />
     <Compile Include="Public\Get-NSHostname.ps1" />
     <Compile Include="Public\Get-NSLBMonitor.ps1" />
