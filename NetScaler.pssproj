@@ -28,11 +28,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="en-US\" />
+    <Folder Include="Tests\" />
     <Folder Include="Private\" />
     <Folder Include="Public\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="en-US\about_NetScaler.help.txt" />
+    <Compile Include="LICENSE" />
     <Compile Include="NetScaler.psd1" />
     <Compile Include="NetScaler.psm1" />
     <Compile Include="Private\_AssertSessionActive.ps1" />
@@ -84,6 +86,11 @@
     <Compile Include="Public\Set-NSLBServiceGroup.ps1" />
     <Compile Include="Public\Set-NSTimeZone.ps1" />
     <Compile Include="Public\Set-NSLBVirtualServer.ps1" />
+    <Compile Include="README.md" />
+    <Compile Include="Tests\AppVeyor.Pester.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appveyor.yml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
