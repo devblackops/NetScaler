@@ -185,7 +185,7 @@ function Set-NSLBServiceGroup {
                     servicegroupname = $item
                 }
                 if ($PSBoundParameters.ContainsKey('Cacheable')) {
-                    $params.Add('cachable', $Cacheable)
+                    $params.Add('cacheable', $Cacheable)
                 }
                 if ($PSBoundParameters.ContainsKey('HealthMonitor')) {
                     $params.Add('healthmonitor', $HealthMonitor)
