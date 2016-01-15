@@ -18,18 +18,18 @@ if(-not $Finalize) {
 
     Import-Module Pester
 
-    Invoke-Pester -Path "$ProjectRoot\Tests" -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile" -PassThru |
-        Export-Clixml -Path "$ProjectRoot\PesterResults$PSVersion.xml"
+    Invoke-Pester -Path "$ProjectRoot\Tests" -OutputFormat NUnitXml -OutputFile "$($env:temp)\$TestFile" -PassThru |
+        Export-Clixml -Path "$($env:temp)\PesterResults$PSVersion.xml"
 } else {
     # If finalize is specified, check for failures and 
 
     #Show status...
-    $AllFiles = Get-ChildItem -Path $ProjectRoot\*Results*.xml | Select -ExpandProperty FullName
+    $AllFiles = Get-ChildItem -Path "$($env:temp)\*Results*.xml" | Select -ExpandProperty FullName
     "`n`tSTATUS: Finalizing results`n"
     "COLLATING FILES:`n$($AllFiles | Out-String)"
 
     #Upload results for test page
-    Get-ChildItem -Path "$ProjectRoot\TestResultsPS*.xml" | Foreach-Object {
+    Get-ChildItem -Path "$($env:temp)\TestResultsPS*.xml" | Foreach-Object {
         
         $Address = "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)"
         $Source = $_.FullName
@@ -40,7 +40,7 @@ if(-not $Finalize) {
     }
 
     #What failed?
-    $Results = @( Get-ChildItem -Path "$ProjectRoot\PesterResults*.xml" | Import-Clixml )
+    $Results = @( Get-ChildItem -Path "$($env:temp)\PesterResults*.xml" | Import-Clixml )
             
     $FailedCount = $Results |
         Select -ExpandProperty FailedCount |
