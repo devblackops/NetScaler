@@ -39,7 +39,7 @@ are highly apprecaited.
 # Submitting Changes
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the main repository.
-* Once the pull request has been reviewed and accepted, it will be merged with the master brance.
+* Once the pull request has been reviewed and accepted, it will be merged with the master branch.
 * Celebrate 
 
 # Additional Resources
