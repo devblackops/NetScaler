@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="appveyor.yml" />
+    <Content Include="CONTRIBUTING.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
