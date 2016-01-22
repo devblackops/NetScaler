@@ -48,27 +48,39 @@ function Get-NSLBVirtualServerBinding {
 
     begin {
         _AssertSessionActive
-        $response = @()
+        $result = @()
     }
 
     process {
         if ($Name.Count -gt 0) {
             foreach ($item in $Name) {
-                $response = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_servicegroup_binding -Resource $item
+                $response = @()
+                $response += _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_servicegroup_binding -Resource $item
                 if ($response.errorcode -ne 0) { throw $response }
-                if ($response.PSobject.Properties.name -contains 'lbvserver_servicegroup_binding') {
-                    $response.lbvserver_servicegroup_binding
-                }                
-            }    
+                $response += _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_service_binding -Resource $item
+
+                foreach ($entry in $response) {
+                    if ($entry.PSobject.Properties.name -contains 'lbvserver_servicegroup_binding') {
+                        $result += $entry.lbvserver_servicegroup_binding
+                    }
+                    if ($entry.PSobject.Properties.name -contains 'lbvserver_service_binding') {
+                        $result += $entry.lbvserver_service_binding
+                    }
+                }
+            }
         } else {
             $vServers = Get-NSLBVirtualServer -Session $Session -Verbose:$false
             foreach ($item in $vServers) {
-                $bindings = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_servicegroup_binding -Resource $item.name
-                if ($bindings.errorcode -ne 0) { throw $bindings }
-                if ($bindings.PSobject.Properties.name -contains 'lbvserver_servicegroup_binding') {
-                    $bindings.lbvserver_servicegroup_binding
+                $response = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_servicegroup_binding -Resource $item.name
+                if ($response.errorcode -ne 0) { throw $bindings }
+                if ($response.PSobject.Properties.name -contains 'lbvserver_servicegroup_binding') {
+                    $result += $response.lbvserver_servicegroup_binding
+                }
+                if ($response.PSobject.Properties.name -contains 'lbvserver_service_binding') {
+                    $result += $response.lbvserver_service_binding
                 }
             }
         }
+        return $result
     }
 }

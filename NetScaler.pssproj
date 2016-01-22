@@ -72,7 +72,7 @@
     <Compile Include="NetScaler\Public\New-NSLBServiceGroup.ps1" />
     <Compile Include="NetScaler\Public\New-NSLBServiceGroupMember.ps1" />
     <Compile Include="NetScaler\Public\New-NSLBVirtualServer.ps1" />
-    <Compile Include="NetScaler\Public\New-NSLBVirtualServerBinding.ps1" />
+    <Compile Include="NetScaler\Public\Add-NSLBVirtualServerBinding.ps1" />
     <Compile Include="NetScaler\Public\Remove-NSLBMonitor.ps1" />
     <Compile Include="NetScaler\Public\Remove-NSLBServer.ps1" />
     <Compile Include="NetScaler\Public\Remove-NSLBServiceGroup.ps1" />
@@ -98,6 +98,7 @@
   <ItemGroup>
     <Content Include="appveyor.yml" />
     <Content Include="CONTRIBUTING.md" />
+    <Content Include="CHANGELOG.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />

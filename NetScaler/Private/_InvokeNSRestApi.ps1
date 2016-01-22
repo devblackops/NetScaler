@@ -75,6 +75,22 @@ function _InvokeNSRestApi {
         if (-not [string]::IsNullOrEmpty($Action)) {
             $uri += "?action=$Action"
         }
+
+        if ($Arguments.Count -gt 0) {
+            $queryPresent = $true
+            if ($uri -like '*?action*') {
+                $uri += '&args='
+            } else {
+                $uri += '?args='
+            }
+            $argsList = @()
+            foreach ($arg in $Arguments.GetEnumerator()) {
+                $argsList += "$($arg.Name):$([System.Uri]::EscapeDataString($arg.Value))"
+            }
+            $uri += $argsList -join ','
+        }
+
+
     } else {
         $queryPresent = $false
         if ($Arguments.Count -gt 0) {

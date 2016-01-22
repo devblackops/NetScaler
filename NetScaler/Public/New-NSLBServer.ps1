@@ -112,7 +112,7 @@ function New-NSLBServer {
                     _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
-                        return Get-NSLBServer -Session $session -Name $item
+                        return (Get-NSLBServer -Session $session -Name $item)
                     }
                 } catch {
                     throw $_

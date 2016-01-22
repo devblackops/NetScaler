@@ -62,7 +62,7 @@ function Remove-NSLBVirtualServer {
                     _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver -Resource $item -Action delete
                 } catch {
                     throw $_
-                }                
+                }
             }
         }
     }

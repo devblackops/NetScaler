@@ -47,9 +47,12 @@ function Disconnect-NetScaler {
             ContentType = 'application/json'
             WebSession = $session.WebSession
         }
-        $response = Invoke-RestMethod @params
-        if ($response.errorcode -ne 0) { throw $response }
+        try {
+            Invoke-RestMethod @params
+        } catch {
+            throw $_
+        }
     } catch {
         throw $_
-    }    
+    }
 }

@@ -41,12 +41,18 @@ function Remove-NSLBVirtualServerBinding {
     .PARAMETER Force
         Suppress confirmation when removing a load balancer binding.
     #>
-    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
+    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High', DefaultParameterSetName='servicegroup')]
     param(
         $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Name,
+
+        [parameter(Mandatory, ParameterSetName='servicegroup')]
+        [string]$ServiceGroupName,
+
+        [parameter(Mandatory, ParameterSetName='service')]
+        [string]$ServiceName,
 
         [switch]$Force
     )
@@ -59,12 +65,22 @@ function Remove-NSLBVirtualServerBinding {
         foreach ($item in $Name) {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Virtual Server Binding')) {
                 try {
-                    $binding = _InvokeNSRestApi -Session $Session -Method GET -Type lbvserver_servicegroup_binding -Resource $item -Action get
-                    $params = @{
-                        name = $binding.name
-                        servicegroupname = $binding.lbvserver_servicegroup_binding.servicegroupname
+                    $bindings = Get-NSLBVirtualServerBinding -Name $item
+
+                    $params = @{}
+
+                    if ($PSBoundParameters.ContainsKey('ServiceGroupName')) {
+                        $match = $bindings | where servicegroupname -eq $ServiceGroupName | Select-Object -First 1
+                        $params.servicegroupname = $match.servicegroupname
+
+                    } elseif ($PSBoundParameters.ContainsKey('ServiceName')) {
+                        $match = @($bindings | where servicename -eq $ServiceName) | Select-Object -First 1
+                        $params.servicename = $match.servicename
                     }
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver_sevicegroup_binding -Arguments $params -Action delete
+
+                    if ($match) {
+                        _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver_servicegroup_binding -Resource $item -Arguments $params -Action delete
+                    }
                 } catch {
                     throw $_
                 }

@@ -83,6 +83,8 @@ function Get-NSLBVirtualServer {
             $response = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver -Action Get
         }
         if ($response.errorcode -ne 0) { throw $response }
-        $response.lbvserver
+        if ($response.psobject.properties | where name -eq lbvserver) {
+            return $response.lbvserver
+        }
     }
 }

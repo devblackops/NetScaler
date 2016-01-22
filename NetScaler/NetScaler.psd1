@@ -83,6 +83,7 @@ FunctionsToExport = @(
     'Add-NSCertKeyPair',
     'Add-NSDnsNameServer',
     'Add-NSIPResource',
+    'Add-NSLBVirtualServerBinding'
     'Add-NSRSAKey',
     'Add-NSServerCertificate',
     'Connect-NetScaler',
@@ -114,7 +115,6 @@ FunctionsToExport = @(
     'New-NSLBServiceGroup',
     'New-NSLBServiceGroupMember',
     'New-NSLBVirtualServer',
-    'New-NSLBVirtualServerBinding',
     'Remove-NSLBMonitor',
     'Remove-NSLBServer',
     'Remove-NSLBServiceGroup',

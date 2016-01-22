@@ -48,18 +48,20 @@ function Get-NSLBServer {
 
     begin {
         _AssertSessionActive
-        $servers = @()
+        $response = @()
     }
 
     process {
         if ($Name.Count -gt 0) {
             foreach ($item in $Name) {
-                $servers = _InvokeNSRestApi -Session $Session -Method Get -Type server -Resource $item -Action Get 
-                return $servers.server
-            }
+                $response = _InvokeNSRestApi -Session $Session -Method Get -Type server -Resource $item -Action Get 
+                if ($response.errorcode -ne 0) { throw $response }
+                    $response.server
+                }
         } else {
-            $servers = _InvokeNSRestApi -Session $Session -Method Get -Type server -Action Get
-            return $servers.server
+            $response = _InvokeNSRestApi -Session $Session -Method Get -Type server -Action Get
+            if ($response.errorcode -ne 0) { throw $response }
+            $response.server
         }
     }
 }

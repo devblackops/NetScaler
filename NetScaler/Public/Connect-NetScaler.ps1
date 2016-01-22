@@ -39,7 +39,7 @@ function Connect-NetScaler {
     .PARAMETER PassThru
         Return the NetScaler session object.
     #>
-    [cmdletbinding()]
+    [cmdletbinding(DefaultParameterSetName='Hostname')]
     param(
         [parameter(Mandatory, ParameterSetName='IP')]
         [ValidateScript({$_ -match [IPAddress]$_ })]
