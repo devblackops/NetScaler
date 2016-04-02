@@ -266,7 +266,7 @@ function New-NSLBServiceGroup {
                         state = $State
                         comment = $Comment
                         autoscale = $AutoScale
-                        cachable = $Cacheable
+                        cacheable = $Cacheable
                         healthmonitor = $HealthMonitor
                         appflowlog = $AppFlowLog
                         sc = $SureConnect
