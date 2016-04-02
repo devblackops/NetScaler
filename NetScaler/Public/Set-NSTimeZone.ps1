@@ -36,6 +36,12 @@ function Set-NSTimeZone {
 
     .PARAMETER Timezone
         The timezone to set the appliance to.
+        
+    .PARAMETER Force
+        Suppress confirmation when updating the timezone.
+        
+    .PARAMETER Passthru
+        Return the hostname.        
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='high')]
     param(
@@ -52,6 +58,8 @@ function Set-NSTimeZone {
         })]
         [string]$TimeZone,
 
+        [switch]$Force,
+        
         [switch]$PassThru
     )
 
@@ -60,8 +68,8 @@ function Set-NSTimeZone {
     }
 
     process {
-        $ip = $($Session.get_ipaddress())
-        if ($PSCmdlet.ShouldProcess($ip, "Set timezone of NS appliance to: $TimeZone")) {
+        $ip = $($Session.Endpoint)
+        if ($Force -or $PSCmdlet.ShouldProcess($ip, "Set timezone of NS appliance to: $TimeZone")) {
             $params = @{
                 timezone = $TimeZone
             }
