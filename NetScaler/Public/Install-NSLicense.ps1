@@ -72,7 +72,7 @@ function Install-NSLicense {
                     filename = $fileName
                     filecontent = $licContentBase64
                     filelocation = '/nsconfig/license/'
-                    fileencodingv = 'BASE64'
+                    fileencoding = 'BASE64'
                 }
                 $response = _InvokeNSRestApi -Session $Session -Method POST -Type systemfile systemfile -Payload $params -Action add
 
