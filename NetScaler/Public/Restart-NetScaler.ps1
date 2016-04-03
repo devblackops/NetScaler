@@ -76,7 +76,7 @@ function Restart-NetScaler {
     }
 
     process {
-        $ip = $($Session.get_ipaddress())
+        $ip = $($Session.EndPoint)
         if ($Force -or $PSCmdlet.ShouldProcess($ip, 'Reboot NetScaler appliance')) {
 
             if ($PSBoundParameters.ContainsKey('SaveConfig')) {

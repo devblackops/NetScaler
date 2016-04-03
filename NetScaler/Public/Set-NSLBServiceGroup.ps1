@@ -43,7 +43,7 @@ function Set-NSLBServiceGroup {
     .PARAMETER Name
         The name or names of the service groups to update.
 
-    .PARAMETER Cachable
+    .PARAMETER Cacheable
         Use the transparent cache redirection virtual server to forward the request to the cache server.
 
     .PARAMETER HealthMonitor

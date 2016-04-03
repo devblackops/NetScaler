@@ -59,7 +59,7 @@ function Set-NSHostname {
     }
 
     process {
-        $ip = $($Session.get_ipaddress())
+        $ip = $($Session.Endpoint)
         if ($Force -or $PSCmdlet.ShouldProcess($ip, "Set hostname of NS appliance to: $Hostname")) {
             $params = @{
                 hostname = $Hostname

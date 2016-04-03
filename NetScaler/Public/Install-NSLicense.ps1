@@ -66,13 +66,13 @@ function Install-NSLicense {
             }
 
             if ($PSCmdlet.ShouldProcess($fileName, 'Install license file')) {
-                $licContent = Get-Content -Path $fileName -Encoding "Byte"
+                $licContent = Get-Content -Path $Path -Encoding "Byte"
                 $licContentBase64 = [System.Convert]::ToBase64String($licContent)
                 $params = @{
                     filename = $fileName
                     filecontent = $licContentBase64
                     filelocation = '/nsconfig/license/'
-                    fileencodingv = 'BASE64'
+                    fileencoding = 'BASE64'
                 }
                 $response = _InvokeNSRestApi -Session $Session -Method POST -Type systemfile systemfile -Payload $params -Action add
 
