@@ -45,7 +45,7 @@ function Set-NSLBServer {
         The comment associated with the load balancer server.
 
     .PARAMETER Force
-        Suppress confirmation when updating an load balancer server.
+        Suppress confirmation when updating a load balancer server.
 
     .PARAMETER Passthru
         Return the load balancer server object.

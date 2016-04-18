@@ -108,6 +108,7 @@ FunctionsToExport = @(
     'Get-NSLBStat',
     'Get-NSLBVirtualServer',
     'Get-NSLBVirtualServerBinding',
+    'Get-NSResponderAction',
     'Get-NSMode',
     'Install-NSLicense',
     'New-NSLBMonitor',
@@ -115,17 +116,20 @@ FunctionsToExport = @(
     'New-NSLBServiceGroup',
     'New-NSLBServiceGroupMember',
     'New-NSLBVirtualServer',
+    'New-NSResponderAction',
     'Remove-NSLBMonitor',
     'Remove-NSLBServer',
     'Remove-NSLBServiceGroup',
     'Remove-NSLBVirtualServer',
     'Remove-NSLBVirtualServerBinding',
+    'Remove-NSResponderAction',
     'Restart-NetScaler',
     'Save-NSConfig',
     'Set-NSHostname',
     'Set-NSLBServer',
     'Set-NSLBServiceGroup',
     'Set-NSLBVirtualServer',
+    'Set-NSResponderAction',
     'Set-NSTimeZone'
 )
 
