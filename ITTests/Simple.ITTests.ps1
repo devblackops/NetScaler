@@ -7,6 +7,10 @@ Import-Module Pester
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 Import-Module -Force $here\..\Netscaler
 
+$SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
+$Credential = New-Object System.Management.Automation.PSCredential ($Username, $SecurePassword)    
+
+
 function Compare-NSConfig($Old, $New) {
     $Old = $Old | ? { Test-IsMutatingConfigLines $_ }
     $New = $New | ? { Test-IsMutatingConfigLines $_ }
@@ -20,10 +24,7 @@ function Test-IsMutatingConfigLines($line) {
 }
 
 Describe "NS Feature" {
-    $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
-    $Credential = New-Object System.Management.Automation.PSCredential ($Username, $SecurePassword)    
     $Session = Connect-Netscaler -Hostname $Nsip -Credential $Credential -PassThru
-    $OldConfig = Get-NSConfig
     
     It "should add a feature1" {
         New-NSLBServer -Name toto -IPAddress 1.2.3.4
@@ -38,4 +39,12 @@ Describe "NS Feature" {
         
         Write-Host ((Compare-NSConfig $OldConfig $NewConfig) -join "`n")       
     }    
+
+    BeforeEach {
+        $OldConfig = Get-NSConfig        
+    }
+    
+    AfterEach {
+        Invoke-Nitro -Method POST -Type nsconfig -Action clear -Payload @{ "level" = "Basic"; "force" = "false"} -Force
+    }
 }
