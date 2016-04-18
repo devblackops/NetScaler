@@ -111,6 +111,7 @@ FunctionsToExport = @(
     'Get-NSLBVirtualServerBinding',
     'Get-NSMode',
     'Install-NSLicense',
+    'Invoke-Nitro',
     'New-NSLBMonitor',
     'New-NSLBServer',
     'New-NSLBServiceGroup',
