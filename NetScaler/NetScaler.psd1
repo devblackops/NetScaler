@@ -99,6 +99,7 @@ FunctionsToExport = @(
     'Enable-NSLBVirtualServer',
     'Enable-NSMode',
     'Get-NSAvailableTimeZone',
+    'Get-NSConfig',
     'Get-NSFeature',
     'Get-NSHostname',
     'Get-NSLBMonitor',
