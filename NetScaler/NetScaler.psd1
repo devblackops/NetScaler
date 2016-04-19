@@ -110,6 +110,7 @@ FunctionsToExport = @(
     'Get-NSLBVirtualServer',
     'Get-NSLBVirtualServerBinding',
     'Get-NSResponderAction',
+    'Get-NSResponderPolicy',
     'Get-NSMode',
     'Install-NSLicense',
     'Invoke-Nitro',
