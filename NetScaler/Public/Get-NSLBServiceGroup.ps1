@@ -55,11 +55,15 @@ function Get-NSLBServiceGroup {
         if ($Name.Count -gt 0) {
             foreach ($item in $Name) {
                 $serviceGroups = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Action Get -Resource $item
-                return $serviceGroups.servicegroup
+                if ($ServiceGroups.psobject.properties.name -contains 'servicegroup') {
+                    return $serviceGroups.servicegroup
+                }
             }
         } else {
             $serviceGroups = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup -Action Get
-            return $serviceGroups.servicegroup
+            if ($ServiceGroups.psobject.properties.name -contains 'servicegroup') {
+                return $serviceGroups.servicegroup
+            }
         }
     }
 }
