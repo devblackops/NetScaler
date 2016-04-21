@@ -86,6 +86,7 @@ FunctionsToExport = @(
     'Add-NSLBVirtualServerBinding'
     'Add-NSRSAKey',
     'Add-NSServerCertificate',
+    'Clear-NSConfig',
     'Connect-NetScaler',
     'Disable-NSFeature',
     'Disable-NSLBMonitor',
