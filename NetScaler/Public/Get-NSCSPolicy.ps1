@@ -37,13 +37,43 @@ function Get-NSCSPolicy {
 
     .PARAMETER Name
         The name or names of the content switching policys to get.
+
+    .PARAMETER Action
+        A filter to apply to the action name value.
+
+    .PARAMETER Rule
+        A filter to apply to the rule value.
+
+    .PARAMETER PolicyName
+        A filter to apply to the policy name value.
+
+    .PARAMETER Domain
+        A filter to apply to the domain value.
+
+    .PARAMETER Url
+        A filter to apply to the URL value.
+
+    .PARAMETER LogAction
+        A filter to apply to the log action name value.
     #>
     [cmdletbinding()]
     param(
         $Session = $Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]$Name = @()
+        [string[]]$Name = @(),
+
+        [string]$Action,
+
+        [string]$Rule,
+
+        [string]$PolicyName,
+
+        [string]$Domain,
+
+        [string]$Url,
+
+        [string]$LogAction
     )
 
     begin {
@@ -51,6 +81,26 @@ function Get-NSCSPolicy {
     }
 
     process {
-        _InvokeNSRestApiGet -Session $Session -Type cspolicy -Name $Name
+        # Contruct a filter hash if we specified any filters
+        $Filters = @{}
+        if ($PSBoundParameters.ContainsKey('Action')) {
+            $Filters['action'] = (Get-Variable -Name 'Action').Value
+        }
+        if ($PSBoundParameters.ContainsKey('Rule')) {
+            $Filters['rule'] = (Get-Variable -Name 'Rule').Value
+        }
+        if ($PSBoundParameters.ContainsKey('PolicyName')) {
+            $Filters['policyname'] = (Get-Variable -Name 'PolicyName').Value
+        }
+        if ($PSBoundParameters.ContainsKey('Domain')) {
+            $Filters['domain'] = (Get-Variable -Name 'Domain').Value
+        }
+        if ($PSBoundParameters.ContainsKey('Url')) {
+            $Filters['url'] = (Get-Variable -Name 'Url').Value
+        }
+        if ($PSBoundParameters.ContainsKey('LogAction')) {
+            $Filters['logaction'] = (Get-Variable -Name 'LogAction').Value
+        }
+        _InvokeNSRestApiGet -Session $Session -Type cspolicy -Name $Name -Filters $Filters
     }
 }

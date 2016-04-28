@@ -15,7 +15,11 @@ function _InvokeNSRestApiGet {
     .PARAMETER Name
         The name or names of the NS appliance resources.
         
+    .PARAMETER Filters
+        A Hashtable of search filter values.
+        
     .EXAMPLE
+        TODO
         
     .OUTPUTS        
         PSCustomObject that represents the JSON response content. This object can be manipulated using the ConvertTo-Json Cmdlet.
@@ -25,10 +29,12 @@ function _InvokeNSRestApiGet {
         [Parameter(Mandatory)]
         [PSObject]$Session,
         
+        [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
+        [string[]]$Name = @(),
+
         [string]$Type,
         
-        [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
-        [string[]]$Name = @()        
+        [Hashtable]$Filters = @{}
     )
 
     if ($Name.Count -gt 0) {
@@ -40,7 +46,7 @@ function _InvokeNSRestApiGet {
             }
         }
     } else {
-        $response = _InvokeNSRestApi -Session $Session -Method Get -Type $Type -Action Get
+        $response = _InvokeNSRestApi -Session $Session -Method Get -Type $Type -Action Get -Filters $Filters
         if ($response.errorcode -ne 0) { throw $response }
         if ($Response.psobject.properties.name -contains $Type) {
             $response.$Type

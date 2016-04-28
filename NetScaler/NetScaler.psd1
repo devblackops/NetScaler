@@ -112,6 +112,7 @@ FunctionsToExport = @(
     'Get-NSVPNServer',
     'Get-NSVPNSessionAction',
     'Get-NSVPNSessionPolicy',
+    'Get-NSVPNVirtualServer',
     'Install-NSLicense',
     'Invoke-Nitro',
     'New-NSKCDAccount',
