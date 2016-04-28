@@ -6,8 +6,46 @@ Param(
     [String]$Type,
 
     [Parameter(Mandatory)]
-    [String]$Label
+    [String]$Label,
+    
+    [Hashtable]$Filters = $Null
 )
+    $ErrorActionPreference = "Stop"
+    
+    function Expand-Filter($Key, $Value) {
+@"
+        if (`$PSBoundParameters.ContainsKey('$Key')) {
+            `$Filters['$Value'] = (Get-Variable -Name '$Key').Value
+        }
+"@
+    }
+
+    function Expand-FilterDoc($Key, $Value) {
+@"
+    .PARAMETER $Key
+        A filter to apply to the $Value value.
+"@
+    }
+
+
+if ($Filters -and ($Filters.Length -ne 0)) {
+    $ProcessBlock = @"
+        # Contruct a filter hash if we specified any filters
+        `$Filters = @{}
+$(($Filters.GetEnumerator() | % { Expand-Filter $_.Key $_.Value[0] }) -Join "`n")
+        _InvokeNSRestApiGet -Session `$Session -Type $Type -Name `$Name -Filters `$Filters
+"@
+    $FilterParameters = ",`n`n" + (
+        ($Filters.Keys | %{ "        [string]`$$_" }) -Join ",`n`n"
+    )
+    $FilterDocs = "`n`n" + (
+        ($Filters.GetEnumerator() | % { Expand-FilterDoc $_.Key $_.Value[1] }) -Join "`n`n"
+    )
+} else {
+ $ProcessBlock = @"
+        _InvokeNSRestApiGet -Session `$Session -Type $Type -Name `$Name
+"@
+}
 
 @"
 <#
@@ -48,14 +86,14 @@ function Get-NS$Name {
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the $($Label)s to get.
+        The name or names of the $($Label)s to get.$FilterDocs
     #>
     [cmdletbinding()]
     param(
         `$Session = `$Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]`$Name = @()
+        [string[]]`$Name = @()$FilterParameters
     )
 
     begin {
@@ -63,7 +101,7 @@ function Get-NS$Name {
     }
 
     process {
-        _InvokeNSRestApiGet -Session `$Session -Type $Type -Name `$Name
+$ProcessBlock
     }
 }
 "@ | Out-File -Encoding UTF8 -FilePath Netscaler\Public\Get-NS$Name.ps1

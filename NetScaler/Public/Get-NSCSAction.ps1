@@ -37,13 +37,43 @@ function Get-NSCSAction {
 
     .PARAMETER Name
         The name or names of the content switching actions to get.
+
+    .PARAMETER Comment
+        A filter to apply to the comment value.
+
+    .PARAMETER UndefinedHits
+        A filter to apply to the undefined hits value.
+
+    .PARAMETER Hits
+        A filter to apply to the hits value.
+
+    .PARAMETER TargetLBVserver
+        A filter to apply to the target load balancer virtual server value.
+
+    .PARAMETER ReferenceCount
+        A filter to apply to the reference count value.
+
+    .PARAMETER ActionName
+        A filter to apply to the action name value.
     #>
     [cmdletbinding()]
     param(
         $Session = $Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]$Name = @()
+        [string[]]$Name = @(),
+
+        [string]$Comment,
+
+        [string]$UndefinedHits,
+
+        [string]$Hits,
+
+        [string]$TargetLBVserver,
+
+        [string]$ReferenceCount,
+
+        [string]$ActionName
     )
 
     begin {
@@ -51,6 +81,26 @@ function Get-NSCSAction {
     }
 
     process {
-        _InvokeNSRestApiGet -Session $Session -Type csaction -Name $Name
+        # Contruct a filter hash if we specified any filters
+        $Filters = @{}
+        if ($PSBoundParameters.ContainsKey('Comment')) {
+            $Filters['comment'] = (Get-Variable -Name 'Comment').Value
+        }
+        if ($PSBoundParameters.ContainsKey('UndefinedHits')) {
+            $Filters['undefhits'] = (Get-Variable -Name 'UndefinedHits').Value
+        }
+        if ($PSBoundParameters.ContainsKey('Hits')) {
+            $Filters['hits'] = (Get-Variable -Name 'Hits').Value
+        }
+        if ($PSBoundParameters.ContainsKey('TargetLBVserver')) {
+            $Filters['targetlbvserver'] = (Get-Variable -Name 'TargetLBVserver').Value
+        }
+        if ($PSBoundParameters.ContainsKey('ReferenceCount')) {
+            $Filters['referencecount'] = (Get-Variable -Name 'ReferenceCount').Value
+        }
+        if ($PSBoundParameters.ContainsKey('ActionName')) {
+            $Filters['name'] = (Get-Variable -Name 'ActionName').Value
+        }
+        _InvokeNSRestApiGet -Session $Session -Type csaction -Name $Name -Filters $Filters
     }
 }
