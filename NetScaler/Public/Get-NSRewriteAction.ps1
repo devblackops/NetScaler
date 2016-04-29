@@ -37,13 +37,53 @@ function Get-NSRewriteAction {
 
     .PARAMETER Name
         The name or names of the rewrite actions to get.
+
+    .PARAMETER Pattern
+        A filter to apply to the pattern value.
+
+    .PARAMETER Expression
+        A filter to apply to the  value.
+
+    .PARAMETER Target
+        A filter to apply to the target value.
+
+    .PARAMETER Type
+        A filter to apply to the type value.
+
+    .PARAMETER Hits
+        A filter to apply to the hits value.
+
+    .PARAMETER ActionName
+        A filter to apply to the action name value.
+
+    .PARAMETER UndefinedHits
+        A filter to apply to the undefined hits value.
+
+    .PARAMETER ShowBuiltin
+        If true, show builtins. Default value: False
     #>
     [cmdletbinding()]
     param(
         $Session = $Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]$Name = @()
+        [string[]]$Name = @(),
+
+        [string]$Pattern,
+
+        [string]$Expression,
+
+        [string]$Target,
+
+        [string]$Type,
+
+        [string]$Hits,
+
+        [string]$ActionName,
+
+        [string]$UndefinedHits,
+
+        [switch]$ShowBuiltin
     )
 
     begin {
@@ -51,6 +91,32 @@ function Get-NSRewriteAction {
     }
 
     process {
-        _InvokeNSRestApiGet -Session $Session -Type rewriteaction -Name $Name
+        # Contruct a filter hash if we specified any filters
+        $Filters = @{}
+        if ($PSBoundParameters.ContainsKey('Pattern')) {
+            $Filters['pattern'] = $Pattern
+        }
+        if ($PSBoundParameters.ContainsKey('Expression')) {
+            $Filters['stringbuilderexpr'] = $Expression
+        }
+        if ($PSBoundParameters.ContainsKey('Target')) {
+            $Filters['target'] = $Target
+        }
+        if ($PSBoundParameters.ContainsKey('Type')) {
+            $Filters['type'] = $Type
+        }
+        if ($PSBoundParameters.ContainsKey('Hits')) {
+            $Filters['hits'] = $Hits
+        }
+        if ($PSBoundParameters.ContainsKey('ActionName')) {
+            $Filters['name'] = $ActionName
+        }
+        if ($PSBoundParameters.ContainsKey('UndefinedHits')) {
+            $Filters['undefhits'] = $UndefinedHits
+        }
+        if (!$ShowBuiltin) {
+            $Filters['isdefault'] = 'false'
+        }
+        _InvokeNSRestApiGet -Session $Session -Type rewriteaction -Name $Name -Filters $Filters
     }
 }

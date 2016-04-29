@@ -37,13 +37,48 @@ function Get-NSRewritePolicy {
 
     .PARAMETER Name
         The name or names of the rewrite policys to get.
+
+    .PARAMETER Rule
+        A filter to apply to the rule value.
+
+    .PARAMETER UndefinedHits
+        A filter to apply to the undefined hits value.
+
+    .PARAMETER Action
+        A filter to apply to the action value.
+
+    .PARAMETER PolicyName
+        A filter to apply to the rewrite policy name value.
+
+    .PARAMETER ShowBuiltin
+        If true, show builtins. Default value: False
+
+    .PARAMETER UndefinedAction
+        A filter to apply to the undefined action value.
+
+    .PARAMETER Hits
+        A filter to apply to the hits value.
     #>
     [cmdletbinding()]
     param(
         $Session = $Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]$Name = @()
+        [string[]]$Name = @(),
+
+        [string]$Rule,
+
+        [string]$UndefinedHits,
+
+        [string]$Action,
+
+        [string]$PolicyName,
+
+        [switch]$ShowBuiltin,
+
+        [string]$UndefinedAction,
+
+        [string]$Hits
     )
 
     begin {
@@ -51,6 +86,29 @@ function Get-NSRewritePolicy {
     }
 
     process {
-        _InvokeNSRestApiGet -Session $Session -Type rewritepolicy -Name $Name
+        # Contruct a filter hash if we specified any filters
+        $Filters = @{}
+        if ($PSBoundParameters.ContainsKey('Rule')) {
+            $Filters['rule'] = $Rule
+        }
+        if ($PSBoundParameters.ContainsKey('UndefinedHits')) {
+            $Filters['undefhits'] = $UndefinedHits
+        }
+        if ($PSBoundParameters.ContainsKey('Action')) {
+            $Filters['action'] = $Action
+        }
+        if ($PSBoundParameters.ContainsKey('PolicyName')) {
+            $Filters['name'] = $PolicyName
+        }
+        if (!$ShowBuiltin) {
+            $Filters['isdefault'] = 'false'
+        }
+        if ($PSBoundParameters.ContainsKey('UndefinedAction')) {
+            $Filters['undefaction'] = $UndefinedAction
+        }
+        if ($PSBoundParameters.ContainsKey('Hits')) {
+            $Filters['hits'] = $Hits
+        }
+        _InvokeNSRestApiGet -Session $Session -Type rewritepolicy -Name $Name -Filters $Filters
     }
 }

@@ -38,20 +38,20 @@ function Get-NSCSPolicy {
     .PARAMETER Name
         The name or names of the content switching policys to get.
 
-    .PARAMETER Action
-        A filter to apply to the action name value.
-
-    .PARAMETER Rule
-        A filter to apply to the rule value.
-
-    .PARAMETER PolicyName
-        A filter to apply to the policy name value.
+    .PARAMETER Url
+        A filter to apply to the URL value.
 
     .PARAMETER Domain
         A filter to apply to the domain value.
 
-    .PARAMETER Url
-        A filter to apply to the URL value.
+    .PARAMETER Action
+        A filter to apply to the action name value.
+
+    .PARAMETER PolicyName
+        A filter to apply to the policy name value.
+
+    .PARAMETER Rule
+        A filter to apply to the rule value.
 
     .PARAMETER LogAction
         A filter to apply to the log action name value.
@@ -63,15 +63,15 @@ function Get-NSCSPolicy {
         [Parameter(Position=0)]
         [string[]]$Name = @(),
 
-        [string]$Action,
-
-        [string]$Rule,
-
-        [string]$PolicyName,
+        [string]$Url,
 
         [string]$Domain,
 
-        [string]$Url,
+        [string]$Action,
+
+        [string]$PolicyName,
+
+        [string]$Rule,
 
         [string]$LogAction
     )
@@ -83,23 +83,23 @@ function Get-NSCSPolicy {
     process {
         # Contruct a filter hash if we specified any filters
         $Filters = @{}
-        if ($PSBoundParameters.ContainsKey('Action')) {
-            $Filters['action'] = (Get-Variable -Name 'Action').Value
-        }
-        if ($PSBoundParameters.ContainsKey('Rule')) {
-            $Filters['rule'] = (Get-Variable -Name 'Rule').Value
-        }
-        if ($PSBoundParameters.ContainsKey('PolicyName')) {
-            $Filters['policyname'] = (Get-Variable -Name 'PolicyName').Value
+        if ($PSBoundParameters.ContainsKey('Url')) {
+            $Filters['url'] = $Url
         }
         if ($PSBoundParameters.ContainsKey('Domain')) {
-            $Filters['domain'] = (Get-Variable -Name 'Domain').Value
+            $Filters['domain'] = $Domain
         }
-        if ($PSBoundParameters.ContainsKey('Url')) {
-            $Filters['url'] = (Get-Variable -Name 'Url').Value
+        if ($PSBoundParameters.ContainsKey('Action')) {
+            $Filters['action'] = $Action
+        }
+        if ($PSBoundParameters.ContainsKey('PolicyName')) {
+            $Filters['policyname'] = $PolicyName
+        }
+        if ($PSBoundParameters.ContainsKey('Rule')) {
+            $Filters['rule'] = $Rule
         }
         if ($PSBoundParameters.ContainsKey('LogAction')) {
-            $Filters['logaction'] = (Get-Variable -Name 'LogAction').Value
+            $Filters['logaction'] = $LogAction
         }
         _InvokeNSRestApiGet -Session $Session -Type cspolicy -Name $Name -Filters $Filters
     }

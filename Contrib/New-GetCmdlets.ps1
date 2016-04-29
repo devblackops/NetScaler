@@ -8,7 +8,7 @@
 
 @(
     @("CSAction",                              "csaction",                          "content switching action",
-        @{
+        [ordered]@{
             "ActionName"      = @("name", "action name") 
             "TargetLBVserver" = @("targetlbvserver", "target load balancer virtual server") 
             "Hits"            = @("hits", "hits")
@@ -18,20 +18,64 @@
         }
     ),
     @("CSPolicy",                              "cspolicy",                          "content switching policy",
-        @{
-            #policyname:/a/,action:/b/,logaction:/a/,url:/a/,rule:/a/,domain:/a/
+        [ordered]@{
             "PolicyName"      = @("policyname", "policy name") 
             "Action"          = @("action", "action name") 
             "LogAction"       = @("logaction", "log action name")
             "Url"             = @("url", "URL")
             "Rule"            = @("rule", "rule")
             "Domain"          = @("domain", "domain")
-        }
-    
+        }    
     ),
-    @("CSVirtualServer",                       "csvserver",                         "content switching virtual server"),
-    @("RewriteAction",                         "rewriteaction",                     "rewrite action"),
-    @("RewritePolicy",                         "rewritepolicy",                     "rewrite policy"),
+    @("CSVirtualServer",                       "csvserver",                         "content switching virtual server",
+        [ordered]@{
+            "ServerName"      = @("name", "virtual server name") 
+            "CurrentState"    = @("curstate", "current state") 
+            "IPv46"           = @("ipv46", "IPv4 or IPv6 address")
+            "Port"            = @("port", "port")
+            "ServiceType"     = @("servicetype", "service type")
+            "TrafficDomain"   = @("td", "traffic domain")
+            "TargetType"      = @("targettype", "target type")
+        }    
+    ),
+    @("RewriteAction",                         "rewriteaction",                     "rewrite action",
+        [ordered]@{
+            "ActionName"        = @("name", "action name") 
+            "Type"              = @("type", "type") 
+            "Target"            = @("target", "target") 
+            "Expression"        = @("stringbuilderexpr", "")
+            "Pattern"           = @("pattern", "pattern")
+            "Hits"              = @("hits", "hits")
+            "UndefinedHits"     = @("undefhits", "undefined hits")
+            "ShowBuiltin"       = @("isdefault", $Null, "default", "false")
+        }
+    ),
+    @("RewritePolicy",                         "rewritepolicy",                     "rewrite policy"
+        # name:/a/,rule:/a/,action:/a/,undefaction:/a/,hits:/a/,undefhits:/a/,isdefault:false
+        [ordered]@{
+            "PolicyName"        = @("name", "rewrite policy name") 
+            "Rule"              = @("rule", "rule") 
+            "Action"            = @("action", "action") 
+            "UndefinedAction"   = @("undefaction", "undefined action")
+            "Hits"              = @("hits", "hits")
+            "UndefinedHits"     = @("undefhits", "undefined hits")
+            "ShowBuiltin"       = @("isdefault", $Null, "default", "false")
+        }
+    ),
+    @("ResponderPolicy",                       "responderpolicy",                   "responder policy"
+      # name:/a/,rule:/a/,action:/a/,undefaction:/a/,hits:/a/,undefhits:/a/,builtin:/^[^I]/
+      # name:/a/,rule:/a/,action:/a/,undefaction:/a/,hits:/a/,undefhits:/a/,builtin:/^[^I]/
+      # filter:name:/T/,builtin:/^[^I]/
+        [ordered]@{
+            "PolicyName"        = @("name", "responder policy name") 
+            "Rule"              = @("rule", "rule") 
+            "Action"            = @("action", "action") 
+            "UndefinedAction"   = @("undefaction", "undefined action")
+            "Hits"              = @("hits", "hits")
+            "UndefinedHits"     = @("undefhits", "undefined hits")
+            "ShowBuiltin"       = @("builtin", $Null, "default", "/^[^I]/")
+        }
+    ),
     @("SAMLAuthenticationAction",              "authenticationsamlaction",          "SAML authentication action"),
     @("SAMLAuthenticationPolicy",              "authenticationsamlpolicy",          "SAML authentication policy"),
     @("VPNVirtualServer",                      "vpnvserver",                        "VPN virtual server"),
