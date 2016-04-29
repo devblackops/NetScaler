@@ -63,9 +63,6 @@
         }
     ),
     @("ResponderPolicy",                       "responderpolicy",                   "responder policy"
-      # name:/a/,rule:/a/,action:/a/,undefaction:/a/,hits:/a/,undefhits:/a/,builtin:/^[^I]/
-      # name:/a/,rule:/a/,action:/a/,undefaction:/a/,hits:/a/,undefhits:/a/,builtin:/^[^I]/
-      # filter:name:/T/,builtin:/^[^I]/
         [ordered]@{
             "PolicyName"        = @("name", "responder policy name") 
             "Rule"              = @("rule", "rule") 
@@ -76,8 +73,20 @@
             "ShowBuiltin"       = @("builtin", $Null, "default", "/^[^I]/")
         }
     ),
-    @("SAMLAuthenticationAction",              "authenticationsamlaction",          "SAML authentication action"),
-    @("SAMLAuthenticationPolicy",              "authenticationsamlpolicy",          "SAML authentication policy"),
+    @("SAMLAuthenticationServer",              "authenticationsamlaction",          "SAML authentication server"
+        [ordered]@{
+            "ServerName"         = @("name", "SAML authentication server name") 
+            "IDPCertificateName" = @("samlidpcertname", "SAML IDP certificate name") 
+            "RedirectUrl"        = @("samlredirecturl", "SAML redirect URL") 
+        }    
+    ),
+    @("SAMLAuthenticationPolicy",              "authenticationsamlpolicy",          "SAML authentication policy"
+        [ordered]@{
+            "PolicyName"        = @("name", "SAML authentication policy name") 
+            "Rule"              = @("rule", "rule") 
+            "Server"            = @("reqaction", "SAML authentication server") 
+        }    
+    ),
     @("VPNVirtualServer",                      "vpnvserver",                        "VPN virtual server"),
     @("VPNSessionAction",                      "vpnsessionaction",                  "VPN session action"),
     @("VPNSessionPolicy",                      "vpnsessionpolicy",                  "VPN session policy"),
