@@ -17,10 +17,14 @@ limitations under the License.
 function Get-NSVPNSessionPolicy {
     <#
     .SYNOPSIS
-        Gets the specified VPN session policy object.
+        Gets the specified VPN session policy object(s).
 
     .DESCRIPTION
-        Gets the specified VPN session policy object.
+        Gets the specified VPN session policy object(s).
+        Either returns a single object identified by its name (-Name parameter)
+        or a collection of objects filtered by the other parameters. Those
+        filter parameters accept either a literal value or a regexp in the form
+        "/someregexp/".
 
     .EXAMPLE
         Get-NSVPNSessionPolicy
@@ -37,13 +41,18 @@ function Get-NSVPNSessionPolicy {
 
     .PARAMETER Name
         The name or names of the VPN session policys to get.
+
+    .PARAMETER PolicyName
+        A filter to apply to the policy name value.
     #>
     [cmdletbinding()]
     param(
         $Session = $Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]$Name = @()
+        [string[]]$Name = @(),
+
+        [string]$PolicyName
     )
 
     begin {
@@ -51,6 +60,11 @@ function Get-NSVPNSessionPolicy {
     }
 
     process {
-        _InvokeNSRestApiGet -Session $Session -Type vpnsessionpolicy -Name $Name
+        # Contruct a filter hash if we specified any filters
+        $Filters = @{}
+        if ($PSBoundParameters.ContainsKey('PolicyName')) {
+            $Filters['name'] = $PolicyName
+        }
+        _InvokeNSRestApiGet -Session $Session -Type vpnsessionpolicy -Name $Name -Filters $Filters
     }
 }
