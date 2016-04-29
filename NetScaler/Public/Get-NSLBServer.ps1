@@ -56,12 +56,16 @@ function Get-NSLBServer {
             foreach ($item in $Name) {
                 $response = _InvokeNSRestApi -Session $Session -Method Get -Type server -Resource $item -Action Get 
                 if ($response.errorcode -ne 0) { throw $response }
+                if ($Response.psobject.properties.name -contains 'server') {
                     $response.server
                 }
+            }
         } else {
             $response = _InvokeNSRestApi -Session $Session -Method Get -Type server -Action Get
             if ($response.errorcode -ne 0) { throw $response }
-            $response.server
+            if ($Response.psobject.properties.name -contains 'server') {
+                $response.server
+            }
         }
     }
 }

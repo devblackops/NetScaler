@@ -55,11 +55,15 @@ function Get-NSLBMonitor {
         if ($Name.Count -gt 0) {
             foreach ($item in $Name) {
                 $monitors = _InvokeNSRestApi -Session $Session -Method Get -Type lbmonitor -Action Get -Resource $item
-                return $monitors.lbmonitor
+                if ($monitors.psobject.properties.name -contains 'lbmonitor') {
+                    return $monitors.lbmonitor
+                }
             }
         } else {
             $monitors = _InvokeNSRestApi -Session $Session -Method Get -Type lbmonitor -Action Get
-            return $monitors.lbmonitor
+            if ($monitors.psobject.properties.name -contains 'lbmonitor') {
+                return $monitors.lbmonitor
+            }
         }
     }
 }
