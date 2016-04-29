@@ -37,13 +37,48 @@ function Get-NSCSVirtualServer {
 
     .PARAMETER Name
         The name or names of the content switching virtual servers to get.
+
+    .PARAMETER CurrentState
+        A filter to apply to the current state value.
+
+    .PARAMETER Port
+        A filter to apply to the port value.
+
+    .PARAMETER TrafficDomain
+        A filter to apply to the traffic domain value.
+
+    .PARAMETER ServerName
+        A filter to apply to the virtual server name value.
+
+    .PARAMETER TargetType
+        A filter to apply to the target type value.
+
+    .PARAMETER IPv46
+        A filter to apply to the IPv4 or IPv6 address value.
+
+    .PARAMETER ServiceType
+        A filter to apply to the service type value.
     #>
     [cmdletbinding()]
     param(
         $Session = $Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]$Name = @()
+        [string[]]$Name = @(),
+
+        [string]$CurrentState,
+
+        [string]$Port,
+
+        [string]$TrafficDomain,
+
+        [string]$ServerName,
+
+        [string]$TargetType,
+
+        [string]$IPv46,
+
+        [string]$ServiceType
     )
 
     begin {
@@ -51,6 +86,29 @@ function Get-NSCSVirtualServer {
     }
 
     process {
-        _InvokeNSRestApiGet -Session $Session -Type csvserver -Name $Name
+        # Contruct a filter hash if we specified any filters
+        $Filters = @{}
+        if ($PSBoundParameters.ContainsKey('CurrentState')) {
+            $Filters['curstate'] = $CurrentState
+        }
+        if ($PSBoundParameters.ContainsKey('Port')) {
+            $Filters['port'] = $Port
+        }
+        if ($PSBoundParameters.ContainsKey('TrafficDomain')) {
+            $Filters['td'] = $TrafficDomain
+        }
+        if ($PSBoundParameters.ContainsKey('ServerName')) {
+            $Filters['name'] = $ServerName
+        }
+        if ($PSBoundParameters.ContainsKey('TargetType')) {
+            $Filters['targettype'] = $TargetType
+        }
+        if ($PSBoundParameters.ContainsKey('IPv46')) {
+            $Filters['ipv46'] = $IPv46
+        }
+        if ($PSBoundParameters.ContainsKey('ServiceType')) {
+            $Filters['servicetype'] = $ServiceType
+        }
+        _InvokeNSRestApiGet -Session $Session -Type csvserver -Name $Name -Filters $Filters
     }
 }

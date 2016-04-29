@@ -12,18 +12,38 @@ Param(
 )
     $ErrorActionPreference = "Stop"
     
+    function Expand-FilterParam($Key, $Value) {
+        if ($Value[2] -eq "default") {
+            "        [switch]`$$Key"
+        } else {
+            "        [string]`$$Key"
+        }
+    }
+
     function Expand-Filter($Key, $Value) {
+        if ($Value[2] -eq "default") {
 @"
-        if (`$PSBoundParameters.ContainsKey('$Key')) {
-            `$Filters['$Value'] = (Get-Variable -Name '$Key').Value
+        if (!`$$Key) {
+            `$Filters['$($Value[0])'] = '$($Value[3])'
         }
 "@
+        } else {
+@"
+        if (`$PSBoundParameters.ContainsKey('$Key')) {
+            `$Filters['$($Value[0])'] = `$$Key
+        }
+"@
+        }
     }
 
     function Expand-FilterDoc($Key, $Value) {
 @"
     .PARAMETER $Key
-        A filter to apply to the $Value value.
+        $(if ($Value[2] -eq "default") {
+          "If true, show builtins. Default value: $False"
+        } else {
+          "A filter to apply to the $($Value[1]) value."
+        })
 "@
     }
 
@@ -32,14 +52,14 @@ if ($Filters -and ($Filters.Length -ne 0)) {
     $ProcessBlock = @"
         # Contruct a filter hash if we specified any filters
         `$Filters = @{}
-$(($Filters.GetEnumerator() | % { Expand-Filter $_.Key $_.Value[0] }) -Join "`n")
+$(($Filters.GetEnumerator() | % { Expand-Filter $_.Key $_.Value }) -Join "`n")
         _InvokeNSRestApiGet -Session `$Session -Type $Type -Name `$Name -Filters `$Filters
 "@
     $FilterParameters = ",`n`n" + (
-        ($Filters.Keys | %{ "        [string]`$$_" }) -Join ",`n`n"
+        ($Filters.GetEnumerator() | % { Expand-FilterParam $_.Key $_.Value }) -Join ",`n`n"
     )
     $FilterDocs = "`n`n" + (
-        ($Filters.GetEnumerator() | % { Expand-FilterDoc $_.Key $_.Value[1] }) -Join "`n`n"
+        ($Filters.GetEnumerator() | % { Expand-FilterDoc $_.Key $_.Value }) -Join "`n`n"
     )
 } else {
  $ProcessBlock = @"
