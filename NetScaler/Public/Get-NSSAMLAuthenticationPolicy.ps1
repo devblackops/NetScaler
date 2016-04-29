@@ -37,13 +37,28 @@ function Get-NSSAMLAuthenticationPolicy {
 
     .PARAMETER Name
         The name or names of the SAML authentication policys to get.
+
+    .PARAMETER Server
+        A filter to apply to the SAML authentication server value.
+
+    .PARAMETER Rule
+        A filter to apply to the rule value.
+
+    .PARAMETER PolicyName
+        A filter to apply to the SAML authentication policy name value.
     #>
     [cmdletbinding()]
     param(
         $Session = $Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]$Name = @()
+        [string[]]$Name = @(),
+
+        [string]$Server,
+
+        [string]$Rule,
+
+        [string]$PolicyName
     )
 
     begin {
@@ -51,6 +66,17 @@ function Get-NSSAMLAuthenticationPolicy {
     }
 
     process {
-        _InvokeNSRestApiGet -Session $Session -Type authenticationsamlpolicy -Name $Name
+        # Contruct a filter hash if we specified any filters
+        $Filters = @{}
+        if ($PSBoundParameters.ContainsKey('Server')) {
+            $Filters['reqaction'] = $Server
+        }
+        if ($PSBoundParameters.ContainsKey('Rule')) {
+            $Filters['rule'] = $Rule
+        }
+        if ($PSBoundParameters.ContainsKey('PolicyName')) {
+            $Filters['name'] = $PolicyName
+        }
+        _InvokeNSRestApiGet -Session $Session -Type authenticationsamlpolicy -Name $Name -Filters $Filters
     }
 }
