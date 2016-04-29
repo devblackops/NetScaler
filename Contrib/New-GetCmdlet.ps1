@@ -13,11 +13,12 @@ Param(
     $ErrorActionPreference = "Stop"
     
     function Expand-FilterParam($Key, $Value) {
+        "        [Parameter(ParameterSetName='search')]`n`n" + $(
         if ($Value[2] -eq "default") {
             "        [switch]`$$Key"
         } else {
             "        [string]`$$Key"
-        }
+        })
     }
 
     function Expand-Filter($Key, $Value) {
@@ -112,11 +113,11 @@ function Get-NS$Name {
     .PARAMETER Name
         The name or names of the $($Label)s to get.$FilterDocs
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         `$Session = `$Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]`$Name = @()$FilterParameters
     )
 

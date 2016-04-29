@@ -60,22 +60,34 @@ function Get-NSCSPolicy {
     .PARAMETER LogAction
         A filter to apply to the log action name value.
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Url,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$Domain,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Action,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$PolicyName,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$Rule,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$LogAction
     )

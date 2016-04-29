@@ -60,22 +60,34 @@ function Get-NSCSAction {
     .PARAMETER Hits
         A filter to apply to the hits value.
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$UndefinedHits,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$Comment,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$ReferenceCount,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$TargetLBVserver,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$ActionName,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Hits
     )

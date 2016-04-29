@@ -51,16 +51,22 @@ function Get-NSSSLCertificate {
     .PARAMETER Status
         A filter to apply to the status value.
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$CertificateName,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$DayToExpiration,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Status
     )

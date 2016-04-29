@@ -48,14 +48,18 @@ function Get-NSNTPServer {
     .PARAMETER PreferredNTPServer
         A filter to apply to the preferred NTP server value.
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$ServerName,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$PreferredNTPServer
     )
