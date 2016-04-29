@@ -14,39 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSNTPServer {
+function Get-NSSSLCertificate {
     <#
     .SYNOPSIS
-        Gets the specified NTP server object(s).
+        Gets the specified SSL certificate object(s).
 
     .DESCRIPTION
-        Gets the specified NTP server object(s).
+        Gets the specified SSL certificate object(s).
         Either returns a single object identified by its name (-Name parameter)
         or a collection of objects filtered by the other parameters. Those
         filter parameters accept either a literal value or a regexp in the form
         "/someregexp/".
 
     .EXAMPLE
-        Get-NSNTPServer
+        Get-NSSSLCertificate
 
-        Get all NTP server objects.
+        Get all SSL certificate objects.
 
     .EXAMPLE
-        Get-NSNTPServer -Name 'foobar'
+        Get-NSSSLCertificate -Name 'foobar'
     
-        Get the NTP server named 'foobar'.
+        Get the SSL certificate named 'foobar'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the NTP servers to get.
+        The name or names of the SSL certificates to get.
 
-    .PARAMETER ServerName
-        A filter to apply to the NTP server name value.
+    .PARAMETER CertificateName
+        A filter to apply to the certificate name value.
 
-    .PARAMETER PreferredNTPServer
-        A filter to apply to the preferred NTP server value.
+    .PARAMETER DayToExpiration
+        A filter to apply to the days to expiration value.
+
+    .PARAMETER Status
+        A filter to apply to the status value.
     #>
     [cmdletbinding()]
     param(
@@ -55,9 +58,11 @@ function Get-NSNTPServer {
         [Parameter(Position=0)]
         [string[]]$Name = @(),
 
-        [string]$ServerName,
+        [string]$CertificateName,
 
-        [string]$PreferredNTPServer
+        [string]$DayToExpiration,
+
+        [string]$Status
     )
 
     begin {
@@ -67,12 +72,15 @@ function Get-NSNTPServer {
     process {
         # Contruct a filter hash if we specified any filters
         $Filters = @{}
-        if ($PSBoundParameters.ContainsKey('ServerName')) {
-            $Filters['servername'] = $ServerName
+        if ($PSBoundParameters.ContainsKey('CertificateName')) {
+            $Filters['certkey'] = $CertificateName
         }
-        if ($PSBoundParameters.ContainsKey('PreferredNTPServer')) {
-            $Filters['preferredntpserver'] = $PreferredNTPServer
+        if ($PSBoundParameters.ContainsKey('DayToExpiration')) {
+            $Filters['daystoexpiration'] = $DayToExpiration
         }
-        _InvokeNSRestApiGet -Session $Session -Type ntpserver -Name $Name -Filters $Filters
+        if ($PSBoundParameters.ContainsKey('Status')) {
+            $Filters['status'] = $Status
+        }
+        _InvokeNSRestApiGet -Session $Session -Type sslcertkey -Name $Name -Filters $Filters
     }
 }

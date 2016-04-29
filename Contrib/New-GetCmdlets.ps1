@@ -109,8 +109,19 @@
             "PolicyName"        = @("name", "policy name") 
         }
     ),
-    @("SSLCertificateKey",                     "sslcertkey",                        "SSL certificate key"),
-    @("NTPServer",                             "ntpserver",                         "NTP server")
+    @("SSLCertificate",                        "sslcertkey",                        "SSL certificate"
+        [ordered]@{
+            "CertificateName"        = @("certkey", "certificate name") 
+            "DayToExpiration"        = @("daystoexpiration", "days to expiration") 
+            "Status"                 = @("status", "status") 
+        }
+    ),
+    @("NTPServer",                             "ntpserver",                         "NTP server"
+        [ordered]@{
+            "ServerName"             = @("servername", "NTP server name") 
+            "PreferredNTPServer"     = @("preferredntpserver", "preferred NTP server") 
+        }
+    )
     
     #@("LBVirtualServerResponderPolicyBinding", "lbvserver_responderpolicy_binding", "load balancer server responder policy binding"),
     #@("LBVirtualServerRewritePolicyBinding",   "lbvserver_rewritepolicy_binding",   "load balancer server rewrite policy binding")

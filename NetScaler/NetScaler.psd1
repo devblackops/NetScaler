@@ -107,7 +107,7 @@ FunctionsToExport = @(
     'Get-NSNTPServer',
     'Get-NSSAMLAuthenticationPolicy',
     'Get-NSSAMLAuthenticationServer',
-    'Get-NSSSLCertificateKey',
+    'Get-NSSSLCertificate',
     'Get-NSVPNServer',
     'Get-NSVPNSessionPolicy',
     'Get-NSVPNSessionProfile',
