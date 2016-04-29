@@ -17,10 +17,14 @@ limitations under the License.
 function Get-NSCSVirtualServer {
     <#
     .SYNOPSIS
-        Gets the specified content switching virtual server object.
+        Gets the specified content switching virtual server object(s).
 
     .DESCRIPTION
-        Gets the specified content switching virtual server object.
+        Gets the specified content switching virtual server object(s).
+        Either returns a single object identified by its name (-Name parameter)
+        or a collection of objects filtered by the other parameters. Those
+        filter parameters accept either a literal value or a regexp in the form
+        "/someregexp/".
 
     .EXAMPLE
         Get-NSCSVirtualServer

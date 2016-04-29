@@ -87,10 +87,28 @@
             "Server"            = @("reqaction", "SAML authentication server") 
         }    
     ),
-    @("VPNVirtualServer",                      "vpnvserver",                        "VPN virtual server"),
-    @("VPNSessionAction",                      "vpnsessionaction",                  "VPN session action"),
-    @("VPNSessionPolicy",                      "vpnsessionpolicy",                  "VPN session policy"),
-    @("VPNSessionPolicy",                      "vpnsessionpolicy",                  "VPN session policy"),
+    @("VPNVirtualServer",                      "vpnvserver",                        "VPN virtual server"
+        [ordered]@{
+            "ServerName"        = @("name", "virtual server name") 
+            "CurrentState"      = @("curstate", "virtual server current state") 
+            "IPv46"             = @("ipv46", "IPv4 or IPv6 address")
+            "Port"              = @("port", "port")
+            "ServiceType"       = @("servicetype", "service type")
+            "MaxAAAUsers"       = @("maxaaausers", "max AAA users")
+            "CurrentAAAUsers"   = @("curaaausers", "current AAA users")
+            "CurrentTotalUsers" = @("curtotalusers", "current total users")
+        }    
+    ),
+    @("VPNSessionProfile",                      "vpnsessionaction",                  "VPN session profile"
+        [ordered]@{
+            "ProfileName"       = @("name", "profile name") 
+        }
+    ),
+    @("VPNSessionPolicy",                      "vpnsessionpolicy",                  "VPN session policy"
+        [ordered]@{
+            "PolicyName"        = @("name", "policy name") 
+        }
+    ),
     @("SSLCertificateKey",                     "sslcertkey",                        "SSL certificate key"),
     @("NTPServer",                             "ntpserver",                         "NTP server")
     

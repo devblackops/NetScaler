@@ -17,10 +17,14 @@ limitations under the License.
 function Get-NSRewritePolicy {
     <#
     .SYNOPSIS
-        Gets the specified rewrite policy object.
+        Gets the specified rewrite policy object(s).
 
     .DESCRIPTION
-        Gets the specified rewrite policy object.
+        Gets the specified rewrite policy object(s).
+        Either returns a single object identified by its name (-Name parameter)
+        or a collection of objects filtered by the other parameters. Those
+        filter parameters accept either a literal value or a regexp in the form
+        "/someregexp/".
 
     .EXAMPLE
         Get-NSRewritePolicy

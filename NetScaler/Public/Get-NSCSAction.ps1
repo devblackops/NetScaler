@@ -17,10 +17,14 @@ limitations under the License.
 function Get-NSCSAction {
     <#
     .SYNOPSIS
-        Gets the specified content switching action object.
+        Gets the specified content switching action object(s).
 
     .DESCRIPTION
-        Gets the specified content switching action object.
+        Gets the specified content switching action object(s).
+        Either returns a single object identified by its name (-Name parameter)
+        or a collection of objects filtered by the other parameters. Those
+        filter parameters accept either a literal value or a regexp in the form
+        "/someregexp/".
 
     .EXAMPLE
         Get-NSCSAction

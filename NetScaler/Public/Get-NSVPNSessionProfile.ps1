@@ -14,40 +14,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSNTPServer {
+function Get-NSVPNSessionProfile {
     <#
     .SYNOPSIS
-        Gets the specified NTP server object(s).
+        Gets the specified VPN session profile object(s).
 
     .DESCRIPTION
-        Gets the specified NTP server object(s).
+        Gets the specified VPN session profile object(s).
         Either returns a single object identified by its name (-Name parameter)
         or a collection of objects filtered by the other parameters. Those
         filter parameters accept either a literal value or a regexp in the form
         "/someregexp/".
 
     .EXAMPLE
-        Get-NSNTPServer
+        Get-NSVPNSessionProfile
 
-        Get all NTP server objects.
+        Get all VPN session profile objects.
 
     .EXAMPLE
-        Get-NSNTPServer -Name 'foobar'
+        Get-NSVPNSessionProfile -Name 'foobar'
     
-        Get the NTP server named 'foobar'.
+        Get the VPN session profile named 'foobar'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the NTP servers to get.
+        The name or names of the VPN session profiles to get.
+
+    .PARAMETER ProfileName
+        A filter to apply to the profile name value.
     #>
     [cmdletbinding()]
     param(
         $Session = $Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]$Name = @()
+        [string[]]$Name = @(),
+
+        [string]$ProfileName
     )
 
     begin {
@@ -55,6 +60,11 @@ function Get-NSNTPServer {
     }
 
     process {
-        _InvokeNSRestApiGet -Session $Session -Type ntpserver -Name $Name
+        # Contruct a filter hash if we specified any filters
+        $Filters = @{}
+        if ($PSBoundParameters.ContainsKey('ProfileName')) {
+            $Filters['name'] = $ProfileName
+        }
+        _InvokeNSRestApiGet -Session $Session -Type vpnsessionaction -Name $Name -Filters $Filters
     }
 }

@@ -17,10 +17,14 @@ limitations under the License.
 function Get-NSVPNVirtualServer {
     <#
     .SYNOPSIS
-        Gets the specified VPN virtual server object.
+        Gets the specified VPN virtual server object(s).
 
     .DESCRIPTION
-        Gets the specified VPN virtual server object.
+        Gets the specified VPN virtual server object(s).
+        Either returns a single object identified by its name (-Name parameter)
+        or a collection of objects filtered by the other parameters. Those
+        filter parameters accept either a literal value or a regexp in the form
+        "/someregexp/".
 
     .EXAMPLE
         Get-NSVPNVirtualServer
@@ -37,13 +41,53 @@ function Get-NSVPNVirtualServer {
 
     .PARAMETER Name
         The name or names of the VPN virtual servers to get.
+
+    .PARAMETER ServerName
+        A filter to apply to the virtual server name value.
+
+    .PARAMETER MaxAAAUsers
+        A filter to apply to the max AAA users value.
+
+    .PARAMETER CurrentState
+        A filter to apply to the virtual server current state value.
+
+    .PARAMETER Port
+        A filter to apply to the port value.
+
+    .PARAMETER CurrentTotalUsers
+        A filter to apply to the current total users value.
+
+    .PARAMETER IPv46
+        A filter to apply to the IPv4 or IPv6 address value.
+
+    .PARAMETER CurrentAAAUsers
+        A filter to apply to the current AAA users value.
+
+    .PARAMETER ServiceType
+        A filter to apply to the service type value.
     #>
     [cmdletbinding()]
     param(
         $Session = $Script:Session,
 
         [Parameter(Position=0)]
-        [string[]]$Name = @()
+        [string[]]$Name = @(),
+
+        [string]$ServerName,
+
+        [string]$MaxAAAUsers,
+
+        [string]$CurrentState,
+
+        [string]$Port,
+
+        [string]$CurrentTotalUsers,
+
+        [string]$IPv46,
+
+        [string]$CurrentAAAUsers,
+
+        [string]$ServiceType
     )
 
     begin {
@@ -51,6 +95,32 @@ function Get-NSVPNVirtualServer {
     }
 
     process {
-        _InvokeNSRestApiGet -Session $Session -Type vpnvserver -Name $Name
+        # Contruct a filter hash if we specified any filters
+        $Filters = @{}
+        if ($PSBoundParameters.ContainsKey('ServerName')) {
+            $Filters['name'] = $ServerName
+        }
+        if ($PSBoundParameters.ContainsKey('MaxAAAUsers')) {
+            $Filters['maxaaausers'] = $MaxAAAUsers
+        }
+        if ($PSBoundParameters.ContainsKey('CurrentState')) {
+            $Filters['curstate'] = $CurrentState
+        }
+        if ($PSBoundParameters.ContainsKey('Port')) {
+            $Filters['port'] = $Port
+        }
+        if ($PSBoundParameters.ContainsKey('CurrentTotalUsers')) {
+            $Filters['curtotalusers'] = $CurrentTotalUsers
+        }
+        if ($PSBoundParameters.ContainsKey('IPv46')) {
+            $Filters['ipv46'] = $IPv46
+        }
+        if ($PSBoundParameters.ContainsKey('CurrentAAAUsers')) {
+            $Filters['curaaausers'] = $CurrentAAAUsers
+        }
+        if ($PSBoundParameters.ContainsKey('ServiceType')) {
+            $Filters['servicetype'] = $ServiceType
+        }
+        _InvokeNSRestApiGet -Session $Session -Type vpnvserver -Name $Name -Filters $Filters
     }
 }
