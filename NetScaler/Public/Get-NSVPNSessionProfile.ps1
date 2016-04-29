@@ -45,12 +45,14 @@ function Get-NSVPNSessionProfile {
     .PARAMETER ProfileName
         A filter to apply to the profile name value.
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$ProfileName
     )

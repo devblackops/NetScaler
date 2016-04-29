@@ -63,24 +63,38 @@ function Get-NSResponderPolicy {
     .PARAMETER Hits
         A filter to apply to the hits value.
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Rule,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$UndefinedHits,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Action,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$PolicyName,
+
+        [Parameter(ParameterSetName='search')]
 
         [switch]$ShowBuiltin,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$UndefinedAction,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Hits
     )

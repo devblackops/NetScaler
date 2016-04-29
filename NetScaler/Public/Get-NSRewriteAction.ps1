@@ -66,26 +66,42 @@ function Get-NSRewriteAction {
     .PARAMETER ShowBuiltin
         If true, show builtins. Default value: False
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Pattern,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$Expression,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Target,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$Type,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Hits,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$ActionName,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$UndefinedHits,
+
+        [Parameter(ParameterSetName='search')]
 
         [switch]$ShowBuiltin
     )

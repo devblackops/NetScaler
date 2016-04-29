@@ -66,26 +66,42 @@ function Get-NSVPNVirtualServer {
     .PARAMETER ServiceType
         A filter to apply to the service type value.
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$ServerName,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$MaxAAAUsers,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$CurrentState,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$Port,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$CurrentTotalUsers,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$IPv46,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$CurrentAAAUsers,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$ServiceType
     )

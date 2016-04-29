@@ -51,16 +51,22 @@ function Get-NSSAMLAuthenticationPolicy {
     .PARAMETER PolicyName
         A filter to apply to the SAML authentication policy name value.
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$Server,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$Rule,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$PolicyName
     )

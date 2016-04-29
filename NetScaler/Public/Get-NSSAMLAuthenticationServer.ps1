@@ -51,16 +51,22 @@ function Get-NSSAMLAuthenticationServer {
     .PARAMETER IDPCertificateName
         A filter to apply to the SAML IDP certificate name value.
     #>
-    [cmdletbinding()]
+    [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0)]
+        [Parameter(Position=0, ParameterSetName='get')]
         [string[]]$Name = @(),
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$RedirectUrl,
 
+        [Parameter(ParameterSetName='search')]
+
         [string]$ServerName,
+
+        [Parameter(ParameterSetName='search')]
 
         [string]$IDPCertificateName
     )
