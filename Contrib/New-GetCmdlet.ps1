@@ -49,7 +49,7 @@ Param(
     }
 
 
-if ($Filters -and ($Filters.Length -ne 0)) {
+if ($Filters -and ($Filters.Count -ne 0)) {
     $ProcessBlock = @"
         # Contruct a filter hash if we specified any filters
         `$Filters = @{}

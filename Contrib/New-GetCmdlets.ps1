@@ -51,7 +51,6 @@
         }
     ),
     @("RewritePolicy",                         "rewritepolicy",                     "rewrite policy"
-        # name:/a/,rule:/a/,action:/a/,undefaction:/a/,hits:/a/,undefhits:/a/,isdefault:false
         [ordered]@{
             "PolicyName"        = @("name", "rewrite policy name") 
             "Rule"              = @("rule", "rule") 
@@ -121,13 +120,23 @@
             "ServerName"             = @("servername", "NTP server name") 
             "PreferredNTPServer"     = @("preferredntpserver", "preferred NTP server") 
         }
+    ),
+    @("KCDAccount",                            "aaakcdaccount",                     "KCD account"
+        [ordered]@{
+            "AccountName"            = @("kcdaccount", "KCD account name") 
+            "Keytab"                 = @("keytab", "keytab") 
+            "KCDSPN"                 = @("kcdspn", "KCD service principal name") 
+            "Realm"                  = @("realmstr", "Realm") 
+        }
+    ),
+    @("AAAVirtualServer",                     "authenticationvserver",             "Authentication virtual server"
+        [ordered]@{}
     )
-    
     #@("LBVirtualServerResponderPolicyBinding", "lbvserver_responderpolicy_binding", "load balancer server responder policy binding"),
     #@("LBVirtualServerRewritePolicyBinding",   "lbvserver_rewritepolicy_binding",   "load balancer server rewrite policy binding")
 ) | % {    
-    Contrib\New-GetCmdlet -Name $_[0] -Type $_[1] -Label $_[2] -Filters $_[3]
     echo "Get-NS$($_[0]) | Measure"
+    Contrib\New-GetCmdlet -Name $_[0] -Type $_[1] -Label $_[2] -Filters $_[3]
 }
 
 
