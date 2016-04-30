@@ -181,7 +181,7 @@ function New-NSLBServiceGroup {
         [ValidateRange(0, 4094)]
         [int]$TrafficDomainId,
 
-        [ValidateSet('FORWARD', 'TRANSPARENT', 'REVERSE')]
+        [ValidateSet('SERVER', 'FORWARD', 'TRANSPARENT', 'REVERSE')]
         [string]$CacheType,
 
         [ValidateSet('DISABLED', 'DNS', 'POLICY')]
@@ -276,10 +276,12 @@ function New-NSLBServiceGroup {
                         usip = $UseClientIP
                         cka = $ClientKeepAlive
                         tcpb = $TCPBuffering
-                        cmp = $HTTPCompression
                         cip = $ClientIP
                         clttimeout = $ClientIdleTimeout
                         svrtimeout = $ServerIdleTimeout
+                    }
+                    if ($PSBoundParameters.ContainsKey('HTTPCompression')) {
+                        $params.Add('cmp', $HTTPCompression)
                     }
                     if ($PSBoundParameters.ContainsKey('TrafficDomainId')) {
                         $params.Add('td', $TrafficDomainId)
