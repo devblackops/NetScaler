@@ -6,45 +6,64 @@ Import-Module Pester
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 Import-Module -Force $here\..\Netscaler
+. $here\TestSupport.ps1
 
-$SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
-$Credential = New-Object System.Management.Automation.PSCredential ($Username, $SecurePassword)    
-
-
-function Compare-NSConfig($Old, $New) {
-    $Old = $Old | ? { Test-IsMutatingConfigLines $_ }
-    $New = $New | ? { Test-IsMutatingConfigLines $_ }
-    Compare-Object $Old $New | % {
-        "{0} {1}" -f $_.SideIndicator, $_.InputObject
-    }
-}
-
-function Test-IsMutatingConfigLines($line) {
-    !($_ -match "^set (ns encryptionParams|cluster rsskey|ns rpcNode)")
-}
-
-Describe "NS Feature" {
+Describe "Netscaler Get-*" {
     $Session = Connect-Netscaler -Hostname $Nsip -Credential $Credential -PassThru
-    
-    It "should add a feature1" {
-        New-NSLBServer -Name toto -IPAddress 1.2.3.4
-        $NewConfig = Get-NSConfig
-        
-        Write-Host (Compare-NSConfig $OldConfig $NewConfig)       
-    }    
 
-    It "should add a feature2" {
-        New-NSLBServer -Name toto1 -IPAddress 1.2.3.5
-        $NewConfig = Get-NSConfig
+    It "should list VPN policies" {
+        $Policy = Get-NSVPNSessionPolicy
         
-        Write-Host ((Compare-NSConfig $OldConfig $NewConfig) -join "`n")       
-    }    
+        $Policy | Should Not BeNullOrEmpty
+        $Policy.name | Should Be "SETVPNPARAMS_POL" 
+    }
 
-    BeforeEach {
-        $OldConfig = Get-NSConfig        
+    It "should get VPN policy" {
+        $Policy = Get-NSVPNSessionPolicy -Name "SETVPNPARAMS_POL"
+        
+        $Policy | Should Not BeNullOrEmpty
+        $Policy.name | Should Be "SETVPNPARAMS_POL"
+    }
+
+    It "should list VPN profiles" {
+        $Policy = Get-NSVPNSessionProfile
+        
+        $Policy | Should Not BeNullOrEmpty
+        $Policy.name | Should Be "SETVPNPARAMS_ACT" 
+    }
+
+    It "should get VPN profiles" {
+        $Policy = Get-NSVPNSessionProfile -Name "SETVPNPARAMS_ACT"
+        
+        $Policy | Should Not BeNullOrEmpty
+        $Policy.name | Should Be "SETVPNPARAMS_ACT"
     }
     
-    AfterEach {
-        Invoke-Nitro -Method POST -Type nsconfig -Action clear -Payload @{ "level" = "Basic"; "force" = "false"} -Force
+    It "should get a certificate" {
+        $Cert = Get-NSSSLCertificate -Name "ns-server-certificate"
+
+        $Cert | Should Not BeNullOrEmpty
+        $Cert.certkey | Should Be "ns-server-certificate"
     }
+
+    It "should list certificates" {
+        $Cert = Get-NSSSLCertificate
+
+        $Cert | Should Not BeNullOrEmpty
+        $Cert.certkey | Should Be "ns-server-certificate"
+    }
+}
+
+Describe "Netscaler" {
+    $Session = Connect-Netscaler -Hostname $Nsip -Credential $Credential -PassThru
+
+        
+    It "should add a server" {
+        New-NSLBServer -Name 'srv-test' -IPAddress 1.2.3.4
+        
+        Compare-NSConfig $OldConf | Should Match "=> add server srv-test 1.2.3.4"       
+    }
+    
+    BeforeEach { $OldConf = Get-NSConfig }    
+    AfterEach { Clear-NSConfig -Force }        
 }
