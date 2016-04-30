@@ -52,13 +52,37 @@ Describe "Netscaler Get-*" {
         $Cert | Should Not BeNullOrEmpty
         $Cert.certkey | Should Be "ns-server-certificate"
     }
+    
+    It "should list builtin responder policies" {
+        $Result = Get-NSResponderPolicy -ShowBuiltin
+        
+        $Result | Should Not BeNullOrEmpty
+        # TODO: this is fragile, it probably depends on the NS version
+        $Result.Count | Should Be 6
+    }
+    
+    It "should list builtin rewrite actions" {
+        $Result = Get-NSRewriteAction -ShowBuiltin
+        
+        $Result | Should Not BeNullOrEmpty
+        # TODO: this is fragile, it probably depends on the NS version
+        $Result.Count | Should Be 45
+    }
+
+    It "should list builtin rewrite policies" {
+        $Result = Get-NSRewritePolicy -ShowBuiltin
+        
+        $Result | Should Not BeNullOrEmpty
+        # TODO: this is fragile, it probably depends on the NS version
+        $Result.Count | Should Be 49
+    }
 }
 
 Describe "Netscaler" {
     $Session = Connect-Netscaler -Hostname $Nsip -Credential $Credential -PassThru
 
         
-    It "should add a server" {
+    It "should add a LB server" {
         New-NSLBServer -Name 'srv-test' -IPAddress 1.2.3.4
         
         Compare-NSConfig $OldConf | Should Match "=> add server srv-test 1.2.3.4"       
