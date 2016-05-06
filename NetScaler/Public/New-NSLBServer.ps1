@@ -78,9 +78,12 @@ function New-NSLBServer {
         [parameter(Mandatory = $true)]
         [string[]]$Name = (Read-Host -Prompt 'LB server name'),
 
-        [parameter(Mandatory)]
+        [parameter(Mandatory,ParameterSetName='IPAddress')]
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string]$IPAddress,
+
+        [parameter(Mandatory,ParameterSetName='DomainName')]
+        [string]$Domain,
 
         [ValidateLength(0, 256)]
         [string]$Comment = [string]::Empty,
@@ -104,10 +107,15 @@ function New-NSLBServer {
                 try {
                     $params = @{
                         name = $item
-                        ipaddress = $IPAddress
                         comment = $Comment
                         td = $TrafficDomainId
                         state = $State
+                    }
+                    if ($PSBoundParameters.ContainsKey('IPAddress')) {
+                        $params.Add('ipaddress', $IPAddress)
+                    }
+                    if ($PSBoundParameters.ContainsKey('Domain')) {
+                        $params.Add('domain', $Domain)
                     }
                     _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action add
 
