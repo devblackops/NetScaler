@@ -144,13 +144,14 @@ try
                     # Errors will still be returned as expected.
                     $excludedRules = @(
                         'PSAvoidUsingUserNameAndPassWordParams'
+                        'PSAvoidUsingConvertToSecureStringWithPlainText'
                     )
                     $PSScriptAnalyzerErrors = Invoke-ScriptAnalyzer -path $RepoRoot -Severity Error -Recurse -ErrorAction SilentlyContinue -ExcludeRule $excludedRules
                     if ($PSScriptAnalyzerErrors -ne $null) {
                         Write-Warning -Message 'There are PSScriptAnalyzer errors that need to be fixed:'
                         @($PSScriptAnalyzerErrors).Foreach( { Write-Warning -Message "$($_.Scriptname) (Line $($_.Line)): $($_.Message)" } )
                         Write-Warning -Message  'For instructions on how to run PSScriptAnalyzer on your own machine, please go to https://github.com/powershell/psscriptAnalyzer/'
-                        $PSScriptAnalyzerErrors.Count | Should Be $null
+                        $PSScriptAnalyzerErrors | Should Be $null
                     }
                 }      
             }
