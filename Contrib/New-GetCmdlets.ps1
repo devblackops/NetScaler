@@ -131,7 +131,33 @@
     ),
     @("AAAVirtualServer",                     "authenticationvserver",             "Authentication virtual server"
         [ordered]@{}
-    )
+    ),
+    @("IPResource",                           "nsip",                              "IPv46 resource"
+        [ordered]@{
+            "IPAddress"             = @("ipaddress", "IPv4 address") 
+            "State"                 = @("state", "state") 
+            "Arp"                   = @("arp", "ARP") 
+            "Icmp"                  = @("icmp", "ICMP") 
+            "VirtualServer"         = @("vserver", "virtual server") 
+            "TrafficDomain"         = @("td", "traffic domain") 
+        }
+    ),    
+    @("IP6Resource",                          "nsip6",                             "IPv6 resource"
+        [ordered]@{
+            "IPAddress"             = @("ipv6address", "IPv6 address") 
+            "State"                 = @("curstate", "state") 
+            "Type"                  = @("iptype", "IP type") 
+            "Scope"                 = @("scope", "scope") 
+            "MappedIP"              = @("map", "mapped IP") 
+            "TrafficDomain"         = @("td", "traffic domain") 
+        }
+    ),
+    @("SystemFile",                          "systemfile",                         "system file"
+        [ordered]@{
+            "FileLocation"          = @("filelocation", "file location") 
+            "Filename"              = @("filename", "file name")
+        }
+    )    
     #@("LBVirtualServerResponderPolicyBinding", "lbvserver_responderpolicy_binding", "load balancer server responder policy binding"),
     #@("LBVirtualServerRewritePolicyBinding",   "lbvserver_rewritepolicy_binding",   "load balancer server rewrite policy binding")
 ) | % {    
