@@ -95,7 +95,7 @@ function Add-NSCertKeyPair {
                 if ($CertKeyFormat -eq 'PEM' -and $Password) {
                     $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
                     $unsecurePassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
-                    $params.Add("passcrypt",$unsecurePassword)
+                    $params.Add("passplain",$unsecurePassword)
                 }
                 $response = _InvokeNSRestApi  -Session $Session -Method POST -Type sslcertkey -Payload $params -Action add 
             } catch {
