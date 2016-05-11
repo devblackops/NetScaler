@@ -52,6 +52,11 @@ function New-NSLBServer {
         Note: If you do not create a server entry, the server IP address that you enter when you create 
         a service becomes the name of the server.
 
+
+    .PARAMETER Domain
+        FQDN of the server. If you create a 'Domain Name' type of server, this parameter contains the
+        FQDN of the server associated to the NetScaler server resource.
+
     .PARAMETER Comment
         Any information about the server.
 
@@ -78,9 +83,12 @@ function New-NSLBServer {
         [parameter(Mandatory = $true)]
         [string[]]$Name = (Read-Host -Prompt 'LB server name'),
 
-        [parameter(Mandatory)]
+        [parameter(Mandatory,ParameterSetName='IPAddress')]
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string]$IPAddress,
+
+        [parameter(Mandatory,ParameterSetName='DomainName')]
+        [string]$Domain,
 
         [ValidateLength(0, 256)]
         [string]$Comment = [string]::Empty,
@@ -104,10 +112,15 @@ function New-NSLBServer {
                 try {
                     $params = @{
                         name = $item
-                        ipaddress = $IPAddress
                         comment = $Comment
                         td = $TrafficDomainId
                         state = $State
+                    }
+                    if ($PSBoundParameters.ContainsKey('IPAddress')) {
+                        $params.Add('ipaddress', $IPAddress)
+                    }
+                    if ($PSBoundParameters.ContainsKey('Domain')) {
+                        $params.Add('domain', $Domain)
                     }
                     _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action add
 

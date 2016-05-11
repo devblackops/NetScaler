@@ -68,7 +68,9 @@ PowerShellVersion = '3.0'
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = 'Add-NSCertKeyPair', 'Add-NSDnsNameServer', 'Add-NSIPResource', 
                'Add-NSLBVirtualServerBinding', 'Add-NSRSAKey', 
-               'Add-NSServerCertificate', 'Clear-NSConfig', 'Connect-NetScaler', 
+               'Add-NSServerCertificate', 
+               'Add-NSSystemFile',
+               'Clear-NSConfig', 'Connect-NetScaler', 
                'Disable-NSFeature', 'Disable-NSLBMonitor', 'Disable-NSLBServer', 
                'Disable-NSLBVirtualServer', 'Disable-NSMode', 'Disconnect-NetScaler', 
                'Enable-NSFeature', 'Enable-NSLBMonitor', 'Enable-NSLBServer', 
