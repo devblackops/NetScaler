@@ -61,7 +61,7 @@ function Add-NSLBVirtualServerBinding {
         Suppress confirmation when binding the service group to the virtual server.
 
     .PARAMETER Passthru
-        Return the load balancer server object.
+        Return the binding object.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Medium', DefaultParameterSetName='servicegroup')]
     param(

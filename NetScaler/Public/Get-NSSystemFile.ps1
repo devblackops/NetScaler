@@ -77,10 +77,6 @@ function Get-NSSystemFile {
         if ($PSBoundParameters.ContainsKey('FileLocation')) {
             $Filters['filelocation'] = $FileLocation
         }
-        $response = _InvokeNSRestApi -Session $Session -Method GET -Type systemfile -Arguments $Filters
-        if ($response.errorcode -ne 0) { throw $response }
-        if ($response.psobject.properties | where name -eq systemfile) {
-            return $response.systemfile
-        }
+        _InvokeNSRestApiGet -Session $Session -Type systemfile -Name $Name -Arguments $Filters
     }
 }
