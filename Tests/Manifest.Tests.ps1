@@ -1,4 +1,4 @@
-$moduleName = 'NetScaler'
+$moduleName = $env:BHProjectName
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = Split-Path -Path $here -Parent
 $modulePath = Join-Path -Path $root -ChildPath $moduleName
@@ -17,7 +17,7 @@ Describe 'Module manifest' {
         }
 
         It "has a valid name in the manifest" {
-            $script:manifest.Name | Should Be Watchmen
+            $script:manifest.Name | Should Be $moduleName
         }
 
         It 'has a valid root module' {
