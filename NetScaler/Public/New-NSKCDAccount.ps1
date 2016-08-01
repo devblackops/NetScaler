@@ -62,11 +62,11 @@ function New-NSKCDAccount {
         [parameter(Mandatory = $true)]
         [String[]]$Name,
 
+        [parameter(Mandatory = $true)]
         [String]$Realm,
 
-        [String]$DelegatedUser,
-
-        [String]$DelegatedUserPassword,
+        [parameter(Mandatory = $true)]
+        [pscredential]$Credential,      
 
         [Switch]$PassThru
     )
@@ -82,8 +82,8 @@ function New-NSKCDAccount {
                     $params = @{
                         kcdaccount    = $item
                         realmstr      = $Realm
-                        delegateduser = $DelegatedUser
-                        kcdpassword   = $DelegatedUserPassword
+                        delegateduser = $Credential.Username
+                        kcdpassword   = $Credential.GetNetworkCredential().password
                     }
                     _InvokeNSRestApi -Session $Session -Method POST -Type aaakcdaccount -Payload $params -Action add
 
