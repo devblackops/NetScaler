@@ -7,6 +7,7 @@ PowerShell module for interacting with Citrix NetScaler via the Nitro API
 
 This script establishes a session with the Netscaler instance and sets its hostname:
 
+```powershell
     $Nsip, $Username, $Password = "1.2.3.4", "nsroot", "nsroot"
     
     $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
@@ -15,5 +16,4 @@ This script establishes a session with the Netscaler instance and sets its hostn
     $Session =  Connect-Netscaler -Hostname $Nsip -Credential $Credential -PassThru
     
     Set-NSHostname -Hostname ns01 -Force -Session $Session
-
-    # ...
+```
