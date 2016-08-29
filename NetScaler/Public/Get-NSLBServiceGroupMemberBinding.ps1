@@ -38,6 +38,7 @@ function Get-NSLBServiceGroupMemberBinding {
         $Session = $script:session,
 
         [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
+        [alias('servicegroupname')]
         [string[]]$Name
     )
 
