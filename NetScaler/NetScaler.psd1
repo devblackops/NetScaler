@@ -134,6 +134,7 @@ FunctionsToExport = @(
     'New-NSLBServer',
     'New-NSLBServiceGroup',
     'New-NSLBServiceGroupMember',
+    'New-NSLBServiceGroupMonitor',
     'New-NSLBVirtualServer',
     'New-NSNTPServer',
     'New-NSResponderAction',
