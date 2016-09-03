@@ -123,6 +123,7 @@ FunctionsToExport = @(
     'Get-NSVPNVirtualServer',
     'Install-NSLicense',
     'Invoke-Nitro',
+    'New-NSCSVirtualServer',
     'New-NSKCDAccount',
     'New-NSLBMonitor',
     'New-NSLBServer',
