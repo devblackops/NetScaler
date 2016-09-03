@@ -71,7 +71,8 @@ FunctionsToExport = @(
     'Add-NSCSVirtualServerResponderPolicyBinding',
     'Add-NSDnsNameServer',
     'Add-NSIPResource',
-    'Add-NSLBVirtualServerBinding'
+    'Add-NSLBSSLVirtualServerCertificateBinding',
+    'Add-NSLBVirtualServerBinding',
     'Add-NSRSAKey',
     'Add-NSServerCertificate',
     'Add-NSSystemFile',
@@ -104,6 +105,7 @@ FunctionsToExport = @(
     'Get-NSLBServer',
     'Get-NSLBServiceGroup',
     'Get-NSLBServiceGroupMemberBinding',
+    'Get-NSLBSSLVirtualServerCertificateBinding',
     'Get-NSLBStat',
     'Get-NSLBVirtualServer',
     'Get-NSLBVirtualServerBinding',
