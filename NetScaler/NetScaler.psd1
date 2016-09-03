@@ -106,6 +106,7 @@ FunctionsToExport = @(
     'Get-NSLBServer',
     'Get-NSLBServiceGroup',
     'Get-NSLBServiceGroupMemberBinding',
+    'Get-NSLBServiceGroupMonitorBinding',
     'Get-NSLBSSLVirtualServer',
     'Get-NSLBSSLVirtualServerCertificateBinding',
     'Get-NSLBStat',
