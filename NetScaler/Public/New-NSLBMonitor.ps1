@@ -223,6 +223,12 @@ function New-NSLBMonitor {
 
     .PARAMETER Passthru
         Return the load balancer monitor object.
+
+    .PARAMETER ResponseCode
+        Response codes for which to mark the service as UP
+
+    .PARAMETER HTTPRequest
+        HTTP request to send to the server (for example, "HEAD /file.html").
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
@@ -315,7 +321,15 @@ function New-NSLBMonitor {
 
         [string]$ScriptArgs,
 
-        [switch]$PassThru
+        [switch]$PassThru,
+
+        [Parameter()]
+        [string[]]
+        $ResponseCode,
+
+        [Parameter()]
+        [string]
+        $HTTPRequest
     )
 
     begin {
@@ -377,6 +391,12 @@ function New-NSLBMonitor {
                     }
                     if ($PSBoundParameters.ContainsKey('ScriptArgs')) {
                         $params.Add('scriptargs', $ScriptArgs)
+                    }
+                    if ($PSBoundParameters.ContainsKey('ResponseCode')) {
+                        $params.Add('respcode', $ResponseCode)
+                    }
+                    if ($PSBoundParameters.ContainsKey('HTTPRequest')) {
+                        $params.Add('httprequest', $HTTPRequest)
                     }
                     _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action add
 
