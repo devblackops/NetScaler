@@ -106,6 +106,7 @@ FunctionsToExport = @(
     'Get-NSLBServer',
     'Get-NSLBServiceGroup',
     'Get-NSLBServiceGroupMemberBinding',
+    'Get-NSLBSSLVirtualServer',
     'Get-NSLBSSLVirtualServerCertificateBinding',
     'Get-NSLBStat',
     'Get-NSLBVirtualServer',
@@ -148,6 +149,7 @@ FunctionsToExport = @(
     'Set-NSHostname',
     'Set-NSLBServer',
     'Set-NSLBServiceGroup',
+    'Set-NSLBSSLVirtualServer',
     'Set-NSLBVirtualServer',
     'Set-NSResponderAction',
     'Set-NSTimeZone'
