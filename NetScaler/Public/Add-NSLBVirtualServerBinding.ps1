@@ -91,16 +91,16 @@ function Add-NSLBVirtualServerBinding {
 
                 $params = @{
                     name = $VirtualServerName
-                    weight = $Weight
                 }
                 if ($PSBoundParameters.ContainsKey('ServiceGroupName')) {
-                    $params.servicename = $ServiceGroupName
-                    _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_servicegroup_binding -Payload $params -Action add
+                    $params.servicegroupname = $ServiceGroupName
+                    _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_servicegroup_binding -Payload $params
                 } elseif ($PSBoundParameters.ContainsKey('ServiceName')) {
                     $params.servicename = $ServiceName
-                    _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_service_binding -Payload $params -Action add
+                    $params.weight = $Weight
+                    _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_service_binding -Payload $params
                 }
-                
+
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
                     return Get-NSLBVirtualServerBinding -Session $Session -Name $VirtualServerName
                 }
