@@ -1,5 +1,13 @@
 ## 1.3.0 (unreleased)
-  - 
+  * Features
+    * Added Get-NSAAAGroup
+    * Added Get-NSAAAGroupBinding
+    * Added Get-NSAAAUser
+    * Added Get-NSAAAUserBinding
+
+  * Improvements
+
+  * Bug fixes
 
 ## 1.2.0 (2016-04-19)
   - Added Invoke-Nitro to wrap direct calls to _InvokeNSRestApi
