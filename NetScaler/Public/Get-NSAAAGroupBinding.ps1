@@ -30,10 +30,10 @@ function Get-NSAAAGroupBinding {
     .EXAMPLE
         Get-NSAAAGroup | Get-NSAAAGroupBinding
 
-        Gets all AAA groups then pipes the result into Get-NSAAAGroupBinding
+        Gets all AAA groups then pipes the result to Get-NSAAAGroupBinding
         to get session policy bindings for all groups.
 
-    .PARAMETER Groupname
+    .PARAMETER Name
         Defines the group(s) for which session policy bindings are
         to be returned.
 
@@ -44,9 +44,11 @@ function Get-NSAAAGroupBinding {
     param(
         [Parameter(
             Mandatory=$true,
+            ValueFromPipeline=$true,
             ValueFromPipelineByPropertyName=$true,
             Position=0)]
-        [string[]]$Groupname,
+        [alias('GroupName')]
+        [string[]]$Name,
 
         $Session = $script:session
     )
@@ -57,7 +59,7 @@ function Get-NSAAAGroupBinding {
 
     process {
         Try {
-            foreach ($Group in $Groupname) {
+            foreach ($Group in $Name) {
                 $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaagroup_binding -Resource $Group -Action Get
                 if ($response.psobject.properties | where name -eq aaagroup_binding) {
                     $response.aaagroup_binding

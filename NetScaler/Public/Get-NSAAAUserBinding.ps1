@@ -33,7 +33,7 @@ function Get-NSAAAUserBinding {
         Gets all AAA users then pipes the result into Get-NSAAAUserBinding
         to get session policy bindings for all users.
 
-    .PARAMETER Username
+    .PARAMETER Name
         Defines the user(s) for which session policy bindings are
         to be returned.
 
@@ -44,9 +44,11 @@ function Get-NSAAAUserBinding {
     param(
         [Parameter(
             Mandatory=$true,
+            ValueFromPipeline=$true,
             ValueFromPipelineByPropertyName=$true,
             Position=0)]
-        [string[]]$Username,
+        [alias('UserName')]
+        [string[]]$Name,
 
         $Session = $script:session
     )
@@ -57,7 +59,7 @@ function Get-NSAAAUserBinding {
 
     process {
         Try {
-            foreach ($User in $Username) {
+            foreach ($User in $Name) {
                 $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaauser_binding -Resource $User -Action Get
                 if ($response.psobject.properties | where name -eq aaauser_binding) {
                     $response.aaauser_binding

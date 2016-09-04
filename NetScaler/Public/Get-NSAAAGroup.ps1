@@ -25,25 +25,25 @@ function Get-NSAAAGroup {
         used to select a specific group or groups. 
 
     .EXAMPLE
-        Get-NSAAAUser
+        Get-NSAAAGroup
 
-        Gets all AAA users.
-
-    .EXAMPLE
-        Get-NSAAAUser -Username User1,User2,User3
-
-        Gets AAA users User1, User2, and User3.
+        Gets all AAA groups.
 
     .EXAMPLE
-        Get-NSAAAUser -Filter 'ABC'
+        Get-NSAAAGroup -Name Group1,Group2,Group3
 
-        Gets all AAA users with 'ABC' in the username.
+        Gets AAA groups Group1,Group2, and Group3.
 
-    .PARAMETER Username
-        Defines the specific AAA user(s) to be returned.
+    .EXAMPLE
+        Get-NSAAAGroup -Filter 'ABC'
+
+        Gets all AAA groups with 'ABC' in the username.
+
+    .PARAMETER Name
+        Defines the specific AAA group(s) to be returned.
 
     .PARAMETER Filter
-        When specified, only usernames that contain the
+        When specified, only groups that contain the
         provided string are returned.
 
     .PARAMETER Session
@@ -53,8 +53,10 @@ function Get-NSAAAGroup {
     param(
         [Parameter(
             ValueFromPipeline=$true,
+            ValueFromPipelineByPropertyName=$true,
             Position=0)]
-        [string[]]$Groupname,
+        [alias('GroupName')]
+        [string[]]$Name,
 
         [string]$Filter,
 
@@ -67,11 +69,11 @@ function Get-NSAAAGroup {
 
     process {
         Try {
-            if (-Not([string]::IsNullOrEmpty($Groupname))) {
-                foreach ($Group in $Groupname) {
+            if (-Not([string]::IsNullOrEmpty($Name))) {
+                foreach ($Group in $Name) {
                     $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaagroup -Resource $Group -Action Get
                     if ($response.psobject.properties | where name -eq aaagroup) {
-                        $response.aaauser
+                        $response.aaagroup
                     }
                 }
             } else {

@@ -39,7 +39,7 @@ function Get-NSAAAUser {
 
         Gets all AAA users with 'ABC' in the username.
 
-    .PARAMETER Username
+    .PARAMETER Name
         Defines the specific AAA user(s) to be returned.
 
     .PARAMETER Filter
@@ -53,8 +53,10 @@ function Get-NSAAAUser {
     param(
         [Parameter(
             ValueFromPipeline=$true,
+            ValueFromPipelineByPropertyName=$true,
             Position=0)]
-        [string[]]$Username,
+        [alias('UserName')]
+        [string[]]$Name,
 
         [string]$Filter,
 
@@ -67,8 +69,8 @@ function Get-NSAAAUser {
 
     process {
         Try {
-            if (-Not([string]::IsNullOrEmpty($Username))) {
-                foreach ($User in $Username) {
+            if (-Not([string]::IsNullOrEmpty($Name))) {
+                foreach ($User in $Name) {
                     $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaauser -Resource $User -Action Get
                     if ($response.psobject.properties | where name -eq aaauser) {
                         $response.aaauser
