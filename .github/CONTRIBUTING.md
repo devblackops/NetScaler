@@ -38,7 +38,7 @@ are highly apprecaited.
 
 # Submitting Changes
 * Push your changes to a topic branch in your fork of the repository.
-* Submit a pull request to the main repository.
+* Submit a pull request to the **dev** branch in the main repository.
 * Once the pull request has been reviewed and accepted, it will be merged with the master branch.
 * Celebrate 
 

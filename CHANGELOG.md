@@ -1,13 +1,27 @@
 ## 1.3.0 (unreleased)
   * Features
-    * Added Get-NSAAAGroup
-    * Added Get-NSAAAGroupBinding
-    * Added Get-NSAAAUser
-    * Added Get-NSAAAUserBinding
+    * Added Add-NSCSVirtualServerResponderPolicyBinding (via @rokett)
+    * Added Add-NSLBSSLVirtualServerCertificateBinding (via @rokett)
+    * Added Add-NSLBVirtualServerRewritePolicyBinding (via @rokett)
+    * Added Get-NSAAAGroup (via @psminion)
+    * Added Get-NSAAAGroupBinding (via @psminion)
+    * Added Get-NSAAAUser (via @psminion)
+    * Added Get-NSAAAUserBinding (via @psminion)    
+    * Added Get-NSCSVirtualServerResponderPolicyBinding (via @rokett)
+    * Added Get-NSLBServiceGroupMonitorBinding (via @rokett)
+    * Added Get-NSLBSSLVirtualServer (via @rokett)
+    * Added Get-NSLBSSLVirtualServerCertificateBinding (via @rokett)
+    * Added Get-NSLBVirtualServerRewritePolicyBinding (via @rokett)
+    * Added New-NSCSVirtualServer (via @rokett)
+    * Added New-NSLBServiceGroupMonitor (via @rokett)
+    * Added Set-NSLBSSLVirtualServer (via @rokett)
 
   * Improvements
+    * Modified New-NSLBMonitor allow setting HTTP request and expected response codes parameters (via @rokett)
+    * Modified New-NSLBVirtualServer to allow setting PersistenceType and PersistenceTimeout parameters (via @rokett)
 
   * Bug fixes
+    * Fixed bug in Add-NSLBVirtualServerBinding where weight was improperly being added when binding to a service group. (via @rokett)
 
 ## 1.2.0 (2016-04-19)
   - Added Invoke-Nitro to wrap direct calls to _InvokeNSRestApi
