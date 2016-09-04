@@ -22,17 +22,18 @@ task Init {
     Import-Module $modules -Verbose:$false -Force
 }
 
-task Test -Depends Init, Analyze, Pester
+task Test -Depends Init, Analyze, Pester-Meta, Pester-Module
 
 task Analyze -Depends Init {
-    $saResults = Invoke-ScriptAnalyzer -Path $sut -Severity Error -Recurse -Verbose:$false
+    $saResults = Get-ChildItem -File -Path $sut -Exclude '*.tests.ps1' -Recurse | 
+        Invoke-ScriptAnalyzer -Severity Error
     if ($saResults) {
         $saResults | Format-Table
         Write-Error -Message 'One or more Script Analyzer errors/warnings where found. Build cannot continue!'
     }
 }
 
-task Pester -Depends Init {   
+task Pester-Meta -Depends Init {   
     if(-not $ENV:BHProjectPath) {
         Set-BuildEnvironment -Path $PSScriptRoot\..
     }
@@ -44,6 +45,21 @@ task Pester -Depends Init {
         $testResults | Format-List
         Write-Error -Message 'One or more Pester tests failed. Build cannot continue!'
     }
+}
+
+task Pester-Module -depends Init {
+    if(-not $ENV:BHProjectPath) {
+        Set-BuildEnvironment -Path $PSScriptRoot\..
+    }
+    Remove-Module $ENV:BHProjectName -ErrorAction SilentlyContinue
+    Import-Module (Join-Path $ENV:BHProjectPath $ENV:BHProjectName) -Force
+
+    $testResults = Invoke-Pester -Path $sut\$env:PSProjectName -PassThru
+    if ($testResults.FailedCount -gt 0) {
+        $testResults | Format-List
+        Write-Error -Message 'One or more Pester tests failed. Build cannot continue!'
+    }
+    Remove-Module $ENV:BHProjectName -ErrorAction SilentlyContinue
 }
 
 task Deploy -depends Test, GenerateHelp {
