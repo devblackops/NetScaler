@@ -22,6 +22,11 @@ function New-NSLBMonitor {
     .DESCRIPTION
         Creates a new load balancer server monitor.
 
+    .EXAMPLE
+        New-NSLBMonitor -Name 'mysite_mon' -Type HTTP -DestinationIP 10.11.12.13 -DestinationPort 80
+
+        Create a new load balancing monitor for IP address 10.11.12.13 using port 80.
+
     .PARAMETER Session
         The NetScaler session object.
 

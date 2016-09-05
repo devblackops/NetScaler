@@ -25,8 +25,7 @@ function Save-NSConfig {
     .EXAMPLE
         Save-NSConfig
 
-    .EXAMPLE
-        Save-NSConfig -Session $session
+        Save NetScaler configuration.
 
     .PARAMETER Session
         The NetScaler session object.

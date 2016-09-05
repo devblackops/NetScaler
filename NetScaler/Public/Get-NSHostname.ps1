@@ -25,9 +25,13 @@ function Get-NSHostname {
     .EXAMPLE
         Get-NSHostname
 
+        Gets the current NetScaler hostname.
+
     .EXAMPLE
         Get-NSHostname -Session $session
 
+        Gets the current NetScaler hostname using session $session.
+        
     .PARAMETER Session
         The NetScaler session object.
     #>

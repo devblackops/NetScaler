@@ -109,7 +109,7 @@ function New-NSLBVirtualServer {
         * FIXSESSION - Connections that have the same SenderCompID and TargetCompID values belong to the same persistence session.
         Possible values = SOURCEIP, COOKIEINSERT, SSLSESSION, RULE, URLPASSIVE, CUSTOMSERVERID, DESTIP, SRCIPDESTIP, CALLID, RTSPSID, DIAMETER, FIXSESSION, NONE
 
-    .PARAMETER PersistenceTimeout
+    .PARAMETER Timeout
         Time period for which a persistence session is in effect.
         Default value: 2
         Minimum value = 0

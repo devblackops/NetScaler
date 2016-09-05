@@ -15,6 +15,19 @@ limitations under the License.
 #>
 
 function Get-NSAvailableTimeZone {
+    <#
+    .SYNOPSIS
+        Get list of available timezones to set on NetScaler.
+
+    .DESCRIPTION
+        Get list of available timezones to set on NetScaler.
+
+    .EXAMPLE
+        Get-NSAvailableTimeZone
+
+        Retrieves list of available timezones.
+    #>
+
     #Count is 411 time zones
     return @(
         'CoordinatedUniversalTime',

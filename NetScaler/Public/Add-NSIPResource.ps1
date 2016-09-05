@@ -25,6 +25,8 @@ function Add-NSIPResource {
     .EXAMPLE
         Add-NSIPResource -IPAddress '10.10.10.10' -SubNetMask '255.255.255.0'
 
+        Add IP address 10.10.10.10 to NetScaler.
+
     .PARAMETER Session
         The NetScaler session object.
 

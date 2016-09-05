@@ -30,7 +30,7 @@ function Add-NSLBSSLVirtualServerCertificateBinding {
     .PARAMETER Session
         The NetScaler session object.
 
-    .PARAMETER VitualServerName
+    .PARAMETER VirtualServerName
         Name of the SSL virtual server
 
     .PARAMETER Certificate

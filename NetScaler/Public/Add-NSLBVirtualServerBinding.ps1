@@ -35,7 +35,7 @@ function Add-NSLBVirtualServerBinding {
     .PARAMETER Session
         The NetScaler session object.
 
-    .PARAMETER VitualServerName
+    .PARAMETER VirtualServerName
         Name for the virtual server. Must begin with an ASCII alphanumeric or underscore (_) character, and must contain
         only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at sign (@), equal sign (=),
         and hyphen (-) characters. Can be changed after the virtual server is created.
@@ -44,6 +44,9 @@ function Add-NSLBVirtualServerBinding {
 
     .PARAMETER ServiceGroupName
         The service group name bound to the selected load balancing virtual server.
+
+    .PARAMETER ServiceName
+        The service name bound to the selected load balancing virtual server.
 
     .PARAMETER Weight
         Integer specifying the weight of the service. A larger number specifies a greater weight. Defines the capacity

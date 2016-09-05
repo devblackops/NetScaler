@@ -55,7 +55,7 @@ function Set-NSLBServiceGroup {
     .PARAMETER Comment
         The comment associated with the virtual server.
 
-    .PARAMETER SureConnet
+    .PARAMETER SureConnect
         State of the SureConnect feature.
 
     .PARAMETER SurgeProtection

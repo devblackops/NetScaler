@@ -19,7 +19,7 @@
   * Improvements
     * Modified New-NSLBMonitor allow setting HTTP request and expected response codes parameters (via @rokett)
     * Modified New-NSLBVirtualServer to allow setting PersistenceType and PersistenceTimeout parameters (via @rokett)
-    * Modified New-NSLBMonitor to support custom monitor properties (via @iainbrighton)
+    * Modified New-NSLBMonitor to support custom monitor properties (via @iainbrighton)    
 
   * Bug fixes
     * Fixed bug in Add-NSLBVirtualServerBinding where weight was improperly being added when binding to a service group. (via @rokett)
@@ -27,6 +27,7 @@
     * Fixed ConvertTo-Json depth in PowerShell 5.1 (via @iainbrighton)
     * Fixed filename rewrite issue in Add-NSSystemFile (via @iainbrighton)
     * Fixed certificate import without private key in Add-NSCertKeyPair (via @iainbrighton)
+    * Fixed comment-based help (via @devblackops)
 
 ## 1.2.0 (2016-04-19)
   - Added Invoke-Nitro to wrap direct calls to _InvokeNSRestApi

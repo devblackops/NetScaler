@@ -27,11 +27,17 @@ function Connect-NetScaler {
 
         Connect to the NetScaler with IP address 10.10.10.10 and prompt for credentials.
 
-    .PARAMETER NSIP
+    .PARAMETER IPAddress
         The IP or hostname of the NetScaler.
+
+    .PARAMETER Hostname
+        The hostname or FQDN of the NetScaler.
 
     .PARAMETER Credential
         The credential to authenticate to the NetScaler with.
+
+    .PARAMETER Timeout
+        Timeout in seconds for session object.
 
     .PARAMETER Https
         Use HTTPs to connect to the NetScaler.

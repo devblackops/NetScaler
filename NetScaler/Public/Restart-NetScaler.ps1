@@ -25,17 +25,27 @@ function Restart-NetScaler {
     .EXAMPLE
         Restart-NetScaler
 
+        Restart a NetScaler appliance.
+
     .EXAMPLE
         Restart-NetScaler -Session $session -Force
+
+        Restart NetScaler and suppress confirmation.
 
     .EXAMPLE
         Restart-NetScaler -Session $session -SaveConfig
 
+        Save config on NetScaler then reboot.
+
     .EXAMPLE
         Restart-NetScaler -Session $session -WarmReboot
 
+        Perform a warm reboot of the NetScaler.
+
     .EXAMPLE
         Restart-NetScaler -Wait -WaitTimeout 180
+
+        Restart NetScaler then wait for it to become available again. Stop waiting after 180 seconds.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -47,7 +57,7 @@ function Restart-NetScaler {
         Perform a warm reboot of the NetScaler appliance.
 
     .PARAMETER Wait
-        Wait for Nitro REST API is online after reboot.
+        Wait for Nitro REST API is become online after reboot.
 
     .PARAMETER WaitTimeout
         Timeout in seconds for the wait after reboot.

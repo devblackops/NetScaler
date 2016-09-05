@@ -25,8 +25,12 @@ function Disconnect-NetScaler {
     .EXAMPLE
         Disconnet-NetScaler
 
+        Disconnect from default NetScaler session.
+
     .EXAMPLE
         Disconnet-NetScaler -Session $session
+
+        Disconnect from specific NetScaler session object $session.
 
     .PARAMETER Session
         The NetScaler session object

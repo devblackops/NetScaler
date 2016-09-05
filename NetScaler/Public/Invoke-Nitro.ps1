@@ -30,6 +30,12 @@ function Invoke-Nitro {
         Name of the NS appliance resource, optional
     .PARAMETER Action
         Name of the action to perform on the NS appliance resource
+    .PARAMETER Arguments
+        Hashtable of arguments to send when invoking NetScaler API directly.
+    .PARAMETER Stat
+        Switch indicating API will operate in the 'Stat` namespace instead of the 'Config' namespace.
+    .PARAMETER Filters
+        Hashtable of filters to apply when invoking a GET request against the NetScaler API.
     .PARAMETER Payload
         Payload  of the web request, in hashtable format
     .PARAMETER GetWarning
@@ -38,6 +44,8 @@ function Invoke-Nitro {
     .PARAMETER OnErrorAction
         Use this parameter to set the onerror status for nitro request. Applicable only for bulk requests.
         Acceptable values: "EXIT", "CONTINUE", "ROLLBACK", default to "EXIT"
+    .PARAMETER Force
+        Suppress confirmation when invoking operation on NetScaler API.
     .EXAMPLE
         Invoke NITRO REST API to add a DNS Server resource.
         $payload = @{ ip = "10.8.115.210" }

@@ -37,6 +37,15 @@ function Get-NSLBVirtualServer {
 
     .PARAMETER Name
         The name or names of the load balancer virtual server to get.
+
+    .PARAMETER Port
+        Filter load balancer virtual servers by port.
+
+    .PARAMETER ServiceType
+        Filter load balancer virtual servers by service type.
+
+    .PARAMETER LBMethod
+        Filter load balancer virtual servers by load balancing method.
     #>
     [cmdletbinding()]
     param(

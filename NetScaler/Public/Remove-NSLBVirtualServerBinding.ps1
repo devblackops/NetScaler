@@ -25,7 +25,7 @@ function Remove-NSLBVirtualServerBinding {
     .EXAMPLE
         Remove-NSLBVirtualServerBinding -Name 'binding01'
 
-        Removes the load balancer virtual server named 'binding01'.
+        Removes the load balancer virtual server binding named 'binding01'.
 
     .EXAMPLE
         'binding01', 'binding02' | Remove-NSLBVirtualServerBinding
@@ -37,6 +37,12 @@ function Remove-NSLBVirtualServerBinding {
 
     .PARAMETER Name
         The name or names of the load balancer bindings to get.
+
+    .PARAMETER ServiceGroupName
+        Service group name to remove from binding.
+
+    .PARAMETER ServiceName
+        Service name to remove from binding.
 
     .PARAMETER Force
         Suppress confirmation when removing a load balancer binding.

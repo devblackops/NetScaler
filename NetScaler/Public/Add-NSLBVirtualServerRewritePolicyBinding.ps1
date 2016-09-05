@@ -30,7 +30,7 @@ function Add-NSLBVirtualServerRewritePolicyBinding {
     .PARAMETER Session
         The NetScaler session object.
 
-    .PARAMETER VitualServerName
+    .PARAMETER VirtualServerName
         Name for the virtual server. Must begin with an ASCII alphanumeric or underscore (_) character, and must contain
         only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at sign (@), equal sign (=),
         and hyphen (-) characters. Can be changed after the virtual server is created.

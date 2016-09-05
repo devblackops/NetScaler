@@ -23,7 +23,8 @@ function New-NSKCDAccount {
         Creates a new KCD account.
 
     .EXAMPLE
-        New-KCDAccount -Name ns_svc -Realm LAB -DelegatedUser ns_svc -DelegatedUserPassword blabla
+        $cred = Get-Credential
+        New-KCDAccount -Name ns_svc -Realm LAB -DelegatedUser ns_svc -Credential $cred
         
         Create a new KCD account with the given delegated user.
 
@@ -39,14 +40,11 @@ function New-NSKCDAccount {
         
         Minimum length = 1
 
-    .PARAMETER DelegatedUser
-        Username of the delegated user. The user Netscaler uses to get delegated tickets.
-
-    .PARAMETER DelegatedUserPassword
-        Password of the delegated user.
-
     .PARAMETER Realm
         Kerberos realm the delegation occurs in.
+    
+    .PARAMETER Credential
+        Credential holding delegated username and password.
 
     .PARAMETER Passthru
         Return the load balancer server object.
