@@ -23,10 +23,14 @@ function Set-NSHostname {
         Set NetScaler hostname
 
     .EXAMPLE
-        Set-NSHostname -Session $session -HostName 'mynsappliance'
+        Set-NSHostname -Session $session -Hostname 'mynsappliance'
+
+        Changes the NetScaler hostname to 'mynsappliance'
 
     .EXAMPLE
-        Set-NSHostname -HostName 'mynsappliance'
+        Set-NSHostname -Hostname 'mynsappliance'
+
+        Changes the NetScaler hostname to 'mynsappliance'
 
     .PARAMETER Session
         The NetScaler session object.

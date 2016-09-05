@@ -27,9 +27,13 @@ function Set-NSTimeZone {
     .EXAMPLE
         Set-NSTimeZone -Session $session -TimeZone 'GMT-07:00-PDT-America/Los_Angeles'
 
+        Configures the NetScaler appliance timezone to 'America/Los_Angeles'.
+
     .EXAMPLE
-        $tz = Get-NSAvailableTimeZones | Where-Object {$_ -contains 'Paris'} | Select-Object -First 1
-        Set-NSHostname -HostName 'mynsappliance' -TimeZone $tz
+        $tz = Get-NSAvailableTimeZone | Where-Object {$_ -match 'Paris'} | Select-Object -First 1
+        Set-NSTimeZone -HostName 'mynsappliance' -TimeZone $tz
+
+        Configures the NetScaler appliance timezone to and available timezone that has 'Paris' in its name.
 
     .PARAMETER Session
         The NetScaler session object.

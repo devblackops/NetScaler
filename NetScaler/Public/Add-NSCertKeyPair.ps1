@@ -23,6 +23,14 @@ function Add-NSCertKeyPair {
         Add server certificate to NetScaler appliance.
 
     .EXAMPLE
+        Add-NSCertKeyPair -CertKeyName 'myrootCA' -CertPath '/nsconfig/ssl/mycertificate.cert' -CertKeyFormat 'PEM'
+
+        Creates a root certificate key pair named 'myrootCA' using the PEM formatted certificate 'mycertificate.cert' located on the appliance.
+
+    .EXAMPLE
+        Add-NSCertKeyPair -CertKeyName 'mywildcardcert' -CertPath '/nsconfig/ssl/mywildcard.cert' -KeyPath '/nsconfig/ssl/mywildcard.key' -CertKeyFormat 'PEM'
+
+        Creates a certificate key pair named 'mywildardcert' using the PEM formatted certificate 'mywildcard.cert' and 'mywildcard.key' key file located on the appliance.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -73,7 +81,7 @@ function Add-NSCertKeyPair {
         [string]$KeyPath,
 
         [Parameter()]
-        [ValidateSet('PEM','DER','PFX'')]
+        [ValidateSet('PEM','DER','PFX')]
         [string]$CertKeyFormat = 'PEM',
 
         [Parameter()]
