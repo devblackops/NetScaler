@@ -19,6 +19,7 @@
   * Improvements
     * Modified New-NSLBMonitor allow setting HTTP request and expected response codes parameters (via @rokett)
     * Modified New-NSLBVirtualServer to allow setting PersistenceType and PersistenceTimeout parameters (via @rokett)
+    * Modified New-NSLBMonitor to support custom monitor properties (via @iainbrighton)
 
   * Bug fixes
     * Fixed bug in Add-NSLBVirtualServerBinding where weight was improperly being added when binding to a service group. (via @rokett)
