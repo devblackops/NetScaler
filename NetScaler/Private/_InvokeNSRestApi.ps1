@@ -1,9 +1,9 @@
 function _InvokeNSRestApi {
     <#
     .SYNOPSIS
-        Invoke NetScaler NITRO REST API 
+        Invoke NetScaler NITRO REST API
     .DESCRIPTION
-        Invoke NetScaler NITRO REST API 
+        Invoke NetScaler NITRO REST API
     .PARAMETER Session
         An existing custom NetScaler Web Request Session object returned by Connect-NetScaler
     .PARAMETER Method
@@ -42,7 +42,7 @@ function _InvokeNSRestApi {
         [Parameter(Mandatory)]
         [string]$Type,
 
-        [string]$Resource, 
+        [string]$Resource,
 
         [string]$Action,
 
@@ -61,13 +61,13 @@ function _InvokeNSRestApi {
         [ValidateSet('EXIT', 'CONTINUE', 'ROLLBACK')]
         [string]$OnErrorAction = 'EXIT'
     )
-    
+
     if ($Stat) {
         $uri = "$($Script:protocol)://$($Session.Endpoint)/nitro/v1/stat/$Type"
     } else {
         $uri = "$($Script:protocol)://$($Session.Endpoint)/nitro/v1/config/$Type"
     }
-    
+
     if (-not [string]::IsNullOrEmpty($Resource)) {
         $uri += "/$Resource"
     }
@@ -120,7 +120,7 @@ function _InvokeNSRestApi {
         $hashtablePayload = @{}
         $hashtablePayload.'params' = @{'warning' = $warning; 'onerror' = $OnErrorAction; <#"action"=$Action#>}
         $hashtablePayload.$Type = $Payload
-        $jsonPayload = ConvertTo-Json -InputObject $hashtablePayload -Depth ([int]::MaxValue)
+        $jsonPayload = ConvertTo-Json -InputObject $hashtablePayload -Depth 100
         Write-Verbose -Message "JSON Payload:`n$jsonPayload"
     }
 
@@ -136,13 +136,13 @@ function _InvokeNSRestApi {
             ErrorVariable = 'restError'
             Verbose = $false
         }
-        
+
         if ($Method -ne 'GET') {
             $restParams.Add('Body', $jsonPayload)
         }
 
         $response = Invoke-RestMethod @restParams
-        
+
         if ($response) {
             if ($response.severity -eq 'ERROR') {
                 throw "Error. See response: `n$($response | Format-List -Property * | Out-String)"
