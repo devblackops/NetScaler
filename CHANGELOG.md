@@ -6,7 +6,7 @@
     * Added Get-NSAAAGroup (via @psminion)
     * Added Get-NSAAAGroupBinding (via @psminion)
     * Added Get-NSAAAUser (via @psminion)
-    * Added Get-NSAAAUserBinding (via @psminion)    
+    * Added Get-NSAAAUserBinding (via @psminion)
     * Added Get-NSCSVirtualServerResponderPolicyBinding (via @rokett)
     * Added Get-NSLBServiceGroupMonitorBinding (via @rokett)
     * Added Get-NSLBSSLVirtualServer (via @rokett)
@@ -22,12 +22,13 @@
 
   * Bug fixes
     * Fixed bug in Add-NSLBVirtualServerBinding where weight was improperly being added when binding to a service group. (via @rokett)
+    * Fixed Set-NSHostname and Set-NSTimeZone update actions (via @iainbrighton)
 
 ## 1.2.0 (2016-04-19)
   - Added Invoke-Nitro to wrap direct calls to _InvokeNSRestApi
   - Added Get-NSConfig : retrieve NetScaler configuration (running or saved)
   - Added Get/New/Set/Remove-NSResponderAction
-  - Modified Get-NSLBMonitor, Get-NSLBServer, Get-NSLBServiceGroup to only return 
+  - Modified Get-NSLBMonitor, Get-NSLBServer, Get-NSLBServiceGroup to only return
     resources if there are resources to return.
 
 ## 1.1.3 (2016-04-03)
@@ -42,4 +43,4 @@
   - Correct typo in Install-NSLicense
   - Correct typo in New-NSLBServiceGroup/Set-NSLBServiceGroup
   - Add -Force and -PassThru to Set-NSTimeZone
-  - Allow any filepath when installing NS license in Install-NSLicense  
+  - Allow any filepath when installing NS license in Install-NSLicense

@@ -36,18 +36,18 @@ function Set-NSTimeZone {
 
     .PARAMETER Timezone
         The timezone to set the appliance to.
-        
+
     .PARAMETER Force
         Suppress confirmation when updating the timezone.
-        
+
     .PARAMETER Passthru
-        Return the hostname.        
+        Return the hostname.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='high')]
     param(
         [parameter(Mandatory)]
         $Session = $script:session,
-        
+
         [parameter(Mandatory)]
         [ValidateScript({
             if ($NSTimeZones -contains $_) {
@@ -59,7 +59,7 @@ function Set-NSTimeZone {
         [string]$TimeZone,
 
         [switch]$Force,
-        
+
         [switch]$PassThru
     )
 
@@ -73,7 +73,7 @@ function Set-NSTimeZone {
             $params = @{
                 timezone = $TimeZone
             }
-            _InvokeNSRestApi -Session $Session -Method PUT -Type nsconfig -Payload $params -Action update
+            _InvokeNSRestApi -Session $Session -Method PUT -Type nsconfig -Payload $params
 
             if ($PSBoundParameters.ContainsKey('PassThru')) {
                 $config = _InvokeNSRestApi -Session $Session -Method GET -Type nsconfig -Action get

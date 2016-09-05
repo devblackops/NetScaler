@@ -44,7 +44,7 @@ function Set-NSHostname {
     param(
         [parameter(Mandatory)]
         $Session = $script:session,
-        
+
         [parameter(Mandatory)]
         [ValidateLength(1, 255)]
         [string]$Hostname = (Read-Host -Prompt 'NetScaler hostname'),
@@ -64,8 +64,8 @@ function Set-NSHostname {
             $params = @{
                 hostname = $Hostname
             }
-            _InvokeNSRestApi -Session $Session -Method PUT -Type nshostname -Payload $params -Action update
-        
+            _InvokeNSRestApi -Session $Session -Method PUT -Type nshostname -Payload $params
+
             if ($PSBoundParameters.ContainsKey('PassThru')) {
                 return _InvokeNSRestApi -Session $Session -Method GET -Type nshostname -Action get
             }
