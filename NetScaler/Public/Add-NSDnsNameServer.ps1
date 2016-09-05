@@ -25,8 +25,12 @@ function Add-NSDnsNameServer {
     .EXAMPLE
         Add-NSDnsNameServer -DNSServerIP '8.8.8.8'
 
+        Adds DNS server IP 8.8.8.8 to NetScaler.
+
     .EXAMPLE
         '2.2.2.2', '8.8.8.8' | Add-NSDnsNameServer -Session $session
+
+        Adds DNS server IP 8.8.8.8 to NetScaler using the pipeline.
 
     .PARAMETER Session
         The NetScaler session object.
