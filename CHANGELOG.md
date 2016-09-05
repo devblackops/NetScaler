@@ -25,6 +25,7 @@
     * Fixed Set-NSHostname and Set-NSTimeZone update actions (via @iainbrighton)
     * Fixed ConvertTo-Json depth in PowerShell 5.1 (via @iainbrighton)
     * Fixed filename rewrite issue in Add-NSSystemFile (via @iainbrighton)
+    * Fixed certificate import without private key in Add-NSCertKeyPair (via @iainbrighton)
 
 ## 1.2.0 (2016-04-19)
   - Added Invoke-Nitro to wrap direct calls to _InvokeNSRestApi
