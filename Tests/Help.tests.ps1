@@ -48,12 +48,15 @@ foreach ($command in $commands) {
 
         Context "Test parameter help for $commandName" {
 
-            $Common = 'Debug', 'ErrorAction', 'ErrorVariable', 'InformationAction', 'InformationVariable', 'OutBuffer', 'OutVariable',
-            'PipelineVariable', 'Verbose', 'WarningAction', 'WarningVariable'
+            $common = 'Debug', 'ErrorAction', 'ErrorVariable', 'InformationAction', 'InformationVariable', 'OutBuffer', 'OutVariable',
+            'PipelineVariable', 'Verbose', 'WarningAction', 'WarningVariable', 'Confirm', 'Whatif'
 
             $parameters = $command.ParameterSets.Parameters | Sort-Object -Property Name -Unique | Where-Object { $_.Name -notin $common }
             $parameterNames = $parameters.Name
-            $HelpParameterNames = $help.Parameters.Parameter.Name | Sort-Object -Unique
+
+            ## Without the filter, WhatIf and Confirm parameters are still flagged in "finds help parameter in code" test
+            $helpParameters = $help.Parameters.Parameter | Where-Object { $_.Name -notin $common } | Sort -Property Name -Unique
+            $helpParameterNames = $helpParameters.Name
 
             foreach ($parameter in $parameters) {
                 $parameterName = $parameter.Name
