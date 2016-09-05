@@ -27,27 +27,31 @@ function Set-NSTimeZone {
     .EXAMPLE
         Set-NSTimeZone -Session $session -TimeZone 'GMT-07:00-PDT-America/Los_Angeles'
 
+        Configures the NetScaler appliance timezone to 'America/Los_Angeles'.
+
     .EXAMPLE
-        $tz = Get-NSAvailableTimeZones | Where-Object {$_ -contains 'Paris'} | Select-Object -First 1
-        Set-NSHostname -HostName 'mynsappliance' -TimeZone $tz
+        $tz = Get-NSAvailableTimeZone | Where-Object {$_ -match 'Paris'} | Select-Object -First 1
+        Set-NSTimeZone -HostName 'mynsappliance' -TimeZone $tz
+
+        Configures the NetScaler appliance timezone to and available timezone that has 'Paris' in its name.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Timezone
         The timezone to set the appliance to.
-        
+
     .PARAMETER Force
         Suppress confirmation when updating the timezone.
-        
+
     .PARAMETER Passthru
-        Return the hostname.        
+        Return the hostname.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='high')]
     param(
         [parameter(Mandatory)]
         $Session = $script:session,
-        
+
         [parameter(Mandatory)]
         [ValidateScript({
             if ($NSTimeZones -contains $_) {
@@ -59,7 +63,7 @@ function Set-NSTimeZone {
         [string]$TimeZone,
 
         [switch]$Force,
-        
+
         [switch]$PassThru
     )
 
@@ -73,7 +77,7 @@ function Set-NSTimeZone {
             $params = @{
                 timezone = $TimeZone
             }
-            _InvokeNSRestApi -Session $Session -Method PUT -Type nsconfig -Payload $params -Action update
+            _InvokeNSRestApi -Session $Session -Method PUT -Type nsconfig -Payload $params
 
             if ($PSBoundParameters.ContainsKey('PassThru')) {
                 $config = _InvokeNSRestApi -Session $Session -Method GET -Type nsconfig -Action get

@@ -23,15 +23,23 @@ function Add-NSCertKeyPair {
         Add server certificate to NetScaler appliance.
 
     .EXAMPLE
+        Add-NSCertKeyPair -CertKeyName 'myrootCA' -CertPath '/nsconfig/ssl/mycertificate.cert' -CertKeyFormat 'PEM'
+
+        Creates a root certificate key pair named 'myrootCA' using the PEM formatted certificate 'mycertificate.cert' located on the appliance.
+
+    .EXAMPLE
+        Add-NSCertKeyPair -CertKeyName 'mywildcardcert' -CertPath '/nsconfig/ssl/mywildcard.cert' -KeyPath '/nsconfig/ssl/mywildcard.key' -CertKeyFormat 'PEM'
+
+        Creates a certificate key pair named 'mywildardcert' using the PEM formatted certificate 'mywildcard.cert' and 'mywildcard.key' key file located on the appliance.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER CertKeyName
-        Name for the certificate and private-key pair. Must begin with an ASCII alphanumeric or underscore (_) character, 
-        and must contain only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at (@), equals (=), 
+        Name for the certificate and private-key pair. Must begin with an ASCII alphanumeric or underscore (_) character,
+        and must contain only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at (@), equals (=),
         and hyphen (-) characters. Cannot be changed after the certificate-key pair is created. The following requirement
-        applies only to the NetScaler CLI: If the name includes one or more spaces, enclose the name in double or single 
+        applies only to the NetScaler CLI: If the name includes one or more spaces, enclose the name in double or single
         quotation marks (for example, "my cert" or 'my cert').
 
     .PARAMETER CertPath
@@ -43,17 +51,18 @@ function Add-NSCertKeyPair {
     .PARAMETER KeyPath
         Name of and, optionally, path to the private-key file that is used to form the certificate-key pair.
         The certificate file should be present on the appliance's hard-disk drive or solid-state drive.
-        Storing a certificate in any location other than the default might cause inconsistency in a high availability setup. 
+        Storing a certificate in any location other than the default might cause inconsistency in a high availability setup.
         '/nsconfig/ssl/' is the default path.
 
     .PARAMETER CertKeyFormat
         Input format of the certificate and the private-key files.
-        The two formats supported by the appliance are:
+        The three formats supported by the appliance are:
             PEM - Privacy Enhanced Mail
-            DER - Distinguished Encoding Rule.
-        
+            DER - Distinguished Encoding Rule
+            PFX - PKCS#12 binary format
+
         Default value: PEM
-        Possible values = DER, PEM
+        Possible values = DER, PEM, PFX
 
     .PARAMETER Password
         Passphrase that was used to encrypt the private-key. Use this option to load encrypted private-keys in PEM format.
@@ -72,8 +81,8 @@ function Add-NSCertKeyPair {
         [string]$KeyPath,
 
         [Parameter()]
-        [ValidateSet("PEM","DER")]
-        [string]$CertKeyFormat="PEM",
+        [ValidateSet('PEM','DER','PFX')]
+        [string]$CertKeyFormat = 'PEM',
 
         [Parameter()]
         [securestring]$Password
@@ -86,18 +95,20 @@ function Add-NSCertKeyPair {
     process {
         if ($PSCmdlet.ShouldProcess($CertKeyName, 'Add SSL certificate and private key pair')) {
             try {
-                $params = @{
+                 $params = @{
                     certkey = $CertKeyName
                     cert = $CertPath
-                    key = $KeyPath
                     inform = $CertKeyFormat
                 }
-                if ($CertKeyFormat -eq 'PEM' -and $Password) {
+                if ($PSBoundParameters.ContainsKey('KeyPath')) {
+                    $params.Add('key', $KeyPath)
+                }
+                if (($CertKeyFormat -in 'PEM','PFX') -and $Password) {
                     $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
                     $unsecurePassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
                     $params.Add("passplain",$unsecurePassword)
                 }
-                $response = _InvokeNSRestApi  -Session $Session -Method POST -Type sslcertkey -Payload $params -Action add 
+                $response = _InvokeNSRestApi  -Session $Session -Method POST -Type sslcertkey -Payload $params -Action add
             } catch {
                 throw $_
             }
