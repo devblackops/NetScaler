@@ -24,8 +24,8 @@ function Add-NSSystemFile {
 
     .EXAMPLE
         Add-NSSystemFile -Path '/tmp/aaa.extlab.local.pfx -FileLocation '/nsconfig/ssl' -Filename 'aaa.extlab.local.pfx'
-        
-        Adds the local '/tmp/aaa.extlab.local.pfx' to the certificate directory on the 
+
+        Adds the local '/tmp/aaa.extlab.local.pfx' to the certificate directory on the
         NetScaler appliance under the name 'aaa.extlab.local.pfx'
 
     .PARAMETER Session
@@ -33,30 +33,30 @@ function Add-NSSystemFile {
 
     .PARAMETER Path
         Local path of the file to upload to the NetScaler appliance.
-        
+
     .PARAMETER FileLocation
         Path of the directory, on the NetScaler appliance, where the file will be uploaded.
-        
+
     .PARAMETER Filename
         Name of the file once it is uploaded on the NetScaler appliance.
 
     .PARAMETER Force
-        Suppress confirmation when creating the system file (this does not override a 
+        Suppress confirmation when creating the system file (this does not override a
         pre-existing file).
-        
+
     .Notes
-        Nitro implementation status: partial        
+        Nitro implementation status: partial
     #>
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
         $Session = $script:Session,
-       
+
         [parameter(Mandatory)]
         [String]$Path,
- 
+
         [parameter(Mandatory)]
         [String]$FileLocation,
- 
+
         [parameter(Mandatory)]
         [String]$Filename,
 
@@ -68,7 +68,7 @@ function Add-NSSystemFile {
     }
 
     process {
-        $fileName = Split-Path -Path $Path -Leaf
+        $FileName = Split-Path -Path $FileName -Leaf
         if ($Force -or $PSCmdlet.ShouldProcess($Path, 'Add system file')) {
             try {
                 $certContent = Get-Content -Path $Path -Encoding "Byte"
@@ -78,7 +78,7 @@ function Add-NSSystemFile {
                     filecontent = $certContentBase64
                     filelocation = $FileLocation
                     fileencoding = 'BASE64'
-                }  
+                }
                 _InvokeNSRestApi -Session $Session -Method POST -Type systemfile systemfile -Payload $params -Action add
             } catch {
                 throw $_
