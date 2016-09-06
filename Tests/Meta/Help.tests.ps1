@@ -1,18 +1,11 @@
 # Taken with love from @juneb_get_help (https://raw.githubusercontent.com/juneb/PesterTDD/master/Module.Help.Tests.ps1)
 
-$moduleName = $env:BHProjectName
-
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$root = Split-Path -Path $here -Parent
-$modulePath = Join-Path -Path $root -ChildPath $moduleName
-$moduleManifest = Join-Path -Path $modulePath -ChildPath "$moduleName.psd1"
-
 # Get module commands
 # Remove all versions of the module from the session. Pester can't handle multiple versions.
-Get-Module $moduleName | Remove-Module
-Import-Module $modulePath -Verbose:$false -ErrorAction Stop
-$moduleVersion = (Test-ModuleManifest $moduleManifest | select -ExpandProperty Version).ToString()
-$ms = [Microsoft.PowerShell.Commands.ModuleSpecification]@{ ModuleName = $moduleName; RequiredVersion = $moduleVersion }
+Get-Module $env:BHProjectName | Remove-Module
+Import-Module $env:BHPSModulePath -Verbose:$false -ErrorAction Stop
+$moduleVersion = (Test-ModuleManifest $env:BHPSModuleManifest | select -ExpandProperty Version).ToString()
+$ms = [Microsoft.PowerShell.Commands.ModuleSpecification]@{ ModuleName = $env:BHProjectName; RequiredVersion = $moduleVersion }
 $commands = Get-Command -FullyQualifiedModule $ms -CommandType Cmdlet, Function, Workflow  # Not alias
 
 ## When testing help, remember that help is cached at the beginning of each session.

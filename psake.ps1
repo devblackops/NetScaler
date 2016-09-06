@@ -5,6 +5,9 @@ properties {
     }
 
     $sut = "$projectRoot\NetScaler"
+    $metaTests = "$projectRoot\Tests\meta"
+    $unitTests = "$projectRoot\Tests\unit"
+    $integrationTests = "$projectRoot\Tests\integration"
     $tests = "$projectRoot\Tests"
 
     $psVersion = $PSVersionTable.PSVersion.Major
@@ -40,7 +43,7 @@ task Pester-Meta -Depends Init {
     Remove-Module $ENV:BHProjectName -ErrorAction SilentlyContinue
     Import-Module (Join-Path $ENV:BHProjectPath $ENV:BHProjectName) -Force
 
-    $testResults = Invoke-Pester -Path $tests -PassThru
+    $testResults = Invoke-Pester -Path $metaTests -PassThru
     if ($testResults.FailedCount -gt 0) {
         $testResults | Format-List
         Write-Error -Message 'One or more Pester tests failed. Build cannot continue!'
@@ -54,7 +57,7 @@ task Pester-Module -depends Init {
     Remove-Module $ENV:BHProjectName -ErrorAction SilentlyContinue
     Import-Module (Join-Path $ENV:BHProjectPath $ENV:BHProjectName) -Force
 
-    $testResults = Invoke-Pester -Path $sut\$env:PSProjectName -PassThru
+    $testResults = Invoke-Pester -Path $unitTests -PassThru
     if ($testResults.FailedCount -gt 0) {
         $testResults | Format-List
         Write-Error -Message 'One or more Pester tests failed. Build cannot continue!'
