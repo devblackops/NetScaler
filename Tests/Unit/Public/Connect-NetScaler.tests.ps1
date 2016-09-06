@@ -6,18 +6,9 @@ describe 'Connect-NetScaler' {
         $secPass = 'password' | ConvertTo-SecureString -AsPlainText -Force
         $credential = New-Object System.Management.Automation.PSCredential -ArgumentList ('user', $secPass)
 
-        $mockSession = @{
-            Endpoint = 'localhost'
-            WebSession = [Microsoft.PowerShell.Commands.WebRequestSession]$null
-        }
-
-        $mockSuccessResponse = @{
-            severity = 'SUCCESS'
-        }
-
-        $mockFailedResponse = @{
-            severity = 'ERROR'
-        } 
+        $mockSession = . $env:BHProjectPath\Tests\Mocks\emptySession.ps1 
+        $mockSuccessResponse = . $env:BHProjectPath\Tests\Mocks\loginSuccess.ps1
+        $mockFailedResponse = . $env:BHProjectPath\Tests\Mocks\loginFailure.ps1
 
         mock -CommandName Invoke-RestMethod -MockWith { return $mockSuccessResponse }
         mock -CommandName Invoke-RestMethod -MockWith { return $mockFailedResponse } -ParameterFilter { $Timeout -eq 10 }
