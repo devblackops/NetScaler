@@ -1,5 +1,5 @@
 <#
-Copyright 2015 Brandon Olin
+Copyright 2016 Iain Brighton
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,39 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSLBServer {
+function Remove-NSSSLProfile {
     <#
     .SYNOPSIS
-        Removes a load balancer server.
+        Removes a SSL profile.
 
     .DESCRIPTION
-        Removes a load balancer server.
-
-    .EXAMPLE
-        Remove-NSLBServer -Name 'server01'
-
-        Removes the load balancer server named 'server01'.
-
-    .EXAMPLE
-        'server01', 'server02' | Remove-NSLBServer
-
-        Removes the load balancer servers named 'server01' and 'server02'.
+        Removes a SSL profile.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the load balancer server to get.
+        The name of the SSL profile to remove.
+
+    .EXAMPLE
+        Remove-NSSSLProfile -Name 'Secure_SSL_Profile'
+
+        Removes the SSL profile named 'Secure_SSL_Profile'.
 
     .PARAMETER Force
-        Suppress confirmation when removing a load balancer server.
+        Suppress confirmation when removing a responder action.
     #>
-    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
+    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     param(
         $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name = (Read-Host -Prompt 'LB server name'),
+        [string[]]$Name,
 
         [switch]$Force
     )
@@ -57,9 +52,9 @@ function Remove-NSLBServer {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Server')) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete SSL Profile')) {
                 try {
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type server -Resource $item -Action delete
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type sslprofile -Resource $item -Action delete
                 } catch {
                     throw $_
                 }

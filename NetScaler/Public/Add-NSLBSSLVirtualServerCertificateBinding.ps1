@@ -38,6 +38,9 @@ function Add-NSLBSSLVirtualServerCertificateBinding {
 
     .PARAMETER Passthru
         Return the load balancer server object.
+
+    .PARAMETER Force
+        Suppress confirmation adding certificate binding.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Medium', DefaultParameterSetName='servicegroup')]
     param(
@@ -49,7 +52,9 @@ function Add-NSLBSSLVirtualServerCertificateBinding {
         [parameter(Mandatory=$True)]
         [string]$Certificate,
 
-        [Switch]$PassThru
+        [Switch]$PassThru,
+
+        [switch]$Force
     )
 
     begin {
@@ -57,7 +62,7 @@ function Add-NSLBSSLVirtualServerCertificateBinding {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($VirtualServerName, 'Add Virtual Server Binding')) {
+        if ($Force -or $PSCmdlet.ShouldProcess($VirtualServerName, 'Add Virtual Server Binding')) {
             try {
 
                 $params = @{

@@ -70,13 +70,17 @@ FunctionsToExport = @(
     'Add-NSCertKeyPair',
     'Add-NSCSVirtualServerResponderPolicyBinding',
     'Add-NSDnsNameServer',
+    'Add-NSDnsSuffix',
     'Add-NSIPResource',
+    'Add-NSLBServiceGroupMonitorBinding',
     'Add-NSLBSSLVirtualServerCertificateBinding',
     'Add-NSLBVirtualServerBinding',
     'Add-NSLBVirtualServerRewritePolicyBinding',
     'Add-NSRSAKey',
     'Add-NSServerCertificate',
+    'Add-NSSSLCertificateLink',
     'Add-NSSystemFile',
+    'Add-NSVPNVirtualServerBinding',
     'Clear-NSConfig',
     'Connect-NetScaler',
     'Disable-NSFeature',
@@ -101,6 +105,8 @@ FunctionsToExport = @(
     'Get-NSCSPolicy',
     'Get-NSCSVirtualServer',
     'Get-NSCSVirtualServerResponderPolicyBinding',
+    'Get-NSDnsNameServer',
+    'Get-NSDnsSuffix',
     'Get-NSFeature',
     'Get-NSHostname',
     'Get-NSIPResource',
@@ -113,10 +119,13 @@ FunctionsToExport = @(
     'Get-NSLBServiceGroupMonitorBinding',
     'Get-NSLBSSLVirtualServer',
     'Get-NSLBSSLVirtualServerCertificateBinding',
+    'Get-NSLBSSLVirtualServerProfile',
     'Get-NSLBStat',
     'Get-NSLBVirtualServer',
     'Get-NSLBVirtualServerBinding',
     'Get-NSLBVirtualServerRewritePolicyBinding',
+    'Get-NSLDAPAuthenticationPolicy',
+    'Get-NSLDAPAuthenticationServer',
     'Get-NSResponderAction',
     'Get-NSResponderPolicy',
     'Get-NSRewriteAction',
@@ -126,11 +135,16 @@ FunctionsToExport = @(
     'Get-NSSAMLAuthenticationPolicy',
     'Get-NSSAMLAuthenticationServer',
     'Get-NSSSLCertificate',
+    'Get-NSSSLCertificateLink',
+    'Get-NSSSLProfile',
     'Get-NSSystemFile',
+    'Get-NSVersion',
     'Get-NSVPNServer',
     'Get-NSVPNSessionPolicy',
     'Get-NSVPNSessionProfile',
     'Get-NSVPNVirtualServer',
+    'Get-NSVPNVirtualServerBinding',
+    'Get-NSVPNVirtualServerTheme',
     'Install-NSLicense',
     'Invoke-Nitro',
     'New-NSCSVirtualServer',
@@ -141,24 +155,42 @@ FunctionsToExport = @(
     'New-NSLBServiceGroupMember',
     'New-NSLBServiceGroupMonitor',
     'New-NSLBVirtualServer',
+    'New-NSLDAPAuthenticationPolicy',
+    'New-NSLDAPAuthenticationServer',
     'New-NSNTPServer',
     'New-NSResponderAction',
     'New-NSNTPServer',
+    'New-NSSSLProfile',
+    'New-NSVPNSessionPolicy',
+    'New-NSVPNSessionProfile',
+    'New-NSVPNVirtualServer',
+    'Remove-NSDnsSuffix',
     'Remove-NSLBMonitor',
     'Remove-NSLBServer',
     'Remove-NSLBServiceGroup',
+    'Remove-NSLBServiceGroupMonitorBinding',
     'Remove-NSLBVirtualServer',
     'Remove-NSLBVirtualServerBinding',
+    'Remove-NSLBSSLVirtualServerProfile',
+    'Remove-NSLDAPAuthenticationPolicy',
+    'Remove-NSLDAPAuthenticationServer',
     'Remove-NSResponderAction',
+    'Remove-NSSSLCertificateLink',
+    'Remove-NSSSLProfile',
+    'Remove-NSVPNSessionPolicy',
+    'Remove-NSVPNSessionProfile',
     'Restart-NetScaler',
     'Save-NSConfig',
     'Set-NSHostname',
     'Set-NSLBServer',
     'Set-NSLBServiceGroup',
     'Set-NSLBSSLVirtualServer',
+    'Set-NSLBSSLVirtualServerProfile',
     'Set-NSLBVirtualServer',
     'Set-NSResponderAction',
-    'Set-NSTimeZone'
+    'Set-NSSSLProfile',
+    'Set-NSTimeZone',
+    'Set-NSVPNVirtualServerTheme'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -200,14 +232,14 @@ PrivateData = @{
         ReleaseNotes = '- Added Invoke-Nitro to wrap direct calls to _InvokeNSRestApi
 - Added Get-NSConfig to retrieve NetScaler configuration (running or saved)
 - Added Get/New/Set/Remove-NSResponderAction
-- Modified Get-NSLBMonitor, Get-NSLBServer, Get-NSLBServiceGroup to only return 
+- Modified Get-NSLBMonitor, Get-NSLBServer, Get-NSLBServiceGroup to only return
   resources if there are resources to return.'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''
 
     } # End of PSData hashtable
-    
+
  } # End of PrivateData hashtable
 
 # HelpInfo URI of this module

@@ -58,6 +58,12 @@ function Add-NSDnsNameServer {
 
         Default value: UDP
         Possible values = UDP, TCP, UDP_TCP
+
+    .PARAMETER Passthru
+        Return the load balancer server object.
+
+    .PARAMETER Force
+        Suppress confirmation adding certificate binding
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
@@ -86,14 +92,19 @@ function Add-NSDnsNameServer {
         foreach ($item in $IPAddress) {
             if ($PSCmdlet.ShouldProcess($item, 'Add DNS server IP')) {
                 try {
+
                     $params = @{
                         ip = $IPAddress
-                        dnsvservername = $DNSVServerName
-                        local = $Local
+                        local = $Local.ToBool()
                         state = $State
                         type = $Type
                     }
+                    if ($PSBoundParameters.ContainsKey('DNSVServerName')) {
+                        $params.Add('dnsvservername', $DNSVServerName)
+                    }
+
                     $response = _InvokeNSRestApi -Session $Session -Method POST -Type dnsnameserver -Payload $params -Action add
+
                 } catch {
                     throw $_
                 }

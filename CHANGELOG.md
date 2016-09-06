@@ -15,11 +15,28 @@
     * Added New-NSCSVirtualServer (via @rokett)
     * Added New-NSLBServiceGroupMonitor (via @rokett)
     * Added Set-NSLBSSLVirtualServer (via @rokett)
+    * Added Get-NSVersion (via @iainbrighton)
+    * Added Get-NSDnsNameServer (via @iainbrighton)
+    * Added Get-NSDnsSuffix, Add-NSDnsSuffix and Remove-NSDnsSuffix (via @iainbrighton)
+    * Added Get-NSSSLCertificateLink, Add-NSSSLCertificateLink and Remove-NSSSLCertificateLink (via @iainbrighton)
+    * Added Get-NSSSLProfile, New-NSSSLProfile, Set-NSSSLProfile and Remove-NSSSLProfile (via @iainbrighton)
+    * Added Add-NSLBServiceGroupMonitorBinding and Remove-NSLBServiceGroupMonitorBinding (via @iainbrighton)
+    * Added Get-NSLBSSLVirtualServerProfile, Set-NSLBSSLVirtualServerProfile and Remove-NSLBSSLVirtualServerProfile (via @iainbrighton)
+    * Added Get-NSLDAPAuthenticationServer, New-NSLDAPAuthenticationServer and Remove-NSLDAPAuthenticationServer (via @iainbrighton)
+    * Added Get-NSLDAPAuthenticationPolicy, New-NSLDAPAuthenticationPolicy and Remove-NSLDAPAuthenticationPolicy (via @iainbrighton
+    * Added New-NSVPNVirtualServer (via @iainbrighton)
+    * Added Get-NSVPNVirtualServerBinding and Add-NSVPNVirtualServerBinding (via @iainbrighton)
+    * Added Get-NSVPNVirtualServerTheme and Set-NSVPNVirtualServerTheme (via @iainbrighton)
+    * Added New-NSVPNSessionPolicy and Remove-NSVPNSessionPolicy (via @iainbrighton)
+    * Added New-NSVPNSessionProfile and Remove-NSVPNSessionProfile (via @iainbrighton)
 
   * Improvements
     * Modified New-NSLBMonitor allow setting HTTP request and expected response codes parameters (via @rokett)
     * Modified New-NSLBVirtualServer to allow setting PersistenceType and PersistenceTimeout parameters (via @rokett)
-    * Modified New-NSLBMonitor to support custom monitor properties (via @iainbrighton)    
+    * Modified New-NSLBMonitor to support custom monitor properties (via @iainbrighton)
+    * Modified Get-NSLBServiceGroupMonitorBinding to support filtering by monitor name (via @iainbrighton)
+    * Added -Force parameter to Add-NSLBSSLVirtualServerCertificateBinding to suppress confirmation (via @iainbrighton)
+    * Added private _AssertNSVersion to enforce particular versioned APIs, e.g. Get-NSVPNVirtualServerTheme (via @iainbrighton)
 
   * Bug fixes
     * Fixed bug in Add-NSLBVirtualServerBinding where weight was improperly being added when binding to a service group. (via @rokett)
@@ -28,6 +45,8 @@
     * Fixed filename rewrite issue in Add-NSSystemFile (via @iainbrighton)
     * Fixed certificate import without private key in Add-NSCertKeyPair (via @iainbrighton)
     * Fixed comment-based help (via @devblackops)
+    * Fixed _InvokeNSRestApiGet to filter collections (via @iainbrighton)
+    * Fixed bug in Add-NSDnsNameServer where DNSVServerName could not be blank (via @iainbrighton)
 
 ## 1.2.0 (2016-04-19)
   - Added Invoke-Nitro to wrap direct calls to _InvokeNSRestApi
