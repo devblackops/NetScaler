@@ -71,7 +71,7 @@ function Set-NSLBSSLVirtualServerProfile {
                         sslprofile = $ProfileName;
                     }
 
-                    _InvokeNSRestApi -Session $Session -Method PUT -Type sslvserver -Payload $params -Action update
+                    _InvokeNSRestApi -Session $Session -Method PUT -Type sslvserver -Payload $params
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSLBVirtualServerSslProfile -Session $Session -Name $item
