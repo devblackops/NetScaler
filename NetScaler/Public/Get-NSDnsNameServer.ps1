@@ -1,5 +1,5 @@
 <#
-Copyright 2015 Brandon Olin
+Copyright 2016 Iain Brighton
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,37 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSLBServiceGroupMonitorBinding {
+function Get-NSDnsNameServer {
     <#
     .SYNOPSIS
-        Gets the service group binding for a service group.
+        Gets the specified DNS name server object.
 
     .DESCRIPTION
-        Gets the service group binding for a service group.
+        Gets the specified DNS name server object.
 
     .EXAMPLE
-        Get-NSLBServiceGroupMonitorBinding -Name $sg
+        Get-NSDnsNameServer
 
-        Gets the service group bindings for the 'sg' service group.
+        Get all DNS name server objects.
+
+    .EXAMPLE
+        Get-NSDnsNameServer -IPAddress '192.168.0.10'
+
+        Get the DNS name server object with the IP address of '192.168.0.10'.
 
     .PARAMETER Session
         The NetScaler session object.
 
-    .PARAMETER Name
-        The name or names of the service group to get the service group member binding for.
+    .PARAMETER IPAddress
+        A filter to apply to the IPv4 address value.
 
-    .PARAMETER MonitorName
-        Filters the returned monitors to only include the name specified
+    .PARAMETER DNSVServerName
+        A filter to apply to the DNSVServerName value.
     #>
     [cmdletbinding()]
     param(
         $Session = $script:session,
 
-        [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
-        [string[]]$Name,
+        [string]$IPAddress,
 
-        [parameter()]
-        [string]$MonitorName
+        [string]$DNSVServerName
     )
 
     begin {
@@ -55,10 +58,13 @@ function Get-NSLBServiceGroupMonitorBinding {
         try {
             # Contruct a filter hash if we specified any filters
             $Filters = @{}
-            if ($PSBoundParameters.ContainsKey('MonitorName')) {
-                $Filters['monitor_name'] = $MonitorName
+            if ($PSBoundParameters.ContainsKey('IPAddress')) {
+                $Filters['ip'] = $IPAddress
             }
-            _InvokeNSRestApiGet -Session $Session -Type servicegroup_lbmonitor_binding -Name $Name -Filters $Filters
+            if ($PSBoundParameters.ContainsKey('DNSVServerName')) {
+                $Filters['dnsvservername'] = $DNSVServerName
+            }
+            _InvokeNSRestApiGet -Session $Session -Type dnsnameserver -Filters $Filters
         }
         catch {
             throw $_

@@ -29,7 +29,7 @@ function Remove-NSLBMonitor {
 
     .EXAMPLE
         'monitor01', 'monitor02' | Remove-NSLBMonitor
-    
+
         Removes the load balancer monitors named 'monitor01' and 'monitor02'.
 
     .PARAMETER Session

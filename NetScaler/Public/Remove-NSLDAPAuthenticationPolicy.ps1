@@ -1,5 +1,5 @@
 <#
-Copyright 2015 Brandon Olin
+Copyright 2016 Iain Brighton
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,39 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSLBServer {
+function Remove-NSLDAPAuthenticationPolicy {
     <#
     .SYNOPSIS
-        Removes a load balancer server.
+        Removes an existing LDAP authentication policy.
 
     .DESCRIPTION
-        Removes a load balancer server.
-
-    .EXAMPLE
-        Remove-NSLBServer -Name 'server01'
-
-        Removes the load balancer server named 'server01'.
-
-    .EXAMPLE
-        'server01', 'server02' | Remove-NSLBServer
-
-        Removes the load balancer servers named 'server01' and 'server02'.
+        Removes an existing LDAP authentication policy.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the load balancer server to get.
+        The name of the LDAP authentication policy to remove.
+
+    .EXAMPLE
+        Remove-NSLDAPAuthenticationPolicy -Name 'pol_ldap_DC1'
+
+        Removes the LDAP authentication policy named 'pol_ldap_DC1'.
 
     .PARAMETER Force
-        Suppress confirmation when removing a load balancer server.
+        Suppress confirmation when removing a responder action.
     #>
-    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
+    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     param(
         $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name = (Read-Host -Prompt 'LB server name'),
+        [string[]]$Name,
 
         [switch]$Force
     )
@@ -57,10 +52,11 @@ function Remove-NSLBServer {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Server')) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete LDAP Authentication Policy')) {
                 try {
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type server -Resource $item -Action delete
-                } catch {
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type authenticationldappolicy -Resource $item -Action delete
+                }
+                catch {
                     throw $_
                 }
             }

@@ -1,7 +1,7 @@
 function _InvokeNSRestApiGet {
     <#
     .SYNOPSIS
-        Invoke NetScaler NITRO REST API GET method 
+        Invoke NetScaler NITRO REST API GET method
 
     .DESCRIPTION
         Invoke NetScaler NITRO REST API GET method
@@ -14,32 +14,32 @@ function _InvokeNSRestApiGet {
 
     .PARAMETER Name
         The name or names of the NS appliance resources.
-        
+
     .PARAMETER Filters
         A Hashtable of search filter values.
-        
+
     .EXAMPLE
         TODO
-        
-    .OUTPUTS        
+
+    .OUTPUTS
         PSCustomObject that represents the JSON response content. This object can be manipulated using the ConvertTo-Json Cmdlet.
     #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
         [PSObject]$Session,
-        
+
         [parameter(ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
         [string[]]$Name = @(),
 
         [string]$Type,
-        
+
         [Hashtable]$Filters = @{}
     )
 
     if ($Name.Count -gt 0) {
         foreach ($item in $Name) {
-            $response = _InvokeNSRestApi -Session $Session -Method Get -Type $Type -Resource $item -Action Get 
+            $response = _InvokeNSRestApi -Session $Session -Method Get -Type $Type -Resource $item -Action Get -Filters $Filters
             if ($response.errorcode -ne 0) { throw $response }
             if ($Response.psobject.properties.name -contains $Type) {
                 $response.$Type
