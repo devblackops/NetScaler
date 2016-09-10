@@ -1,4 +1,4 @@
-## 1.3.0 (unreleased)
+## 1.3.0 (2016-09-10)
   * Features
     * Added Add-NSCSVirtualServerResponderPolicyBinding (via @rokett)
     * Added Add-NSLBSSLVirtualServerCertificateBinding (via @rokett)
