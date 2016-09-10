@@ -23,34 +23,34 @@ function New-NSNTPServer {
         Creates a new NTP server.
 
     .EXAMPLE
-        New-NTPServer -Server 1.2.3.4
-        
+        New-NSNTPServer -Server 1.2.3.4
+
         Create a new KCD account with the given delegate user.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Server
-        IP address (or array of addresses) of the NTP server(s). 
-    
+        IP address (or array of addresses) of the NTP server(s).
+
     .PARAMETER MinPollInterval
         Minimum poll interval: minimum time after which Netscaler must poll the NTP server.
         Expressed power of 2 seconds.
-        
+
         Default value: 6 (64 seconds)
 
     .PARAMETER MaxPollInterval
         Maximum poll interval: maximum time after which Netscaler must poll the NTP server.
         Expressed power of 2 seconds.
-        
+
         Default value: 10 (1024 seconds)
 
     .PARAMETER Passthru
         Return the load balancer server object.
-        
+
     .NOTES
         Nitro implementation status: partial
-    
+
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(

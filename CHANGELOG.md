@@ -29,6 +29,7 @@
     * Added Get-NSVPNVirtualServerTheme and Set-NSVPNVirtualServerTheme (via @iainbrighton)
     * Added New-NSVPNSessionPolicy and Remove-NSVPNSessionPolicy (via @iainbrighton)
     * Added New-NSVPNSessionProfile and Remove-NSVPNSessionProfile (via @iainbrighton)
+    * Added Get-NSTimeZone (via @iainbrighton)
 
   * Improvements
     * Modified New-NSLBMonitor allow setting HTTP request and expected response codes parameters (via @rokett)
@@ -37,6 +38,8 @@
     * Modified Get-NSLBServiceGroupMonitorBinding to support filtering by monitor name (via @iainbrighton)
     * Added -Force parameter to Add-NSLBSSLVirtualServerCertificateBinding to suppress confirmation (via @iainbrighton)
     * Added private _AssertNSVersion to enforce particular versioned APIs, e.g. Get-NSVPNVirtualServerTheme (via @iainbrighton)
+    * Modified Set-NSTimeZone to accept pipeline input and return just the configured timezone (via @iainbrighton)
+    * Added additional help tests and fixed incorrect help examples/commands (via @iainbrighton)
 
   * Bug fixes
     * Fixed bug in Add-NSLBVirtualServerBinding where weight was improperly being added when binding to a service group. (via @rokett)

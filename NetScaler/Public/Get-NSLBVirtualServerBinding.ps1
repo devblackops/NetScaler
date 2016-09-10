@@ -23,14 +23,14 @@ function Get-NSLBVirtualServerBinding {
         Gets the specified load balancer virtual server binding object.
 
     .EXAMPLE
-        Get-NSLBVirtualServer
+        Get-NSLBVirtualServerBinding
 
-        Get all load balancer virtual server objects.
+        Get all load balancer virtual server binding objects.
 
     .EXAMPLE
-        Get-NSLBVirtualServer -Name 'vserver01'
-    
-        Get the load balancer virtual server named 'vserver01'.
+        Get-NSLBVirtualServerBinding -Name 'vserver01'
+
+        Get the load balancer virtual server binding object for the 'vserver01' load balancing virtual server.
 
     .PARAMETER Session
         The NetScaler session object.

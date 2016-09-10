@@ -138,6 +138,7 @@ FunctionsToExport = @(
     'Get-NSSSLCertificateLink',
     'Get-NSSSLProfile',
     'Get-NSSystemFile',
+    'Get-NSTimeZone',
     'Get-NSVersion',
     'Get-NSVPNServer',
     'Get-NSVPNSessionPolicy',

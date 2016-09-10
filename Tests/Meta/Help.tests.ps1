@@ -29,14 +29,33 @@ foreach ($command in $commands) {
             $help.Description | Should Not BeNullOrEmpty
         }
 
-        # Should be at least one example
-        It "gets example code from $commandName" {
-            ($help.Examples.Example | Select-Object -First 1).Code | Should Not BeNullOrEmpty
-        }
+        Context "Test example help for $commandName" {
 
-        # Should be at least one example description
-        It "gets example remarks from $commandName" {
-            ($help.Examples.Example.Remarks | Select-Object -First 1).Text | Should Not BeNullOrEmpty
+            $examples = @($help.examples.example)
+
+            # Should be at least one example
+            It "$commandName contains at least one examplegets example code from $commandName" {
+                $examples.Count -ge 1 | Should Be $true
+            }
+
+            for ($i = 0; $i -lt $examples.Count; $i++) {
+
+                $example = $examples[$i]
+
+                It "gets example $i code from $commandName" {
+                    $example.Code | Should Not BeNullOrEmpty
+                }
+
+                It "gets example $i remarks from $commandName" {
+                    $example.Remarks | Should Not BeNullOrEmpty
+                }
+
+                It "example $i code contains command $commandName" {
+                    ## Command may be on the second line (within the remarks) so concatenate them
+                    $example.Code + $example.remarks.Text | Should Match $commandName
+                }
+            }
+
         }
 
         Context "Test parameter help for $commandName" {
@@ -83,13 +102,13 @@ foreach ($command in $commands) {
             }
         }
 
-        Context "Help Links should be Valid for $commandName" {            
+        Context "Help Links should be Valid for $commandName" {
             $link = $help.relatedLinks.navigationLink.uri
-        
+
             foreach ($link in $links) {
                 if ($link) {
                     # Should have a valid uri if one is provided.
-                    it "[$link] should have 200 Status Code for $commandName" {        
+                    it "[$link] should have 200 Status Code for $commandName" {
                         $Results = Invoke-WebRequest -Uri $link -UseBasicParsing
                         $Results.StatusCode | Should Be '200'
                     }
