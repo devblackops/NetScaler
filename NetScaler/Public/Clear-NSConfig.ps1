@@ -25,10 +25,29 @@ function Clear-NSConfig {
     .EXAMPLE
         Clear-NSConfig
 
+        Performs a basic clear of the NetScaler configuration. All configurations except for the following are cleared:
+            * NetScaler, IP, mapped IP(s), and subnet IP(s)
+            * Network settings (default gateway, VLAN, route health injection, NTP, and DNS settings)
+            * High availability (HA) node definitions
+            * Feature and mode settings
+            * nsroot password
+
+    .EXAMPLE
+        Clear-NSConfig -Level Extended
+
+        Performs an extended clear of the NetScaler configuration. All configurations except for the following are cleared:
+            * NetScaler IP, mapped IP(s), and subnet IP(s)
+            * Network settings (default gateway, VLAN, route health injection, NTP, and DNS settings)
+            * High availability (HA) node definitions
+            * Feature and mode settings are reverted to their default values
+
     .EXAMPLE
         Clear-NSConfig -Level Full
 
-        Fully clears the netscaler configuration.
+        Fully clears the NetScaler configuration and resets to factory default values. All settings are reset except the following to maintain
+        network connectivity.
+            * NetScaler IP
+            * Default gateway
         
     .PARAMETER Level
         Parameters that defines how much of the configuration is cleared.

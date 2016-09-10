@@ -1,11 +1,61 @@
 ## 1.3.0 (unreleased)
-  - 
+  * Features
+    * Added Add-NSCSVirtualServerResponderPolicyBinding (via @rokett)
+    * Added Add-NSLBSSLVirtualServerCertificateBinding (via @rokett)
+    * Added Add-NSLBVirtualServerRewritePolicyBinding (via @rokett)
+    * Added Get-NSAAAGroup (via @psminion)
+    * Added Get-NSAAAGroupBinding (via @psminion)
+    * Added Get-NSAAAUser (via @psminion)
+    * Added Get-NSAAAUserBinding (via @psminion)
+    * Added Get-NSCSVirtualServerResponderPolicyBinding (via @rokett)
+    * Added Get-NSLBServiceGroupMonitorBinding (via @rokett)
+    * Added Get-NSLBSSLVirtualServer (via @rokett)
+    * Added Get-NSLBSSLVirtualServerCertificateBinding (via @rokett)
+    * Added Get-NSLBVirtualServerRewritePolicyBinding (via @rokett)
+    * Added New-NSCSVirtualServer (via @rokett)
+    * Added New-NSLBServiceGroupMonitor (via @rokett)
+    * Added Set-NSLBSSLVirtualServer (via @rokett)
+    * Added Get-NSVersion (via @iainbrighton)
+    * Added Get-NSDnsNameServer (via @iainbrighton)
+    * Added Get-NSDnsSuffix, Add-NSDnsSuffix and Remove-NSDnsSuffix (via @iainbrighton)
+    * Added Get-NSSSLCertificateLink, Add-NSSSLCertificateLink and Remove-NSSSLCertificateLink (via @iainbrighton)
+    * Added Get-NSSSLProfile, New-NSSSLProfile, Set-NSSSLProfile and Remove-NSSSLProfile (via @iainbrighton)
+    * Added Add-NSLBServiceGroupMonitorBinding and Remove-NSLBServiceGroupMonitorBinding (via @iainbrighton)
+    * Added Get-NSLBSSLVirtualServerProfile, Set-NSLBSSLVirtualServerProfile and Remove-NSLBSSLVirtualServerProfile (via @iainbrighton)
+    * Added Get-NSLDAPAuthenticationServer, New-NSLDAPAuthenticationServer and Remove-NSLDAPAuthenticationServer (via @iainbrighton)
+    * Added Get-NSLDAPAuthenticationPolicy, New-NSLDAPAuthenticationPolicy and Remove-NSLDAPAuthenticationPolicy (via @iainbrighton
+    * Added New-NSVPNVirtualServer (via @iainbrighton)
+    * Added Get-NSVPNVirtualServerBinding and Add-NSVPNVirtualServerBinding (via @iainbrighton)
+    * Added Get-NSVPNVirtualServerTheme and Set-NSVPNVirtualServerTheme (via @iainbrighton)
+    * Added New-NSVPNSessionPolicy and Remove-NSVPNSessionPolicy (via @iainbrighton)
+    * Added New-NSVPNSessionProfile and Remove-NSVPNSessionProfile (via @iainbrighton)
+    * Added Get-NSTimeZone (via @iainbrighton)
+
+  * Improvements
+    * Modified New-NSLBMonitor allow setting HTTP request and expected response codes parameters (via @rokett)
+    * Modified New-NSLBVirtualServer to allow setting PersistenceType and PersistenceTimeout parameters (via @rokett)
+    * Modified New-NSLBMonitor to support custom monitor properties (via @iainbrighton)
+    * Modified Get-NSLBServiceGroupMonitorBinding to support filtering by monitor name (via @iainbrighton)
+    * Added -Force parameter to Add-NSLBSSLVirtualServerCertificateBinding to suppress confirmation (via @iainbrighton)
+    * Added private _AssertNSVersion to enforce particular versioned APIs, e.g. Get-NSVPNVirtualServerTheme (via @iainbrighton)
+    * Modified Set-NSTimeZone to accept pipeline input and return just the configured timezone (via @iainbrighton)
+    * Added additional help tests and fixed incorrect help examples/commands (via @iainbrighton)
+
+  * Bug fixes
+    * Fixed bug in Add-NSLBVirtualServerBinding where weight was improperly being added when binding to a service group. (via @rokett)
+    * Fixed Set-NSHostname and Set-NSTimeZone update actions (via @iainbrighton)
+    * Fixed ConvertTo-Json depth in PowerShell 5.1 (via @iainbrighton)
+    * Fixed filename rewrite issue in Add-NSSystemFile (via @iainbrighton)
+    * Fixed certificate import without private key in Add-NSCertKeyPair (via @iainbrighton)
+    * Fixed comment-based help (via @devblackops)
+    * Fixed _InvokeNSRestApiGet to filter collections (via @iainbrighton)
+    * Fixed bug in Add-NSDnsNameServer where DNSVServerName could not be blank (via @iainbrighton)
 
 ## 1.2.0 (2016-04-19)
   - Added Invoke-Nitro to wrap direct calls to _InvokeNSRestApi
   - Added Get-NSConfig : retrieve NetScaler configuration (running or saved)
   - Added Get/New/Set/Remove-NSResponderAction
-  - Modified Get-NSLBMonitor, Get-NSLBServer, Get-NSLBServiceGroup to only return 
+  - Modified Get-NSLBMonitor, Get-NSLBServer, Get-NSLBServiceGroup to only return
     resources if there are resources to return.
 
 ## 1.1.3 (2016-04-03)
@@ -20,4 +70,4 @@
   - Correct typo in Install-NSLicense
   - Correct typo in New-NSLBServiceGroup/Set-NSLBServiceGroup
   - Add -Force and -PassThru to Set-NSTimeZone
-  - Allow any filepath when installing NS license in Install-NSLicense  
+  - Allow any filepath when installing NS license in Install-NSLicense

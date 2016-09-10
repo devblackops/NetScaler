@@ -25,12 +25,17 @@ function Add-NSServerCertificate {
     .EXAMPLE
         Add-NSServerCertificate -CAName 'webserver.example.com' -CommonName 'storefront.example.com' -OrganizationName 'My Company, Inc.' -CountryName "US" -StateName "Oregon" -KeyFileBits "2048"
 
+        Adds a new 2048 bit certificate with common name 'storefront.example.com' to the NetScaler. 
+
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER CAName
-        The FQDN of the Certification Authority host and Certification Authority
+        The FQDN of the Certificate Authority host and Certificate Authority
         name in the form CAHostNameFQDN\CAName
+
+    .PARAMETER CATemplate
+        Certificate template name on Certificate Authority host to use when requesting certificate.
 
     .PARAMETER CommonName
         Fully qualified domain name for the company or web site.

@@ -23,37 +23,35 @@ function New-NSKCDAccount {
         Creates a new KCD account.
 
     .EXAMPLE
-        New-KCDAccount -Name ns_svc -Realm LAB -DelegatedUser ns_svc -DelegatedUserPassword blabla
-        
+        $cred = Get-Credential
+        New-NSKCDAccount -Name ns_svc -Realm LAB -DelegatedUser ns_svc -Credential $cred
+
         Create a new KCD account with the given delegated user.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        Name for the server. 
-    
-        Must begin with an ASCII alphabetic or underscore (_) character, and must contain only 
-        ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at (@), equals (=), 
+        Name for the server.
+
+        Must begin with an ASCII alphabetic or underscore (_) character, and must contain only
+        ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at (@), equals (=),
         and hyphen (-) characters. Can be changed after the name is created.
-        
+
         Minimum length = 1
-
-    .PARAMETER DelegatedUser
-        Username of the delegated user. The user Netscaler uses to get delegated tickets.
-
-    .PARAMETER DelegatedUserPassword
-        Password of the delegated user.
 
     .PARAMETER Realm
         Kerberos realm the delegation occurs in.
 
+    .PARAMETER Credential
+        Credential holding delegated username and password.
+
     .PARAMETER Passthru
         Return the load balancer server object.
-        
+
     .NOTES
         Nitro implementation status: partial
-        
+
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
@@ -66,7 +64,7 @@ function New-NSKCDAccount {
         [String]$Realm,
 
         [parameter(Mandatory = $true)]
-        [pscredential]$Credential,      
+        [pscredential]$Credential,
 
         [Switch]$PassThru
     )

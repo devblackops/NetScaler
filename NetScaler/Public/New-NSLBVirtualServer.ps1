@@ -92,6 +92,29 @@ function New-NSLBVirtualServer {
         Possible values = ROUNDROBIN, LEASTCONNECTION, LEASTRESPONSETIME, URLHASH, DOMAINHASH, DESTINATIONIPHASH, SOURCEIPHASH,
         SRCIPDESTIPHASH, LEASTBANDWIDTH, LEASTPACKETS, TOKEN, SRCIPSRCPORTHASH, LRTM, CALLIDHASH, CUSTOMLOAD, LEASTREQUEST
 
+    .PARAMETER PersistenceType
+        Return the load balancer server object.
+
+        Type of persistence for the virtual server. Available settings function as follows:
+        * SOURCEIP - Connections from the same client IP address belong to the same persistence session.
+        * COOKIEINSERT - Connections that have the same HTTP Cookie, inserted by a Set-Cookie directive from a server, belong to the same persistence session.
+        * SSLSESSION - Connections that have the same SSL Session ID belong to the same persistence session.
+        * CUSTOMSERVERID - Connections with the same server ID form part of the same session. For this persistence type, set the Server ID (CustomServerID) parameter for each service and configure the Rule parameter to identify the server ID in a request.
+        * RULE - All connections that match a user defined rule belong to the same persistence session.
+        * URLPASSIVE - Requests that have the same server ID in the URL query belong to the same persistence session. The server ID is the hexadecimal representation of the IP address and port of the service to which the request must be forwarded. This persistence type requires a rule to identify the server ID in the request.
+        * DESTIP - Connections to the same destination IP address belong to the same persistence session.
+        * SRCIPDESTIP - Connections that have the same source IP address and destination IP address belong to the same persistence session.
+        * CALLID - Connections that have the same CALL-ID SIP header belong to the same persistence session.
+        * RTSPSID - Connections that have the same RTSP Session ID belong to the same persistence session.
+        * FIXSESSION - Connections that have the same SenderCompID and TargetCompID values belong to the same persistence session.
+        Possible values = SOURCEIP, COOKIEINSERT, SSLSESSION, RULE, URLPASSIVE, CUSTOMSERVERID, DESTIP, SRCIPDESTIP, CALLID, RTSPSID, DIAMETER, FIXSESSION, NONE
+
+    .PARAMETER Timeout
+        Time period for which a persistence session is in effect.
+        Default value: 2
+        Minimum value = 0
+        Maximum value = 1440
+
     .PARAMETER Passthru
         Return the load balancer server object.
     #>
@@ -118,6 +141,15 @@ function New-NSLBVirtualServer {
         [ValidateSet('ROUNDROBIN', 'LEASTCONNECTION', 'LEASTRESPONSETIME', 'LEASTBANDWIDTH', 'LEASTPACKETS', 'CUSTOMLOAD', 'LRTM', 'URLHASH', 'DOMAINHASH', 'DESTINATIONIPHASH', 'SOURCEIPHASH', 'TOKEN', 'SRCIPDESTIPHASH', 'SRCIPSRCPORTHASH', 'CALLIDHASH')]
         [string]$LBMethod = 'ROUNDROBIN',
 
+        [Parameter()]
+        [ValidateSet('SOURCEIP', 'COOKIEINSERT', 'SSLSESSION', 'CUSTOMSERVERID', 'RULE', 'URLPASSIVE', 'DESTIP', 'SRCIPDESTIP', 'CALLID' ,'RTSPID', 'FIXSESSION', 'NONE')]
+        [string]
+        $PersistenceType,
+
+        [Parameter()]
+        [int]
+        $Timeout,
+
         [Switch]$PassThru
     )
 
@@ -137,6 +169,15 @@ function New-NSLBVirtualServer {
                         port = $Port
                         lbmethod = $LBMethod
                     }
+
+                    if ($PSBoundParameters.ContainsKey('PersistenceType')) {
+                        $params.Add('persistencetype', $PersistenceType)
+                    }
+
+                    if ($PSBoundParameters.ContainsKey('Timeout')) {
+                        $params.Add('timeout', $Timeout)
+                    }
+
                     _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {

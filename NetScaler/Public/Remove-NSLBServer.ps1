@@ -29,7 +29,7 @@ function Remove-NSLBServer {
 
     .EXAMPLE
         'server01', 'server02' | Remove-NSLBServer
-    
+
         Removes the load balancer servers named 'server01' and 'server02'.
 
     .PARAMETER Session

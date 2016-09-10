@@ -23,13 +23,13 @@ function Set-NSResponderAction {
         Updates an existing responder action.
 
     .EXAMPLE
-        Set-ResponderAction -Name 'act-redirect' -Target '"/test"'
+        Set-NSResponderAction -Name 'act-redirect' -Target '"/test"'
 
         Sets the target (expression) for responder action 'act-redirect' to /test.
 
     .EXAMPLE
-        Set-ResponderAction -Name 'act-redirect' -Comment 'this is a comment' -PassThru
-    
+        Set-NSResponderAction -Name 'act-redirect' -Comment 'this is a comment' -PassThru
+
         Sets the comment for responder action 'act-redirect' and returns the updated object.
 
     .PARAMETER Session
@@ -45,7 +45,7 @@ function Set-NSResponderAction {
     .PARAMETER ResponseStatusCode
         The HTTP response status code returned by the responder action.
         Valid only for types Redirect, RespondWith, RespondWithSQLOK and RespondWithSQLError.
-        
+
         Range: 100 - 599
 
     .PARAMETER ReasonPhrase
@@ -57,7 +57,7 @@ function Set-NSResponderAction {
 
     .PARAMETER HtmlPage
         The name of the HTML page to respond with.
-        
+
         Valid only for type RespondWithHTMLPage.
 
     .PARAMETER Comment
@@ -106,13 +106,13 @@ function Set-NSResponderAction {
                 }
                 if ($PSBoundParameters.ContainsKey('Target')) {
                     $params.Add('target', $Target)
-                }                            
+                }
                 if ($PSBoundParameters.ContainsKey('ResponseStatusCode')) {
                     $params.Add('responsestatuscode', $ResponseStatusCode)
                 }
                 if ($PSBoundParameters.ContainsKey('ReasonPhrase')) {
                     $params.Add('reasonphrase', $ReasonPhrase)
-                }                            
+                }
                 if ($PSBoundParameters.ContainsKey('HtmlPage')) {
                     $params.Add('htmlpage', $HtmlPage)
                 }

@@ -28,13 +28,13 @@ function Get-NSResponderAction {
         Get all responder action objects
 
     .EXAMPLE
-        Get-NSReponderAction -Name 'act-redirect'
-    
+        Get-NSResponderAction -Name 'act-redirect'
+
         Get the responder action named act-redirect.
 
     .EXAMPLE
-        Get-NSReponderAction -Name /redir/
-    
+        Get-NSResponderAction -Name /redir/
+
         Get all the responder actions whose name matches '.*redir.*' (NS treats this as a regex).
 
     .PARAMETER Session
@@ -42,7 +42,7 @@ function Get-NSResponderAction {
 
     .PARAMETER Name
         A filter to apply to the responder action name value.
-        
+
     .PARAMETER Type
         A filter to apply to the responder action type value.
 
@@ -57,10 +57,10 @@ function Get-NSResponderAction {
 
     .PARAMETER Hits
         A filter to apply to the responder action hits value.
-        
+
     .PARAMETER UndefHits
         A filter to apply to the responder action undefined hits value.
-        
+
     .PARAMETER ReferenceCount
         A filter to apply to the responder action reference count value.
 
@@ -78,9 +78,9 @@ function Get-NSResponderAction {
         [string]$Target,
 
         [string]$HtmlPage,
-        
+
         [string]$ResponseStatusCode,
-        
+
         [string]$Hits,
 
         [Alias('UndefinedHits')]
@@ -100,7 +100,7 @@ function Get-NSResponderAction {
         "Name","Type","Target","HtmlPage","ResponseStatusCode","Hits","UndefHits","ReferenceCount" | ForEach {
             if ($PSBoundParameters.ContainsKey($_)) {
                 $filters[$_.ToLower()] = (Get-Variable -Name $_).Value
-            }            
+            }
         }
 
         $response = _InvokeNSRestApi -Session $Session -Method Get -Type responderaction -Action Get -Filters $filters

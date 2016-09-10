@@ -24,7 +24,7 @@ function Resolve-Module {
                 if ($Version -lt $GalleryVersion) {                                        
                     Write-Verbose -Message "$($ModuleName) Installed Version [$($Version.tostring())] is outdated. Installing Gallery Version [$($GalleryVersion.tostring())]"
                     
-                    Install-Module -Name $ModuleName -Verbose:$false -Force
+                    Install-Module -Name $ModuleName -Repository PSGallery -Verbose:$false -Force
                     Import-Module -Name $ModuleName -Verbose:$false -Force -RequiredVersion $GalleryVersion
                 }
                 else {
@@ -34,7 +34,7 @@ function Resolve-Module {
             }
             else {
                 Write-Verbose -Message "[$($ModuleName)] Missing, installing Module"
-                Install-Module -Name $ModuleName -Verbose:$false -Force
+                Install-Module -Name $ModuleName -Repository PSGallery -Verbose:$false -Force
                 Import-Module -Name $ModuleName -Verbose:$false -Force -RequiredVersion $Version
             }
         }

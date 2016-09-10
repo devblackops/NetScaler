@@ -35,7 +35,7 @@ function Add-NSLBVirtualServerBinding {
     .PARAMETER Session
         The NetScaler session object.
 
-    .PARAMETER VitualServerName
+    .PARAMETER VirtualServerName
         Name for the virtual server. Must begin with an ASCII alphanumeric or underscore (_) character, and must contain
         only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at sign (@), equal sign (=),
         and hyphen (-) characters. Can be changed after the virtual server is created.
@@ -44,6 +44,9 @@ function Add-NSLBVirtualServerBinding {
 
     .PARAMETER ServiceGroupName
         The service group name bound to the selected load balancing virtual server.
+
+    .PARAMETER ServiceName
+        The service name bound to the selected load balancing virtual server.
 
     .PARAMETER Weight
         Integer specifying the weight of the service. A larger number specifies a greater weight. Defines the capacity
@@ -91,16 +94,16 @@ function Add-NSLBVirtualServerBinding {
 
                 $params = @{
                     name = $VirtualServerName
-                    weight = $Weight
                 }
                 if ($PSBoundParameters.ContainsKey('ServiceGroupName')) {
-                    $params.servicename = $ServiceGroupName
-                    _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_servicegroup_binding -Payload $params -Action add
+                    $params.servicegroupname = $ServiceGroupName
+                    _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_servicegroup_binding -Payload $params
                 } elseif ($PSBoundParameters.ContainsKey('ServiceName')) {
                     $params.servicename = $ServiceName
-                    _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_service_binding -Payload $params -Action add
+                    $params.weight = $Weight
+                    _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_service_binding -Payload $params
                 }
-                
+
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
                     return Get-NSLBVirtualServerBinding -Session $Session -Name $VirtualServerName
                 }

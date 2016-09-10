@@ -22,20 +22,25 @@ function New-NSLBMonitor {
     .DESCRIPTION
         Creates a new load balancer server monitor.
 
+    .EXAMPLE
+        New-NSLBMonitor -Name 'mysite_mon' -Type HTTP -DestinationIP 10.11.12.13 -DestinationPort 80
+
+        Create a new load balancing monitor for IP address 10.11.12.13 using port 80.
+
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        Name for the monitor. 
+        Name for the monitor.
         Must begin with an ASCII alphanumeric or underscore (_) character, and must contain
         only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at (@),
-        equals (=), and hyphen (-) characters. 
+        equals (=), and hyphen (-) characters.
 
         Minimum length = 1
 
     .PARAMETER Type
         Type of monitor that you want to create.
-        
+
         Possible values = PING, TCP, HTTP, TCP-ECV, HTTP-ECV, UDP-ECV, DNS, FTP, LDNS-PING,
         LDNS-TCP, LDNS-DNS, RADIUS, USER, HTTP-INLINE, SIP-UDP, LOAD, FTP-EXTENDED, SMTP,
         SNMP, NNTP, MYSQL, MYSQL-ECV, MSSQL-ECV, ORACLE-ECV, LDAP, POP3, CITRIX-XML-SERVICE,
@@ -57,13 +62,13 @@ function New-NSLBMonitor {
         Possible values = SEC, MSEC, MIN
 
     .PARAMETER DestinationIP
-        IP address of the service to which to send probes. 
-        If the parameter is set to 0, the IP address of the server to which the monitor is bound is 
+        IP address of the service to which to send probes.
+        If the parameter is set to 0, the IP address of the server to which the monitor is bound is
         considered the destination IP address.
 
     .PARAMETER DestinationPort
         TCP or UDP port to which to send the probe.
-        If the parameter is set to 0, the port number of the service to which the monitor is bound is 
+        If the parameter is set to 0, the port number of the service to which the monitor is bound is
         considered the destination port. For a monitor of type USER, however, the destination port is
         the port number that is included in the HTTP request sent to the dispatcher. Does not apply to
         monitors of type PING.
@@ -72,11 +77,11 @@ function New-NSLBMonitor {
         Amount of time for which the appliance must wait before it marks a probe as FAILED.
 
     .PARAMETER ResponseTimeoutType
-        Amount of time for which the appliance must wait before it marks a probe as FAILED. 
-        Must be less than the value specified for the Interval parameter. 
-    
-        Note: For UDP-ECV monitors for which a receive string is not configured, response timeout 
-        does not apply. For UDP-ECV monitors with no receive string, probe failure is indicated by 
+        Amount of time for which the appliance must wait before it marks a probe as FAILED.
+        Must be less than the value specified for the Interval parameter.
+
+        Note: For UDP-ECV monitors for which a receive string is not configured, response timeout
+        does not apply. For UDP-ECV monitors with no receive string, probe failure is indicated by
         an ICMP port unreachable error received from the service.
 
         Default value: 2
@@ -113,8 +118,8 @@ function New-NSLBMonitor {
     .PARAMETER ResponseTimeoutThreshold
         Response time threshold, specified as a percentage of the Response Time-out parameter.
         If the response to a monitor probe has not arrived when the threshold is reached, the appliance generates
-        an SNMP trap called monRespTimeoutAboveThresh. After the response time returns to a value below the threshold, 
-        the appliance generates a monRespTimeoutBelowThresh SNMP trap. For the traps to be generated, 
+        an SNMP trap called monRespTimeoutAboveThresh. After the response time returns to a value below the threshold,
+        the appliance generates a monRespTimeoutBelowThresh SNMP trap. For the traps to be generated,
         the "MONITOR-RTO-THRESHOLD" alarm must also be enabled.
 
         Minimum value = 0
@@ -161,8 +166,8 @@ function New-NSLBMonitor {
         Maximum value = 63
 
     .PARAMETER State
-        State of the monitor. 
-        The DISABLED setting disables not only the monitor being configured, but all monitors of the same type, until the parameter 
+        State of the monitor.
+        The DISABLED setting disables not only the monitor being configured, but all monitors of the same type, until the parameter
         is set to ENABLED. If the monitor is bound to a service, the state of the monitor is not taken into account when the state
         of the service is determined.
 
@@ -221,6 +226,17 @@ function New-NSLBMonitor {
     .PARAMETER ScriptArgs
         String of arguments for the script. The string is copied verbatim into the request.
 
+    .PARAMETER CustomProperty
+        Send additional monitor-specific properties when creating the monitor.
+
+        Example STOREFRONT monitor value: @{ StoreName = 'Store' }
+
+    .PARAMETER ResponseCode
+        Response codes for which to mark the service as UP
+
+    .PARAMETER HTTPRequest
+        HTTP request to send to the server (for example, "HEAD /file.html").
+
     .PARAMETER Passthru
         Return the load balancer monitor object.
     #>
@@ -274,7 +290,7 @@ function New-NSLBMonitor {
         [int]$AlertRetries,
 
         [ValidateRange(0, 32)]
-        [int]$SuccessRetries = 1, 
+        [int]$SuccessRetries = 1,
 
         [ValidateRange(0, 32)]
         [int]$FailureRetries,
@@ -295,7 +311,7 @@ function New-NSLBMonitor {
         [string]$Reverse = 'NO',
 
         [ValidateSet('YES', 'NO')]
-        [string]$Transparent = 'NO', 
+        [string]$Transparent = 'NO',
 
         [ValidateSet('ENABLED', 'DISABLED')]
         [string]$LRTM = 'DISABLED',
@@ -309,13 +325,23 @@ function New-NSLBMonitor {
         [string]$ScriptName,
 
         [ValidateScript({$_ -match [IPAddress]$_ })]
-        [string]$DispatcherIP, 
+        [string]$DispatcherIP,
 
         [int]$DispatcherPort,
 
         [string]$ScriptArgs,
 
-        [switch]$PassThru
+        [System.Collections.Hashtable]$CustomProperty,
+
+        [switch]$PassThru,
+
+        [Parameter()]
+        [string[]]
+        $ResponseCode,
+
+        [Parameter()]
+        [string]
+        $HTTPRequest
     )
 
     begin {
@@ -377,6 +403,18 @@ function New-NSLBMonitor {
                     }
                     if ($PSBoundParameters.ContainsKey('ScriptArgs')) {
                         $params.Add('scriptargs', $ScriptArgs)
+                    }
+                    if ($PSBoundParameters.ContainsKey('CustomProperty')) {
+                        ## Add each custom property to the $params Hashtable
+                        foreach ($key in $CustomProperty.Keys) {
+                            $params.Add($key.ToLower(), $CustomProperty[$key])
+                        }
+                    }
+                    if ($PSBoundParameters.ContainsKey('ResponseCode')) {
+                        $params.Add('respcode', $ResponseCode)
+                    }
+                    if ($PSBoundParameters.ContainsKey('HTTPRequest')) {
+                        $params.Add('httprequest', $HTTPRequest)
                     }
                     _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action add
 

@@ -25,12 +25,18 @@ function Add-NSRSAKey {
     .EXAMPLE
         Add-NSRSAKey -Name 'DC.EXAMPLE.COM\EXAMPLE-DC-CA'
 
+        Add a new RSA private key with name 'DC.EXAMPLE.COM\EXAMPLE-DC-CA'
+
     .EXAMPLE
         $result = Add-NSRSAKey -Name 'DC.EXAMPLE.COM\EXAMPLE-DC-CA' -KeyFileBits 4096 -PassThru
+
+        Add a new 4096 bit RSA private key with name 'DC.EXAMPLE.COM\EXAMPLE-DC-CA' and return the newly created key.
 
     .EXAMPLE
         $names = 'dc.example.com\example-dc-ca1', 'dc.example.com\example-dc-ca2'
         $names | Add-NSRSAKey -KeyFileBits = 2048
+
+        Add a new 2048 bit RSA private key using the pipeline.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -47,6 +53,9 @@ function Add-NSRSAKey {
         Default value = 2048
         Minimum value = 512
         Maximum value = 4096
+
+    .PARAMETER Passthru
+        Return the newly created private key.
 
     .PARAMETER Force
         Suppress confirmation when creating RSA key.

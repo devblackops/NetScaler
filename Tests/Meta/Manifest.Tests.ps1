@@ -1,9 +1,5 @@
 $moduleName = $env:BHProjectName
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$root = Split-Path -Path $here -Parent
-$modulePath = Join-Path -Path $root -ChildPath $moduleName
-$manifestPath = Join-Path -Path $modulePath -Child "$moduleName.psd1"
-$changelogPath = Join-Path -Path $root -Child "CHANGELOG.md"
+$changelogPath = Join-Path -Path $env:BHProjectPath -Child "CHANGELOG.md"
 
 Describe 'Module manifest' {
     Context 'Validation' {
@@ -12,7 +8,7 @@ Describe 'Module manifest' {
 
         It "has a valid manifest" {
             {
-                $script:manifest = Test-ModuleManifest -Path $manifestPath -ErrorAction Stop -WarningAction SilentlyContinue
+                $script:manifest = Test-ModuleManifest -Path $env:BHPSModuleManifest -ErrorAction Stop -WarningAction SilentlyContinue
             } | Should Not Throw
         }
 

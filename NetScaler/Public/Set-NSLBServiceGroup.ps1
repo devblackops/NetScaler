@@ -29,12 +29,12 @@ function Set-NSLBServiceGroup {
 
     .EXAMPLE
         Set-NSLBServiceGroup -Name 'sg01' HTTPCompression = 'ON'
-    
+
         Enable the HTTP compression feature for service group 'sg01'.
 
     .EXAMPLE
-        Set-NSLBVirtualServer -Name 'sg01' MaxBandwithKbps 819200
-    
+        Set-NSLBServiceGroup -Name 'sg01' MaxBandwithKbps 819200
+
         Set the maximum bandwidth for service group 'sg01' to 819200 Kbps.
 
     .PARAMETER Session
@@ -55,7 +55,7 @@ function Set-NSLBServiceGroup {
     .PARAMETER Comment
         The comment associated with the virtual server.
 
-    .PARAMETER SureConnet
+    .PARAMETER SureConnect
         State of the SureConnect feature.
 
     .PARAMETER SurgeProtection
@@ -65,7 +65,7 @@ function Set-NSLBServiceGroup {
         Use the proxy port as the source port when initiating connections with the server.
 
     .PARAMETER DownStateFlush
-        Flush all active transactions associated with all the services in the service group whose state transitions from UP to DOWN. 
+        Flush all active transactions associated with all the services in the service group whose state transitions from UP to DOWN.
 
     .PARAMETER UseClientIP
         Use client's IP address as the source IP address when initiating connection to the server.
