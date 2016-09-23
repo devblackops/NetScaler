@@ -1,3 +1,7 @@
+## 1.4.0 (Unreleased)
+  * Features
+    * Added parameters to New-NSLBVirtualServer to configure a redirect (via @rokett) 
+
 ## 1.3.0 (2016-09-10)
   * Features
     * Added Add-NSCSVirtualServerResponderPolicyBinding (via @rokett)
