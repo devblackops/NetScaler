@@ -117,6 +117,15 @@ function New-NSLBVirtualServer {
     .PARAMETER HTTPSRedirectURL
         URL to which to redirect traffic if the traffic is recieved from redirect port.
 
+    .PARAMETER ICMPVSResponse
+        How the NetScaler appliance responds to ping requests received for an IP address that is common to one or more virtual servers. Available settings function as follows:
+        * If set to PASSIVE on all the virtual servers that share the IP address, the appliance always responds to the ping requests.
+        * If set to ACTIVE on all the virtual servers that share the IP address, the appliance responds to the ping requests if at least one of the virtual servers is UP. Otherwise, the appliance does not respond.
+        * If set to ACTIVE on some virtual servers and PASSIVE on the others, the appliance responds if at least one virtual server with the ACTIVE setting is UP. Otherwise, the appliance does not respond.
+        Note: This parameter is available at the virtual server level. A similar parameter, ICMP Response, is available at the IP address level, for IPv4 addresses of type VIP. To set that parameter, use the add ip command in the CLI or the Create IP dialog box in the GUI.
+        Default value: PASSIVE
+        Possible values = PASSIVE, ACTIVE
+
     .PARAMETER Timeout
         Time period for which a persistence session is in effect.
         Default value: 2
@@ -164,6 +173,11 @@ function New-NSLBVirtualServer {
         $HTTPSRedirectURL,
 
         [Parameter()]
+        [ValidateSet('PASSIVE', 'ACTIVE')]
+        [string]
+        $ICMPVSResponse = 'PASSIVE',
+
+        [Parameter()]
         [int]
         $Timeout,
 
@@ -185,6 +199,7 @@ function New-NSLBVirtualServer {
                         ipv46 = $IPAddress
                         port = $Port
                         lbmethod = $LBMethod
+                        icmpvsrresponse = $ICMPVSResponse
                     }
 
                     if ($PSBoundParameters.ContainsKey('PersistenceType')) {
