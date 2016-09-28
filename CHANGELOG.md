@@ -1,4 +1,4 @@
-## 1.4.0 (Unreleased)
+## (Unreleased)
   * Features
     * Added parameters to New-NSLBVirtualServer to configure a redirect (via @rokett) 
 
