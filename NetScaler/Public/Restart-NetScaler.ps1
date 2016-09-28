@@ -67,7 +67,6 @@ function Restart-NetScaler {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
-        [parameter(Mandatory)]
         $Session = $script:session,
 
         [switch]$SaveConfig,

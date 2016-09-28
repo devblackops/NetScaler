@@ -46,7 +46,6 @@ function Set-NSHostname {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='high')]
     param(
-        [parameter(Mandatory)]
         $Session = $script:session,
 
         [parameter(Mandatory)]
