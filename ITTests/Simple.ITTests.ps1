@@ -1,4 +1,4 @@
-$Nsip              = "172.16.124.10"
+$Nsip              = "172.16.124.11"
 $Username          = "nsroot"
 $Password          = "nsroot"
 
