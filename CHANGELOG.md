@@ -1,7 +1,16 @@
 ## (Unreleased)
   * Features
-    * Added parameters to New-NSLBVirtualServer to configure a redirect (via @rokett) 
+    * Added parameters to New-NSLBVirtualServer to configure a redirect (via @rokett)
+    * Added parameter 'ICMPVSResponse' to New-NSLBVirtualServer which controler whether ICMP response is ACTIVE or PASSIVE on VIP (via @dbroeglin)    
 
+  * Improvements
+    * Added support for 'Arguments' parameter in _InvokeNsRestApiGet (via @dbroeglin)
+    * Refactored Get-NSSystemFile to use internal _InvokeNSRestApiGet function (via @dbroeglin)
+    * Added example to comment-based help in _InvokeNSRestApiGet (via @dbroeglin)
+
+  * Bug fixes
+    * Fix typo in Add-NSLBVirtualServerBinding (via @rokett)
+  
 ## 1.3.0 (2016-09-10)
   * Features
     * Added Add-NSCSVirtualServerResponderPolicyBinding (via @rokett)
