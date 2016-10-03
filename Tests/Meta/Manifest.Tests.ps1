@@ -51,7 +51,7 @@ Describe 'Module manifest' {
         $script:changelogVersion = $null
         It "has a valid version in the changelog" {
             foreach ($line in (Get-Content $changelogPath)) {
-                if ($line -match "^\D*(?<Version>(\d+\.){1,3}\d+)") {
+                if ($line -match "^## (?<Version>(\d+\.){1,3}\d+) \(\d{4}-\d{2}-\d{2}\)") {
                     $script:changelogVersion = $matches.Version
                     break
                 }
