@@ -12,6 +12,9 @@
 
   * Bug fixes
     * Fix typo in Add-NSLBVirtualServerBinding (via @rokett)
+
+  * Deprecated
+    * Mark Get-NSLBStat as deprecated in favor of Get-NSStat
   
 ## 1.3.0 (2016-09-10)
   * Features
