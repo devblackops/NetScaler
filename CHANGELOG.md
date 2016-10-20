@@ -1,7 +1,8 @@
 ## (Unreleased)
   * Features
     * Added parameters to New-NSLBVirtualServer to configure a redirect (via @rokett)
-    * Added parameter 'ICMPVSResponse' to New-NSLBVirtualServer which controler whether ICMP response is ACTIVE or PASSIVE on VIP (via @dbroeglin)    
+    * Added parameter 'ICMPVSResponse' to New-NSLBVirtualServer which controler whether ICMP response is ACTIVE or PASSIVE on VIP (via @dbroeglin)
+    * Added Add-NSLBVirtualServerResponderPolicyBinding an Get-NSLBVirtualServerResponderPolicyBinding (via @rokett)
 
   * Improvements
     * Added support for 'Arguments' parameter in _InvokeNsRestApiGet (via @dbroeglin)
