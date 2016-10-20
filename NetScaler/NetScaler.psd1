@@ -132,6 +132,7 @@ FunctionsToExport = @(
     'Get-NSResponderPolicy',
     'Get-NSRewriteAction',
     'Get-NSRewritePolicy',
+    'Get-NSStat',
     'Get-NSMode',
     'Get-NSNTPServer',
     'Get-NSSAMLAuthenticationPolicy',
