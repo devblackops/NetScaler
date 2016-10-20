@@ -4,11 +4,11 @@ properties {
         $projectRoot = $PSScriptRoot
     }
 
-    $sut = "$projectRoot\NetScaler"
-    $metaTests = "$projectRoot\Tests\meta"
-    $unitTests = "$projectRoot\Tests\unit"
-    $integrationTests = "$projectRoot\Tests\integration"
-    $tests = "$projectRoot\Tests"
+    $sut = Join-Path -Path $projectRoot -ChildPath $ENV:BHProjectName
+    $testDir = Join-Path $projectRoot -ChildPath 'Tests'
+    $metaTests = Join-Path $testDir -ChildPath 'Meta'
+    $unitTests = Join-Path $testDir -ChildPath 'Unit'
+    $integrationTests = Join-Path $testDir -ChildPath 'Integration'
 
     $psVersion = $PSVersionTable.PSVersion.Major
 }
@@ -20,14 +20,12 @@ task Init {
     "Build System Details:"
     Get-Item ENV:BH*
 
-    $modules = 'Pester', 'PSDeploy', 'PSScriptAnalyzer'
-    Install-Module $modules -Confirm:$false
-    Import-Module $modules -Verbose:$false -Force
+    Write-Host $sut
 }
 
 task Test -Depends Init, Analyze, Pester-Meta, Pester-Module
 
-task Analyze -Depends Init {
+task Analyze -Depends Init { 
     $saResults = Invoke-ScriptAnalyzer -Path $sut -Severity Error -Recurse -Verbose:$false
     if ($saResults) {
         $saResults | Format-Table
