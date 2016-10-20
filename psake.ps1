@@ -28,8 +28,7 @@ task Init {
 task Test -Depends Init, Analyze, Pester-Meta, Pester-Module
 
 task Analyze -Depends Init {
-    $saResults = Get-ChildItem -File -Path $sut -Exclude '*.tests.ps1' -Recurse | 
-        Invoke-ScriptAnalyzer -Severity Error
+    $saResults = Invoke-ScriptAnalyzer -Path $sut -Severity Error -Recurse -Verbose:$false
     if ($saResults) {
         $saResults | Format-Table
         Write-Error -Message 'One or more Script Analyzer errors/warnings where found. Build cannot continue!'
