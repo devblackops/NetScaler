@@ -21,7 +21,7 @@ task Init {
     Get-Item ENV:BH*
 
     $modules = 'Pester', 'PSDeploy', 'PSScriptAnalyzer'
-    Install-Module $modules -Confirm:$false
+    Install-Module $modules -Repository PSGallery -Confirm:$false
     Import-Module $modules -Verbose:$false -Force
 }
 
