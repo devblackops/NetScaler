@@ -27,7 +27,7 @@ function Get-NSBackup {
 
         Get all backup objects.
     .EXAMPLE
-        Get-NSLBServer -Name 'test.tgz'
+        Get-NSBackup -Name 'test.tgz'
     
         Get the backup object 'test.tgz'.
     .PARAMETER Session
