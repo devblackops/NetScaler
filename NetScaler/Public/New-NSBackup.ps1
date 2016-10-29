@@ -23,11 +23,11 @@ function New-NSBackup {
         Create a backup of the NetScaler configuration.
 
     .EXAMPLE
-        New-NSBackup -Filename 'test' -Level 'full' -Comment 'Before upgrade'
+        New-NSBackup -Name 'test' -Level 'full' -Comment 'Before upgrade'
         
         Creates a full backup of the NetScaler configuration called 'test.tgz'
     .EXAMPLE
-        $backup = New-NSBackup -Filename 'test' -Level 'full' -Comment 'Before upgrade' -PassThru
+        $backup = New-NSBackup -Name 'test' -Level 'full' -Comment 'Before upgrade' -PassThru
         $bytes = [System.Convert]::FromBase64String($backup.filecontent)
         [IO.File]::WriteAllBytes('c:\temp\test.tgz', $bytes)
 
@@ -37,12 +37,12 @@ function New-NSBackup {
     .PARAMETER Session
         The NetScaler session object.
 
-    .PARAMETER Filename
+    .PARAMETER Name
         Name of the backup file.
 
         The file extension ".tgz" will be appended to the name automatically.
 
-    .PARAMETER LEVEL
+    .PARAMETER Level
         The level of data to be backed up.
 
         Default value: basic
@@ -59,7 +59,8 @@ function New-NSBackup {
         $Session = $script:session,
 
         [parameter(Mandatory = $true)]
-        [string]$Filename,
+        [Alias('Filename')]
+        [string]$Name,
 
         [ValidateSet('basic', 'full')]
         [string]$Level = 'full',
@@ -74,10 +75,10 @@ function New-NSBackup {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($Filename, "Create $Level backup")) {
+        if ($PSCmdlet.ShouldProcess($Name, "Create $Level backup")) {
             try {
                 $params = @{
-                    filename = $Filename
+                    filename = $Name
                     level = $Level
                 }
                 if ($PSBoundParameters.ContainsKey('Comment')) {
@@ -87,7 +88,7 @@ function New-NSBackup {
                 _InvokeNSRestApi -Session $Session -Method POST -Type systembackup -Payload $params -Action create
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    $backup = Get-NSSystemFile -Session $Session -FileLocation '/var/ns_sys_backup' -Filename "$($Filename).tgz"
+                    $backup = Get-NSSystemFile -Session $Session -FileLocation '/var/ns_sys_backup' -Filename "$($Name).tgz"
                     $backup
                 }
             } catch {
