@@ -1,41 +1,47 @@
 [cmdletbinding()]
 param(
-    [string[]]$Task = 'default'
+    [string[]]$Task = 'default',
+
+    [switch]$Help,
+
+    [switch]$UpdateModules
 )
 
 function Resolve-Module {
     [Cmdletbinding()]
     param (
         [Parameter(Mandatory, ValueFromPipeline)]
-        [string[]]$Name
+        [string[]]$Name,
+
+        [switch]$Update
     )
 
     Process {
-        foreach ($ModuleName in $Name) {
-            $Module = Get-Module -Name $ModuleName -ListAvailable
-            Write-Verbose -Message "Resolving Module [$($ModuleName)]"
+        foreach ($moduleName in $Name) {
+            $module = Get-Module -Name $moduleName -ListAvailable -Verbose:$false
+            Write-Verbose -Message "Resolving [$($ModuleName)]"
             
-            if ($Module) {
-                $Version = $Module | Measure-Object -Property Version -Maximum | Select-Object -ExpandProperty Maximum
-                $GalleryVersion = Find-Module -Name $ModuleName -Repository PSGallery -Verbose:$false | 
-                    Measure-Object -Property Version -Maximum | 
-                    Select-Object -ExpandProperty Maximum
+            if ($module) {
+                if ($PSBoundParameters.ContainsKey('UpdateModules')) {
+                    $version = $module | Measure-Object -Property Version -Maximum | Select-Object -ExpandProperty Maximum
+                    $galleryVersion = Find-Module -Name $moduleName -Repository PSGallery -Verbose:$false | 
+                        Measure-Object -Property Version -Maximum | 
+                        Select-Object -ExpandProperty Maximum
 
-                if ($Version -lt $GalleryVersion) {                                        
-                    Write-Verbose -Message "$($ModuleName) Installed Version [$($Version.tostring())] is outdated. Installing Gallery Version [$($GalleryVersion.tostring())]"
-                    
-                    Install-Module -Name $ModuleName -Repository PSGallery -Verbose:$false -Force
-                    Import-Module -Name $ModuleName -Verbose:$false -Force -RequiredVersion $GalleryVersion
+                    if ($version -lt $galleryVersion) {                                        
+                        Write-Verbose -Message "$($moduleName) Installed Version [$($Version.tostring())] is outdated. Installing Gallery Version [$($galleryVersion.tostring())]"
+                        
+                        Install-Module -Name $moduleName -Repository PSGallery -Verbose:$false -Force
+                        Import-Module -Name $moduleName -Verbose:$false -Force -RequiredVersion $galleryVersion
+                    }
                 }
-                else {
-                    Write-Verbose -Message "Module Installed, Importing [$($ModuleName)]"
-                    Import-Module -Name $ModuleName -Verbose:$false -Force -RequiredVersion $Version
-                }
+                Write-Verbose -Message "Importing [$($moduleName)]"
+                Import-Module -Name $moduleName -Verbose:$false -Force
             }
             else {
-                Write-Verbose -Message "[$($ModuleName)] Missing, installing Module"
-                Install-Module -Name $ModuleName -Repository PSGallery -Verbose:$false -Force
-                Import-Module -Name $ModuleName -Verbose:$false -Force -RequiredVersion $Version
+                Write-Verbose -Message "[$($moduleName)] Missing, installing Module"
+                Install-Module -Name $moduleName -Repository PSGallery -Verbose:$false -Force
+                Import-Module -Name $moduleName -Verbose:$false -Force -RequiredVersion $version
             }
         }
     }
@@ -44,7 +50,12 @@ function Resolve-Module {
 Get-PackageProvider -Name Nuget -ForceBootstrap | Out-Null
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 
-'BuildHelpers', 'psake' | Resolve-Module
+'BuildHelpers', 'psake', 'Pester', 'PSDeploy', 'PSScriptAnalyzer' | Resolve-Module -Update:$UpdateModules
+
+if ($PSBoundParameters.ContainsKey('Help')) {
+    Get-PSakeScriptTasks -buildFile "$PSScriptRoot\psake.ps1"   
+    return
+}
 
 Set-BuildEnvironment
 
