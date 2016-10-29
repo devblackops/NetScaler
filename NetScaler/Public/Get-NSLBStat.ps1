@@ -49,6 +49,8 @@ function Get-NSLBStat {
     begin {
         _AssertSessionActive
         $stats = @()
+
+        Write-Warning -Message 'This function is deprecated in favor of Get-NSStat and will be removed in a future major release. Please use Get-NSStat -Type <typename> instead.'
     }
 
     process {

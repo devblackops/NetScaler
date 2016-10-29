@@ -3,6 +3,7 @@
     * Added parameters to New-NSLBVirtualServer to configure a redirect (via @rokett)
     * Added parameter 'ICMPVSResponse' to New-NSLBVirtualServer which controler whether ICMP response is ACTIVE or PASSIVE on VIP (via @dbroeglin)
     * Added Add-NSLBVirtualServerResponderPolicyBinding an Get-NSLBVirtualServerResponderPolicyBinding (via @rokett)
+    * Added Get-NSStat function to get NetScaler stat objects (via @devblackops)
 
   * Improvements
     * Added support for 'Arguments' parameter in _InvokeNsRestApiGet (via @dbroeglin)
@@ -11,6 +12,9 @@
 
   * Bug fixes
     * Fix typo in Add-NSLBVirtualServerBinding (via @rokett)
+
+  * Deprecated
+    * Mark Get-NSLBStat as deprecated in favor of Get-NSStat
   
 ## 1.3.0 (2016-09-10)
   * Features
