@@ -67,7 +67,7 @@ foreach ($command in $commands) {
             $parameterNames = $parameters.Name
 
             ## Without the filter, WhatIf and Confirm parameters are still flagged in "finds help parameter in code" test
-            $helpParameters = $help.Parameters.Parameter | Where-Object { $_.Name -notin $common } | Sort -Property Name -Unique
+            $helpParameters = $help.Parameters.Parameter | Where-Object { $_.Name -notin $common } | Sort-Object -Property Name -Unique
             $helpParameterNames = $helpParameters.Name
 
             foreach ($parameter in $parameters) {
