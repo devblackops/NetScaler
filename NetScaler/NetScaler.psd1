@@ -165,6 +165,7 @@ FunctionsToExport = @(
     'New-NSLDAPAuthenticationServer',
     'New-NSNTPServer',
     'New-NSResponderAction',
+    'New-NSResponderPolicy',
     'New-NSNTPServer',
     'New-NSSSLProfile',
     'New-NSVPNSessionPolicy',
