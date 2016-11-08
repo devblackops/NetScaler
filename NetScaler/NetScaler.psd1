@@ -12,7 +12,7 @@
 RootModule = 'NetScaler.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.3.0'
+ModuleVersion = '1.4.0'
 
 # ID used to uniquely identify this module
 GUID = 'bd4390dc-a8ad-4bce-8d69-f53ccf8e4163'
@@ -21,7 +21,7 @@ GUID = 'bd4390dc-a8ad-4bce-8d69-f53ccf8e4163'
 Author = 'Brandon Olin'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+CompanyName = 'Community'
 
 # Copyright statement for this module
 Copyright = '(c) 2015 Brandon Olin. All rights reserved.'
