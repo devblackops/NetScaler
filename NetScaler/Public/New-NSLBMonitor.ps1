@@ -430,15 +430,12 @@ function New-NSLBMonitor {
                     if ($PSBoundParameters.ContainsKey('HTTPRequest')) {
                         $params.Add('httprequest', $HTTPRequest)
                     }
-<<<<<<< HEAD
-=======
                     if ($PSBoundParameters.ContainsKey('Send')) {
                         $params.Add('send', $Send)
                     }
                     if ($PSBoundParameters.ContainsKey('Recv')) {
                         $params.Add('recv', $Recv)
                     }
->>>>>>> dev
                     _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
