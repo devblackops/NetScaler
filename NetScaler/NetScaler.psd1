@@ -12,7 +12,7 @@
 RootModule = 'NetScaler.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.3.0'
+ModuleVersion = '1.4.0'
 
 # ID used to uniquely identify this module
 GUID = 'bd4390dc-a8ad-4bce-8d69-f53ccf8e4163'
@@ -21,7 +21,7 @@ GUID = 'bd4390dc-a8ad-4bce-8d69-f53ccf8e4163'
 Author = 'Brandon Olin'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+CompanyName = 'Community'
 
 # Copyright statement for this module
 Copyright = '(c) 2015 Brandon Olin. All rights reserved.'
@@ -75,6 +75,7 @@ FunctionsToExport = @(
     'Add-NSLBServiceGroupMonitorBinding',
     'Add-NSLBSSLVirtualServerCertificateBinding',
     'Add-NSLBVirtualServerBinding',
+    'Add-NSLBVirtualServerResponderPolicyBinding',
     'Add-NSLBVirtualServerRewritePolicyBinding',
     'Add-NSRSAKey',
     'Add-NSServerCertificate',
@@ -100,6 +101,7 @@ FunctionsToExport = @(
     'Get-NSAAAUserBinding',
     'Get-NSAAAVirtualServer',
     'Get-NSAvailableTimeZone',
+    'Get-NSBackup',
     'Get-NSConfig',
     'Get-NSCSAction',
     'Get-NSCSPolicy',
@@ -123,6 +125,7 @@ FunctionsToExport = @(
     'Get-NSLBStat',
     'Get-NSLBVirtualServer',
     'Get-NSLBVirtualServerBinding',
+    'Get-NSLBVirtualServerResponderPolicyBinding',
     'Get-NSLBVirtualServerRewritePolicyBinding',
     'Get-NSLDAPAuthenticationPolicy',
     'Get-NSLDAPAuthenticationServer',
@@ -130,6 +133,7 @@ FunctionsToExport = @(
     'Get-NSResponderPolicy',
     'Get-NSRewriteAction',
     'Get-NSRewritePolicy',
+    'Get-NSStat',
     'Get-NSMode',
     'Get-NSNTPServer',
     'Get-NSSAMLAuthenticationPolicy',
@@ -148,6 +152,7 @@ FunctionsToExport = @(
     'Get-NSVPNVirtualServerTheme',
     'Install-NSLicense',
     'Invoke-Nitro',
+    'New-NSBackup',
     'New-NSCSVirtualServer',
     'New-NSKCDAccount',
     'New-NSLBMonitor',
@@ -160,11 +165,13 @@ FunctionsToExport = @(
     'New-NSLDAPAuthenticationServer',
     'New-NSNTPServer',
     'New-NSResponderAction',
+    'New-NSResponderPolicy',
     'New-NSNTPServer',
     'New-NSSSLProfile',
     'New-NSVPNSessionPolicy',
     'New-NSVPNSessionProfile',
     'New-NSVPNVirtualServer',
+    'Remove-NSBackup',
     'Remove-NSDnsSuffix',
     'Remove-NSLBMonitor',
     'Remove-NSLBServer',

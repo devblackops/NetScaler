@@ -239,6 +239,12 @@ function New-NSLBMonitor {
 
     .PARAMETER Passthru
         Return the load balancer monitor object.
+
+    .PARAMETER Send
+        String to send to the service. Applicable to TCP-ECV, HTTP-ECV, and UDP-ECV monitors.
+
+    .PARAMETER Recv
+        String expected from the server for the service to be marked as UP. Applicable to TCP-ECV, HTTP-ECV, and UDP-ECV monitors.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
@@ -341,7 +347,15 @@ function New-NSLBMonitor {
 
         [Parameter()]
         [string]
-        $HTTPRequest
+        $HTTPRequest,
+
+        [Parameter()]
+        [string]
+        $Send,
+
+        [Parameter()]
+        [string]
+        $Recv
     )
 
     begin {
@@ -416,6 +430,15 @@ function New-NSLBMonitor {
                     if ($PSBoundParameters.ContainsKey('HTTPRequest')) {
                         $params.Add('httprequest', $HTTPRequest)
                     }
+<<<<<<< HEAD
+=======
+                    if ($PSBoundParameters.ContainsKey('Send')) {
+                        $params.Add('send', $Send)
+                    }
+                    if ($PSBoundParameters.ContainsKey('Recv')) {
+                        $params.Add('recv', $Recv)
+                    }
+>>>>>>> dev
                     _InvokeNSRestApi -Session $Session -Method POST -Type lbmonitor -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {

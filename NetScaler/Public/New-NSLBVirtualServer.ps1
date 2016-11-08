@@ -29,17 +29,17 @@ function New-NSLBVirtualServer {
 
     .EXAMPLE
         New-NSLBVirtualServer -Name 'vserver01' -IPAddress '10.10.10.10' -Port 8080 -ServiceType 'HTTP' -LBMethod 'ROUNDROBIN'
-    
+
         Create a new virtual server named 'vserver01' listening on port 8080 with a load balancing method of 'ROUNDROBIN'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        Name for the virtual server. Must begin with an ASCII alphanumeric or underscore (_) character, 
+        Name for the virtual server. Must begin with an ASCII alphanumeric or underscore (_) character,
         and must contain only ASCII alphanumeric, underscore, hash (#), period (.), space, colon (:), at sign (@),
-        equal sign (=), and hyphen (-) characters. Can be changed after the virtual server is created. 
-    
+        equal sign (=), and hyphen (-) characters. Can be changed after the virtual server is created.
+
         Minimum length = 1
 
     .PARAMETER IPAddress
@@ -56,25 +56,25 @@ function New-NSLBVirtualServer {
     .PARAMETER ServiceType
         Protocol used by the service (also called the service type).
 
-        Possible values = HTTP, FTP, TCP, UDP, SSL, SSL_BRIDGE, SSL_TCP, DTLS, NNTP, DNS, DHCPRA, ANY, SIP_UDP, 
+        Possible values = HTTP, FTP, TCP, UDP, SSL, SSL_BRIDGE, SSL_TCP, DTLS, NNTP, DNS, DHCPRA, ANY, SIP_UDP,
         DNS_TCP, RTSP, PUSH, SSL_PUSH, RADIUS, RDP, MYSQL, MSSQL, DIAMETER, SSL_DIAMETER, TFTP, ORACLE
 
     .PARAMETER LBMethod
-        Load balancing method. 
-    
-        The available settings function as follows: 
-        * ROUNDROBIN - Distribute requests in rotation, regardless of the load. Weights can be assigned to services 
+        Load balancing method.
+
+        The available settings function as follows:
+        * ROUNDROBIN - Distribute requests in rotation, regardless of the load. Weights can be assigned to services
         to enforce weighted round robin distribution.
-        * LEASTCONNECTION (default) - Select the service with the fewest connections. 
-        * LEASTRESPONSETIME - Select the service with the lowest average response time. 
-        * LEASTBANDWIDTH - Select the service currently handling the least traffic. 
-        * LEASTPACKETS - Select the service currently serving the lowest number of packets per second. 
-        * CUSTOMLOAD - Base service selection on the SNMP metrics obtained by custom load monitors. 
-        * LRTM - Select the service with the lowest response time. Response times are learned through monitoring probes. 
-            This method also takes the number of active connections into account. Also available are a number of hashing methods, 
+        * LEASTCONNECTION (default) - Select the service with the fewest connections.
+        * LEASTRESPONSETIME - Select the service with the lowest average response time.
+        * LEASTBANDWIDTH - Select the service currently handling the least traffic.
+        * LEASTPACKETS - Select the service currently serving the lowest number of packets per second.
+        * CUSTOMLOAD - Base service selection on the SNMP metrics obtained by custom load monitors.
+        * LRTM - Select the service with the lowest response time. Response times are learned through monitoring probes.
+            This method also takes the number of active connections into account. Also available are a number of hashing methods,
             in which the appliance extracts a predetermined portion of the request, creates a hash of the portion, and then checks
-            whether any previous requests had the same hash value. If it finds a match, it forwards the request to the service 
-            that served those previous requests. Following are the hashing methods: 
+            whether any previous requests had the same hash value. If it finds a match, it forwards the request to the service
+            that served those previous requests. Following are the hashing methods:
         * URLHASH - Create a hash of the request URL (or part of the URL).
         * DOMAINHASH - Create a hash of the domain name in the request (or part of the domain name). The domain name is taken from
             either the URL or the Host header. If the domain name appears in both locations, the URL is preferred. If the request
@@ -82,12 +82,12 @@ function New-NSLBVirtualServer {
         * DESTINATIONIPHASH - Create a hash of the destination IP address in the IP header.
         * SOURCEIPHASH - Create a hash of the source IP address in the IP header.
         * TOKEN - Extract a token from the request, create a hash of the token, and then select the service to which any previous
-            requests with the same token hash value were sent. 
+            requests with the same token hash value were sent.
         * SRCIPDESTIPHASH - Create a hash of the string obtained by concatenating the source IP address and destination IP address
             in the IP header.
         * SRCIPSRCPORTHASH - Create a hash of the source IP address and source port in the IP header.
         * CALLIDHASH - Create a hash of the SIP Call-ID header.
-        
+
         Default value: LEASTCONNECTION
         Possible values = ROUNDROBIN, LEASTCONNECTION, LEASTRESPONSETIME, URLHASH, DOMAINHASH, DESTINATIONIPHASH, SOURCEIPHASH,
         SRCIPDESTIPHASH, LEASTBANDWIDTH, LEASTPACKETS, TOKEN, SRCIPSRCPORTHASH, LRTM, CALLIDHASH, CUSTOMLOAD, LEASTREQUEST
@@ -108,6 +108,23 @@ function New-NSLBVirtualServer {
         * RTSPSID - Connections that have the same RTSP Session ID belong to the same persistence session.
         * FIXSESSION - Connections that have the same SenderCompID and TargetCompID values belong to the same persistence session.
         Possible values = SOURCEIP, COOKIEINSERT, SSLSESSION, RULE, URLPASSIVE, CUSTOMSERVERID, DESTIP, SRCIPDESTIP, CALLID, RTSPSID, DIAMETER, FIXSESSION, NONE
+
+    .PARAMETER RedirectFromPort
+        Port number for the virtual server, from which we absorb the traffic for http redirect.
+        Minimum value = 1
+        Range 1 - 65535
+
+    .PARAMETER HTTPSRedirectURL
+        URL to which to redirect traffic if the traffic is recieved from redirect port.
+
+    .PARAMETER ICMPVSResponse
+        How the NetScaler appliance responds to ping requests received for an IP address that is common to one or more virtual servers. Available settings function as follows:
+        * If set to PASSIVE on all the virtual servers that share the IP address, the appliance always responds to the ping requests.
+        * If set to ACTIVE on all the virtual servers that share the IP address, the appliance responds to the ping requests if at least one of the virtual servers is UP. Otherwise, the appliance does not respond.
+        * If set to ACTIVE on some virtual servers and PASSIVE on the others, the appliance responds if at least one virtual server with the ACTIVE setting is UP. Otherwise, the appliance does not respond.
+        Note: This parameter is available at the virtual server level. A similar parameter, ICMP Response, is available at the IP address level, for IPv4 addresses of type VIP. To set that parameter, use the add ip command in the CLI or the Create IP dialog box in the GUI.
+        Default value: PASSIVE
+        Possible values = PASSIVE, ACTIVE
 
     .PARAMETER Timeout
         Time period for which a persistence session is in effect.
@@ -147,6 +164,20 @@ function New-NSLBVirtualServer {
         $PersistenceType,
 
         [Parameter()]
+        [ValidateRange(1, 65535)]
+        [int]
+        $RedirectFromPort,
+
+        [Parameter()]
+        [string]
+        $HTTPSRedirectURL,
+
+        [Parameter()]
+        [ValidateSet('PASSIVE', 'ACTIVE')]
+        [string]
+        $ICMPVSResponse = 'PASSIVE',
+
+        [Parameter()]
         [int]
         $Timeout,
 
@@ -168,10 +199,19 @@ function New-NSLBVirtualServer {
                         ipv46 = $IPAddress
                         port = $Port
                         lbmethod = $LBMethod
+                        icmpvsrresponse = $ICMPVSResponse
                     }
 
                     if ($PSBoundParameters.ContainsKey('PersistenceType')) {
                         $params.Add('persistencetype', $PersistenceType)
+                    }
+
+                    if ($PSBoundParameters.ContainsKey('RedirectFromPort')) {
+                        $params.Add('redirectfromport', $RedirectFromPort)
+                    }
+
+                    if ($PSBoundParameters.ContainsKey('HTTPSRedirectURL')) {
+                        $params.Add('httpsredirecturl', $HTTPSRedirectURL)
                     }
 
                     if ($PSBoundParameters.ContainsKey('Timeout')) {

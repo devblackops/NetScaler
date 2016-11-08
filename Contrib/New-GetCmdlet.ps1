@@ -8,7 +8,9 @@ Param(
     [Parameter(Mandatory)]
     [String]$Label,
     
-    [Hashtable]$Filters = $Null
+    [Hashtable]$Filters = $Null,
+
+    [Switch]$Arguments = $False
 )
     $ErrorActionPreference = "Stop"
     
@@ -50,11 +52,13 @@ Param(
 
 
 if ($Filters -and ($Filters.Count -ne 0)) {
+    $ArgumentName = "-Filters"
+    if ($Arguments) { $ArgumentName = "-Arguments" }
     $ProcessBlock = @"
         # Contruct a filter hash if we specified any filters
         `$Filters = @{}
 $(($Filters.GetEnumerator() | % { Expand-Filter $_.Key $_.Value }) -Join "`n")
-        _InvokeNSRestApiGet -Session `$Session -Type $Type -Name `$Name -Filters `$Filters
+        _InvokeNSRestApiGet -Session `$Session -Type $Type -Name `$Name $ArgumentName `$Filters
 "@
     $FilterParameters = ",`n`n" + (
         ($Filters.GetEnumerator() | % { Expand-FilterParam $_.Key $_.Value }) -Join ",`n`n"

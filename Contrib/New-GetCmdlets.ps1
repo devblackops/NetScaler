@@ -4,7 +4,7 @@
 
 # Format: @(<cmdlet name>, <resource type>, <documentation label>,
 #            <optional hashtable of parameter names to a hashtable of filter name to parameter label>
-#         )
+#         ), <optional boolean that indicates arguments instead of filters>
 
 @(
     @("CSAction",                              "csaction",                          "content switching action",
@@ -156,13 +156,19 @@
         [ordered]@{
             "FileLocation"          = @("filelocation", "file location") 
             "Filename"              = @("filename", "file name")
-        }
-    )    
+        }, $True
+    )
+    # The following Get cmdlet has been modified after generation!
+    #@("VirtualServerCertificateBinding",   "sslvserver_sslcertkey_binding",      "virtual server certificate-key pair binding"
+    #    [ordered]@{}
+    #)  
+      
     #@("LBVirtualServerResponderPolicyBinding", "lbvserver_responderpolicy_binding", "load balancer server responder policy binding"),
     #@("LBVirtualServerRewritePolicyBinding",   "lbvserver_rewritepolicy_binding",   "load balancer server rewrite policy binding")
-) | % {    
-    echo "Get-NS$($_[0]) | Measure"
-    Contrib\New-GetCmdlet -Name $_[0] -Type $_[1] -Label $_[2] -Filters $_[3]
+) | % {
+    $Name, $Type, $Label, $Filters, $Arguments = $_
+    echo "Get-NS$($Name) | Measure -Count"
+    Contrib\New-GetCmdlet -Name $Name -Type $Type -Label $Label -Filters $Filters -Arguments:$Arguments
 }
 
 
