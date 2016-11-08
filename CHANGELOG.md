@@ -3,6 +3,7 @@
     * Added parameters to New-NSLBVirtualServer to configure a redirect (via @rokett)
     * Added parameter 'ICMPVSResponse' to New-NSLBVirtualServer which controler whether ICMP response is ACTIVE or PASSIVE on VIP (via @dbroeglin)
     * Added Add-NSLBVirtualServerResponderPolicyBinding an Get-NSLBVirtualServerResponderPolicyBinding (via @rokett)
+    * Added (Get|New|Remove)-NSBackup to manage NetScaler backups (via @devblackops)
     * Added Get-NSStat function to get NetScaler stat objects (via @devblackops)
 
   * Improvements
