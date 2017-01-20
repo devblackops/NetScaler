@@ -37,11 +37,19 @@ function Disable-NSLBServer {
 
         Disable the load balancer server 'server01' without confirmation and return the resulting object.
 
+    .EXAMPLE
+        $server = Disable-NSLBServer -Name 'server01' -Graceful 60 -Force -PassThru
+
+        Disable the load balancer server 'server01' without confirmation, giving a 60 second grace period before disabling and return the resulting object.
+
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
         The name or names of the load balancer servers to disable.
+
+    .PARAMETER Graceful
+        Indicates graceful shutdown of the server. System will wait for all outstanding connections to this server to be closed before disabling the server. Wait time in seconds may be included before disabling happens.
 
     .PARAMETER Force
         Suppress confirmation when disabling the server.
@@ -55,7 +63,9 @@ function Disable-NSLBServer {
 
         [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB server name'),
-
+        
+        [int]$Graceful,
+        
         [switch]$Force,
 
         [switch]$PassThru
@@ -71,6 +81,14 @@ function Disable-NSLBServer {
                 try {
                     $params = @{
                         name = $item
+                    }
+                    if ($PSBoundParameters.ContainsKey('Graceful')) {
+                        $params.Add('graceful', 'YES')
+                        if ($Graceful -gt 0) {
+                            $params.Add('delay', $Graceful)
+                        } else {
+                            $params.Add('delay', 0)
+                        }
                     }
                     _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action disable
 
