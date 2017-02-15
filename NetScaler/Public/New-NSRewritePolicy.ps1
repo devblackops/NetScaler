@@ -41,11 +41,19 @@ function New-NSRewritePolicy {
         
         Default value: ""
         
+    .PARAMETER Rule
+        The rule/expression that has to be matched for this policy to apply.
+
+        Minimum length: 0
+        Maximum length: 8191
+        Alias: Expression
+
     .PARAMETER Expression
         The rule/expression that has to be matched for this policy to apply.
 
         Minimum length: 0
         Maximum length: 8191
+        Alias for: Rule
                 
     .PARAMETER Comment
         Any information about the rewrite policy.
