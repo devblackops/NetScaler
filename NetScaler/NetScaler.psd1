@@ -167,6 +167,8 @@ FunctionsToExport = @(
     'New-NSNTPServer',
     'New-NSResponderAction',
     'New-NSResponderPolicy',
+    'New-NSRewriteAction',
+    'New-NSRewritePolicy',
     'New-NSNTPServer',
     'New-NSSSLProfile',
     'New-NSVPNSessionPolicy',
