@@ -45,6 +45,9 @@ function New-NSLBVirtualServer {
     .PARAMETER IPAddress
         IPv4 or IPv6 address to assign to the virtual server.
 
+    .PARAMETER NonAddressable
+        Bypasses the need for an IPAddress and port for the virtual server to configure it as "Non Addressable"
+    
     .PARAMETER Comment
         Any comments that you might want to associate with the virtual server.
 
@@ -141,17 +144,21 @@ function New-NSLBVirtualServer {
 
         [parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB virtual server name'),
-
-        [parameter(Mandatory)]
+        
+        [Parameter(Mandatory = $true, ParameterSetName = "Addressable")]
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string]$IPAddress,
-
-        [ValidateLength(0, 256)]
-        [string]$Comment = '',
-
+        
+        [Parameter(Mandatory = $true, ParameterSetName = "NonAddressable")]
+        [Switch]$NonAddressable,
+        
+        [Parameter(Mandatory = $true, ParameterSetName = "Addressable")]
         [ValidateRange(1, 65534)]
         [int]$Port = 80,
-
+        
+        [ValidateLength(0, 256)]
+        [string]$Comment = '',
+        
         [ValidateSet('DHCPRA','DIAMTER', 'DNS', 'DNS_TCP', 'DLTS', 'FTP', 'HTTP', 'MSSQL', 'MYSQL', 'NNTP', 'PUSH','RADIUS', 'RDP', 'RTSP', 'SIP_UDP', 'SSL', 'SSL_BRIDGE', 'SSL_DIAMETER', 'SSL_PUSH', 'SSL_TCP', 'TCP', 'TFTP', 'UDP')]
         [string]$ServiceType = 'HTTP',
 
@@ -192,14 +199,24 @@ function New-NSLBVirtualServer {
         foreach ($item in $Name) {
             if ($PSCmdlet.ShouldProcess($item, 'Create Virtual Server')) {
                 try {
-                    $params = @{
-                        name = $item
-                        comment = $comment
-                        servicetype = $ServiceType
-                        ipv46 = $IPAddress
-                        port = $Port
-                        lbmethod = $LBMethod
-                        icmpvsrresponse = $ICMPVSResponse
+                    if ($NonAddressable) {
+                        $params = @{
+                            name = $item
+                            comment = $comment
+                            servicetype = $ServiceType
+                            lbmethod = $LBMethod
+                            icmpvsrresponse = $ICMPVSResponse
+                        }
+                    } else {
+                        $params = @{
+                            name = $item
+                            comment = $comment
+                            servicetype = $ServiceType
+                            ipv46 = $IPAddress
+                            port = $Port
+                            lbmethod = $LBMethod
+                            icmpvsrresponse = $ICMPVSResponse
+                        }
                     }
 
                     if ($PSBoundParameters.ContainsKey('PersistenceType')) {
