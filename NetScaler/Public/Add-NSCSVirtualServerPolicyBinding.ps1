@@ -30,13 +30,13 @@ function Add-NSCSVirtualServerPolicyBinding {
     .PARAMETER Session
         The NetScaler session object.
 
-    .PARAMETER -Name
+    .PARAMETER Name
         Name of the content switching virtual server.
 
-    .PARAMETER -PolicyName
+    .PARAMETER PolicyName
         Name for the content switching policy to bind.
 
-    .PARAMETER -TargetLBVServer
+    .PARAMETER TargetLBVServer
         Name for the load balance virtual server.
 
         Minimum length = 1
