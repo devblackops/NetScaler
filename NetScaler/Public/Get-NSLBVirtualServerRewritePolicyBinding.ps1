@@ -17,15 +17,17 @@ limitations under the License.
 function Get-NSLBVirtualServerRewritePolicyBinding {
     <#
     .SYNOPSIS
-        Gets the specified load balancer virtual server binding object.
+        Gets the rewrite policy binding objects for the specified load balancer 
+        virtual server.
 
     .DESCRIPTION
-        Gets the specified load balancer virtual server binding object.
+        Gets the rewrite policy binding objects for the specified load balancer 
+        virtual server.
 
     .EXAMPLE
         Get-NSLBVirtualServerRewritePolicyBinding
 
-        Get all load balancer virtual server bindings.
+        Get all load balancer virtual server rewrite policy bindings.
 
     .EXAMPLE
         Get-NSLBVirtualServerRewritePolicyBinding -Name 'vserver01'
@@ -36,7 +38,7 @@ function Get-NSLBVirtualServerRewritePolicyBinding {
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the load balancer virtual server to get.
+        The name or names of the load balancer virtual server to get policy bindings for.
     #>
     [cmdletbinding()]
     param(

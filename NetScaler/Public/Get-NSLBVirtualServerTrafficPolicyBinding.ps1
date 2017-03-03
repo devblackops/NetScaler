@@ -17,10 +17,12 @@ limitations under the License.
 function Get-NSLBVirtualServerTrafficPolicyBinding {
     <#
     .SYNOPSIS
-        Gets the specified load balancer virtual server binding object.
+        Gets the traffic policy binding objects for the specified load balancer 
+        virtual server.
 
     .DESCRIPTION
-        Gets the specified load balancer virtual server binding object.
+        Gets the traffic policy binding objects for the specified load balancer 
+        virtual server.
 
     .EXAMPLE
         Get-NSLBVirtualServerTrafficPolicyBinding
