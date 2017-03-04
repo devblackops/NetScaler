@@ -188,6 +188,7 @@ FunctionsToExport = @(
     'Remove-NSResponderAction',
     'Remove-NSSSLCertificateLink',
     'Remove-NSSSLProfile',
+    'Remove-NSSystemFile',
     'Remove-NSVPNSessionPolicy',
     'Remove-NSVPNSessionProfile',
     'Restart-NetScaler',
