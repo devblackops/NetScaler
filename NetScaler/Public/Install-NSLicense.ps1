@@ -46,7 +46,7 @@ function Install-NSLicense {
             if (Test-Path -Path $_) {
                 $true
             } else {
-                throw 'Cannot file license file. Path does not exist.'
+                throw 'Cannot find license file. Path does not exist.'
             }
         })]
         [string]$Path,
