@@ -77,21 +77,19 @@ function Add-NSCSVirtualServerPolicyBinding {
     process {
         if ($PSCmdlet.ShouldProcess($Name, 'Add Content Switching Virtual Server Binding')) {
             try {
-                if ($Priority) {
-                    $params = @{
-                        name = $Name
-                        policyname = $PolicyName
-                        targetlbvserver = $TargetLBVServer
-                        priority = $Priority
-                    }
-                } else {
-                    $params = @{
-                        name = $Name
-                        policyname = $PolicyName
-                        targetlbvserver = $TargetLBVServer
-                    }
+                if (-not $Priority) {
+                    # No priority was passed so find the highest currently used and add 10 to it
+                    $CSP = Get-NSCSVirtualServerPolicyBinding $Name | Sort-Object Priority -Descending | Select-Object -First 1
+                    $Priority = [double]$CSP.Priority + 10
                 }
-
+                
+                $params = @{
+                    name = $Name
+                    policyname = $PolicyName
+                    targetlbvserver = $TargetLBVServer
+                    priority = $Priority
+                }
+                
                 _InvokeNSRestApi -Session $Session -Method PUT -Type csvserver_cspolicy_binding -Payload $params
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
