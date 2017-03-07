@@ -92,6 +92,7 @@ FunctionsToExport = @(
     'Disable-NSLBVirtualServer',
     'Disable-NSMode',
     'Disconnect-NetScaler',
+    'Enable-NSHighAvailability',
     'Enable-NSFeature',
     'Enable-NSLBMonitor',
     'Enable-NSLBServer',

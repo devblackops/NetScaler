@@ -58,6 +58,6 @@ function Get-NSConfig {
         } else {
             $Config = (_InvokeNSRestApi -Session $Session -Method Get -Type nssavedconfig -Action GetAll).nssavedconfig.textblob            
         }
-        $Config -Split '\n' | ? { $_ -and !($_ -match "^( Done| *#)") }
+        $Config -Split '\n' | Where-Object { $_ -and !($_ -match "^( Done| *#)") }
     }
 }

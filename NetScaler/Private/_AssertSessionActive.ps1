@@ -15,8 +15,11 @@ limitations under the License.
 #>
 
 function _AssertSessionActive {
-    $s = $script:session
-    if ($null -eq $s ) {
+    param(
+        $Session = $script:session
+    )
+
+    if ($null -eq $session) {
         throw 'Must be logged into NetScaler appliance first!'
     }
 }
