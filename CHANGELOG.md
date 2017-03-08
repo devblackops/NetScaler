@@ -1,3 +1,23 @@
+
+## 1.5.0 (Unreleased)
+  * Features
+    * PR57 - Added -Graceful parameter to the Disable-NSLBServer (via @daimhin)
+    * PR59 - Added New-NSRewriteAction and New-NSRewritePolicy functions (via @dbroeglin)
+    * PR61 - Added Clear-NSAAASession function (via @dbroeglin)
+    * PR66 - Added Add-NSLBVirtualServerTrafficPolicyBinding and Get-NSLBVirtualServerTrafficPolicyBinding functions (via @dbroeglin
+    )
+    * PR72 - Added Get-NSHardware and Remove-NSSystemFile functions (via @daimhin)
+
+  * Improvements
+    * PR66 - Updated comment-based help for Get-NSLBVirtualServerResponderPolicyBinding and Get-NSLBVirtualServerRewritePolicyBinding (via @dbroeglin)
+
+  * Bug fixes
+    * PR68 - Fixed bug in Add-NSCertKeyPair when converting a securestring to plain text using PowerShell v6.0 on Mac OSX. (via @dbroeglin)
+    * PR72 - Fix bug in Get-NSSystemFile where FileLocation parameter was not set to mandatory even though the Nitro API requires it (via @dbroeglin)
+
+  * Deprecated
+    * None
+
 ## 1.4.0 (2016-11-07)
   * Features
     * Added parameters to New-NSLBVirtualServer to configure a redirect (via @rokett)
@@ -18,7 +38,7 @@
 
   * Deprecated
     * Mark Get-NSLBStat as deprecated in favor of Get-NSStat
-  
+
 ## 1.3.0 (2016-09-10)
   * Features
     * Added Add-NSCSVirtualServerResponderPolicyBinding (via @rokett)
