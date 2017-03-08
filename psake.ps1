@@ -33,14 +33,15 @@ task Analyze -Depends Init {
     }
 }
 
-task Pester-Meta -Depends Init {   
+task Pester-Meta -Depends Init {
     if(-not $ENV:BHProjectPath) {
         Set-BuildEnvironment -Path $PSScriptRoot\..
     }
     Remove-Module $ENV:BHProjectName -ErrorAction SilentlyContinue
     Import-Module (Join-Path $ENV:BHProjectPath $ENV:BHProjectName) -Force
 
-    $testResults = Invoke-Pester -Path $metaTests -PassThru
+    $testResultsFile = "$projectRoot\TestResults-Meta.xml"
+    $testResults = Invoke-Pester -Path $metaTests -PassThru -OutputFormat NUnitXml -OutputFile $testResultsFile
     if ($testResults.FailedCount -gt 0) {
         $testResults | Format-List
         Write-Error -Message 'One or more Pester tests failed. Build cannot continue!'
@@ -54,7 +55,8 @@ task Pester-Module -depends Init {
     Remove-Module $ENV:BHProjectName -ErrorAction SilentlyContinue
     Import-Module (Join-Path $ENV:BHProjectPath $ENV:BHProjectName) -Force
 
-    $testResults = Invoke-Pester -Path $unitTests -PassThru
+    $testResultsFile = "$projectRoot\TestResults-Module.xml"
+    $testResults = Invoke-Pester -Path $unitTests -PassThru -OutputFormat NUnitXml -OutputFile $testResultsFile
     if ($testResults.FailedCount -gt 0) {
         $testResults | Format-List
         Write-Error -Message 'One or more Pester tests failed. Build cannot continue!'
