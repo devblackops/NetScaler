@@ -44,7 +44,7 @@ task Pester-Meta -Depends Init {
     $testResults = Invoke-Pester -Path $metaTests -PassThru -OutputFormat NUnitXml -OutputFile $testResultsFile
     # If in AppVeyor, upload test results
     if ($env:BHBuildSystem -eq 'AppVeyor') {
-        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", "$ProjectRoot\$testResultsFile")
+        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $testResultsFile)
     }
     if ($testResults.FailedCount -gt 0) {
         $testResults | Format-List
@@ -63,7 +63,7 @@ task Pester-Module -depends Init {
     $testResults = Invoke-Pester -Path $unitTests -PassThru -OutputFormat NUnitXml -OutputFile $testResultsFile
     # If in AppVeyor, upload test results
     if ($env:BHBuildSystem -eq 'AppVeyor') {
-        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", "$ProjectRoot\$testResultsFile")
+        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $testResultsFile)
     }
     if ($testResults.FailedCount -gt 0) {
         $testResults | Format-List
