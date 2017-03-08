@@ -46,7 +46,7 @@ function _InvokeNSRestApiGet {
 
     if ($Name.Count -gt 0) {
         foreach ($item in $Name) {
-            $response = _InvokeNSRestApi -Session $Session -Method Get -Type $Type -Resource $item -Action Get -Filters $Filters
+            $response = _InvokeNSRestApi -Session $Session -Method Get -Type $Type -Resource $item -Action Get -Filters $Filters -Arguments $Arguments
             if ($response.errorcode -ne 0) { throw $response }
             if ($Response.psobject.properties.name -contains $Type) {
                 $response.$Type

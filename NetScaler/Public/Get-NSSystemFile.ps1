@@ -52,15 +52,13 @@ function Get-NSSystemFile {
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0, ParameterSetName='get')]
+        [Parameter(Position=0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Name = @(),
 
         [Parameter(ParameterSetName='search')]
-
         [string]$Filename,
 
-        [Parameter(ParameterSetName='search')]
-
+        [Parameter(Mandatory)]
         [string]$FileLocation
     )
 
@@ -70,12 +68,11 @@ function Get-NSSystemFile {
 
     process {
         # Contruct a filter hash if we specified any filters
-        $Filters = @{}
+        $Filters = @{
+            filelocation = $FileLocation
+        }
         if ($PSBoundParameters.ContainsKey('Filename')) {
             $Filters['filename'] = $Filename
-        }
-        if ($PSBoundParameters.ContainsKey('FileLocation')) {
-            $Filters['filelocation'] = $FileLocation
         }
         _InvokeNSRestApiGet -Session $Session -Type systemfile -Name $Name -Arguments $Filters
     }
