@@ -32,7 +32,17 @@
         Default gateway to auto-provision the instane with
 
     .EXAMPLE
-        TODO
+        New-NSHyperVInstance.ps1 -Verbose -Package C:\temp\NSVPX-HyperV-11.1-50.10_nc.zip `
+            -VMName NSVPX-11-1 `
+            -SwitchName Labnet `
+            -NSIP 10.0.0.30 -DefaultGateway 10.0.0.254 `
+            -Path C:\temp\NSVPX-11-1 `
+            -Force
+
+        Create a new NetScaler Hyper-V VM named 'NSVPX-11-1' in directory 'c:\temp\NSVPX-11-1'
+        from the given VPX package. 
+        Auto-provision it with NSIP 10.0.0.30/24 default gateway 10.0.0.254 on switch 
+        'Labnet'. If the VM already exists, remove it first. 
 
     .NOTES
         Copyright 2017 Dominique Broeglin¨
