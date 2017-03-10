@@ -62,7 +62,7 @@ function Remove-NSLBMonitor {
                 try {
                     $m = Get-NSLBMonitor -Session $Session -Name $item
                     $params = @{
-                        type = $m.lbmonitor.type
+                        type = $m.type
                     }
                     _InvokeNSRestApi -Session $Session -Method DELETE -Type lbmonitor -Resource $item -Arguments $params -Action delete
                 } catch {
