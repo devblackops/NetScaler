@@ -44,7 +44,7 @@ function Add-NSSystemFile {
         Suppress confirmation when creating the system file (this does not override a
         pre-existing file).
 
-    .Notes
+    .NOTES
         Nitro implementation status: partial
     #>
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
