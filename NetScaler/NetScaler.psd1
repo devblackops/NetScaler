@@ -113,6 +113,7 @@ FunctionsToExport = @(
     'Get-NSDnsNameServer',
     'Get-NSDnsSuffix',
     'Get-NSFeature',
+    'Get-NSHANode',
     'Get-NSHardware',
     'Get-NSHostname',
     'Get-NSIP6Resource',

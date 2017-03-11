@@ -25,4 +25,14 @@ generator. The preferred approach now is to use a template base generator. The g
         "`$1`r`n$list`r`n`$2"))
 
 
+# Example code generation:
+
+    New-NSGet -Name HANode -Label "HA Node" -Filters ([ordered]@{ 
+        "Name"      = "name"
+        "IPAddress" = "ipaddress"
+        "State"     = "state"
+        "HAStatus"  = "hastatus"
+        "HASync"    = "hasync"
+        }) -ResourceIdParamName ID -Partial
+
 
