@@ -45,7 +45,7 @@ function Disconnect-NetScaler {
     try {
         Write-Verbose -Message 'Logging out of NetScaler'
         $params = @{
-            Uri =  "$($script:protocol)://$($Session.Endpoint)/nitro/v1/config/logout"
+            Uri = $Session.CreateUri("config", "logout")
             Body = ConvertTo-Json -InputObject @{logout = @{}}
             Method = 'POST'
             ContentType = 'application/json'

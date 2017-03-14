@@ -48,8 +48,8 @@ function Disable-NSFeature {
     param(
         $Session = $script:session,
 
-        [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
-        [string[]]$Name = (Read-Host -Prompt 'NetScaler feature'),
+        [parameter(Mandatory, ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
+        [string[]]$Name,
 
         [switch]$Force,
 

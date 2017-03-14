@@ -63,9 +63,9 @@ function _InvokeNSRestApi {
     )
 
     if ($Stat) {
-        $uri = "$($Script:protocol)://$($Session.Endpoint)/nitro/v1/stat/$Type"
+        $uri = $Session.CreateUri("stat", $Type)
     } else {
-        $uri = "$($Script:protocol)://$($Session.Endpoint)/nitro/v1/config/$Type"
+        $uri = $Session.CreateUri("config", $Type)
     }
 
     if (-not [string]::IsNullOrEmpty($Resource)) {
