@@ -11,7 +11,7 @@ Describe "Netscaler Connection" {
 
             Get-NSHostname
             Disconnect-Netscaler
-            { Get-NSHostname } | Should Throw "401 (Unauthorized)"
+            { Get-NSHostname } | Should Throw "Unauthorized"
         }
 
         It "should disconnect explicit session" {
@@ -19,7 +19,7 @@ Describe "Netscaler Connection" {
 
             Get-NSHostname -Session $Session
             Disconnect-Netscaler -Session $Session
-            { Get-NSHostname -Session $Session } | Should Throw "401 (Unauthorized)"
+            { Get-NSHostname -Session $Session } | Should Throw "Unauthorized"
         }
     }
 
