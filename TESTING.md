@@ -2,6 +2,8 @@
 
 ## Setup a test netscaler
 
+The following commands achieve a minimal NetScaler setup for testing purposes.
+
     $Nsip       = "172.16.124.11"
     $Snip       = "172.16.124.111"
     $DnsIp      = "172.16.124.1"
@@ -16,9 +18,9 @@
     Add-NSDnsNameServer -IPAddress $DnsIp
     Set-NSTimeZone -TimeZone "GMT+01:00-CET-Europe/Paris" -Force
     Save-NSConfig
-    (Invoke-Nitro -Action get -Type nshardware -Method get).nshardware.Hostname
+    (Get-NSHardware).host
 
     # Get a license with the _Host ID_
 
-    Install-NSLicense -Path /Users/dom/Downloads/FID__26d05285_157049a9857_1935.lic -Session $Session
-    Restart-NetScaler -Force
+    Install-NSLicense -Path /Users/dom/Downloads/my_downloaded_license.lic -Session $Session
+    Restart-NetScaler -Force -Wait
