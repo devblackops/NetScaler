@@ -132,7 +132,7 @@ function New-NSLBServiceGroup {
         value set by the set ns config command is used as client's IP header name.
         Minimum length = 1
 
-    .PARAMETER MaxBandwithKbps
+    .PARAMETER MaxBandwidthKbps
         Maximum bandwidth, in Kbps, allocated for all the services in the service group.
         Minimum value = 0
         Maximum value = 4294967287
@@ -179,7 +179,7 @@ function New-NSLBServiceGroup {
         [string]$ServiceType = 'HTTP',
 
         [ValidateRange(0, 4094)]
-        [int]$TrafficDomainId,
+        [int]$TrafficDomainId = 0,
 
         [ValidateSet('SERVER', 'FORWARD', 'TRANSPARENT', 'REVERSE')]
         [string]$CacheType,
@@ -232,7 +232,7 @@ function New-NSLBServiceGroup {
         [string]$ClientIPHeader,
 
         [ValidateRange(0, 4294967287)]
-        [int]$MaxBandwithKbps,
+        [int]$MaxBandwidthKbps,
 
         [ValidateRange(0, 65535)]
         [int]$MonitorThreshold,
@@ -292,8 +292,8 @@ function New-NSLBServiceGroup {
                     if ($ClientIP -eq 'ENABLED') {
                         $params.Add('cipheader', $ClientIPHeader)
                     }
-                    if ($PSBoundParameters.ContainsKey('MaxBandwithKbps')) {
-                        $params.Add('maxbandwidth', $MaxBandwithKbps)
+                    if ($PSBoundParameters.ContainsKey('MaxBandwidthKbps')) {
+                        $params.Add('maxbandwidth', $MaxBandwidthKbps)
                     }
                     if ($PSBoundParameters.ContainsKey('MonitorThreshold')) {
                         $params.Add('monthreshold', $MonitorThreshold)

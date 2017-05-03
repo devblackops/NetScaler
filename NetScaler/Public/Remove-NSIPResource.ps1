@@ -1,5 +1,5 @@
 <#
-Copyright 2015 Brandon Olin
+Copyright 2017 Juan C. Herrera
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Add-NSIPResource {
+function Remove-NSIPResource {
     <#
     .SYNOPSIS
-        Add an IP resource to the NetScaler appliance.
+        Remove an IP resource to the NetScaler appliance.
 
     .DESCRIPTION
-        Add an IP resource to the NetScaler appliance.
+        Remove an IP resource to the NetScaler appliance.
 
     .EXAMPLE
-        Add-NSIPResource -IPAddress '10.10.10.10' -SubNetMask '255.255.255.0'
+        Remove-NSIPResource -IPAddress '10.10.10.10' -SubNetMask '255.255.255.0'
 
-        Add IP address 10.10.10.10 to NetScaler.
-
-    .EXAMPLE
-        Add-NSIPResource -IPAddress 192.168.30.31 -SubnetMask 255.255.255.0 -Type SNIP -VServer -Telnet -FTP -SNMP -SSH -GUI
-
-        Add IP address 192.168.30.31 to NetScaler and disabled VServer,SSH, GUI and SNMP but enable but enable Telnet and FTP to Netscaler
+        Removes IP address 10.10.10.10 to NetScaler.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -71,36 +66,6 @@ function Add-NSIPResource {
         Default value: ENABLED
         Possible values = ENABLED, DISABLED
 
-    .PARAMETER Telnet
-        Use this option to set (enable or disable) the virtual server attribute for this IP address.
-
-        Default value: DISABLED
-        Possible values = ENABLED, DISABLED
-
-    .PARAMETER FTP
-        Use this option to set (enable or disable) the virtual server attribute for this IP address.
-
-        Default value: DISABLED
-        Possible values = ENABLED, DISABLED            
-
-    .PARAMETER GUI
-        Use this option to set (enable or disable) the virtual server attribute for this IP address.
-
-        Default value: ENABLED
-        Possible values = ENABLED, DISABLED
-
-    .PARAMETER SSH
-        Use this option to set (enable or disable) the virtual server attribute for this IP address.
-
-        Default value: ENABLED
-        Possible values = ENABLED, DISABLED        
-
-    .PARAMETER SNMP
-        Use this option to set (enable or disable) the virtual server attribute for this IP address.
-
-        Default value: ENABLED
-        Possible values = ENABLED, DISABLED        
-
     .PARAMETER MgmtAccess
         Allow access to management applications on this IP address.
 
@@ -114,27 +79,8 @@ function Add-NSIPResource {
         [parameter(Mandatory)]
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string[]]$IPAddress = (Read-Host -Prompt 'IP resource'),
-
-        [parameter(Mandatory)]
-        [ValidateScript({$_ -match [IPAddress]$_ })]
-        [string]$SubnetMask = (Read-Host -Prompt 'Subnet mask'),
-
-        [ValidateSet("SNIP", "VIP", "MIP", "NSIP", "GSLBsiteIP", "CLIP")]
-        [string]$Type = 'SNIP',
-
-        [switch]$VServer,
-
-        [switch]$Telnet,
-
-        [switch]$FTP,
-
-        [switch]$GUI,
-
-        [switch]$SSH,
-
-        [switch]$SNMP,
         
-        [switch]$MgmtAccess
+        [switch]$Force
     )
 
     begin {
@@ -143,21 +89,9 @@ function Add-NSIPResource {
 
     process {
         foreach ($item in $IPAddress) {
-            if ($PSCmdlet.ShouldProcess($item, 'Add IP resource')) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Remove IP resource')) {
                 try {
-                    $params = @{
-                        ipaddress = $ipaddress
-                        netmask = $SubnetMask
-                        type = $Type
-                        vserver = if ($PSBoundParameters.ContainsKey('VServer')) { 'ENABLED' } else { 'DISABLED' }
-                        telnet = if ($PSBoundParameters.ContainsKey('Telnet')) { 'DISABLED' } else { 'DISABLED' }
-                        ftp = if ($PSBoundParameters.ContainsKey('FTP')) { 'DISABLED' } else { 'DISABLED' }
-                        gui = if ($PSBoundParameters.ContainsKey('GUI')) { 'DISABLED' } else { 'ENABLED' }
-                        ssh = if ($PSBoundParameters.ContainsKey('SSH')) { 'DISABLED' } else { 'ENABLED' }
-                        snmp = if ($PSBoundParameters.ContainsKey('SNMP')) { 'DISABLED' } else { 'ENABLED' }
-                        mgmtaccess = if ($PSBoundParameters.ContainsKey('MgmtAccess')) { 'DISABLED' } else { 'ENABLED' }
-                    }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type nsip -Payload $params -Action add
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type nsip -Resource $item -Action delete
                 } catch {
                     throw $_
                 }

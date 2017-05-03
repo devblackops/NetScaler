@@ -49,10 +49,7 @@ function Disable-NSMode {
         $Session = $script:session,
 
         [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
-        [ValidateSet(
-                'bridgebpbus', 'cka', 'dradv', 'dradv6', 'edge', 'fr', 'iradv', 'l2', 'l3', 'mbf',
-                'pmtud', 'rise_apbr', 'rise_rhi', 'sradv', 'sradv6', 'tcpb', 'usip', 'usnip'
-        )]
+        [ValidateSet('bridgebpbus', 'cka', 'dradv', 'dradv6', 'edge', 'fr', 'iradv', 'l2', 'l3', 'mbf','pmtud', 'rise_apbr', 'rise_rhi', 'sradv', 'sradv6', 'tcpb', 'usip', 'usnip')]
         [string[]]$Name = (Read-Host -Prompt 'Netscaler mode'),
 
         [switch]$Force,

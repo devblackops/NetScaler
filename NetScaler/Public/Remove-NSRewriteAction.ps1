@@ -1,5 +1,5 @@
 <#
-Copyright 2015 Brandon Olin
+Copyright 2017 Juan C. Herrera
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,40 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSLBMonitor {
+function Remove-NSRewriteAction {
     <#
     .SYNOPSIS
-        Removes a load balancer monitor.
+        Removes a rewrite action.
 
     .DESCRIPTION
-        Removes a load balancer monitor.
+        Removes a rewrite action.
 
     .EXAMPLE
-        Remove-NSLBMonitor -Name 'monitor01'
+        Remove-NSRewriteAction -Name 'act-redirect'
 
-        Removes the load balancer monitor named 'monitor01'.
+        Removes the rewrite action named 'act-redirect'.
 
     .EXAMPLE
-        'monitor01', 'monitor02' | Remove-NSLBMonitor
-
-        Removes the load balancer monitors named 'monitor01' and 'monitor02'.
+        'act-1', 'act-2' | Remove-NSRewriteAction
+    
+        Removes the rewrite action named 'act-1' and 'act-2'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the load balancer monitor to get.
+        The name or names of the rewrite actions to remove.
 
     .PARAMETER Force
-        Suppress confirmation when removing a load balancer monitor.
+        Suppress confirmation when removing a rewrite action.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [Alias('MonitorName')]
-        [string[]]$Name = (Read-Host -Prompt 'Monitor name'),
+        [string[]]$Name,
 
         [switch]$Force
     )
@@ -58,12 +57,9 @@ function Remove-NSLBMonitor {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Monitor')) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete Rewrite Action')) {
                 try {
-                    $params = @{
-                        monitorname = $Name
-                    }
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type lbmonitor -Resource $item -Arguments $params -Action delete
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type rewriteaction -Resource $item -Action delete
                 } catch {
                     throw $_
                 }

@@ -33,15 +33,18 @@ function Set-NSLBVirtualServer {
         Sets the comment for virtual server 'vserver01' and returns the updated object.
 
     .EXAMPLE
-        Set-NSLBVirtualServer -Name 'vserver01' -IPAddress '11.11.11.11' -Force
+        Set-NSLBVirtualServer -Name 'vserver01' -IPAddress '11.11.11.11' -HttpRedirectURL "http://google.com" -Force
     
-        Sets the IP address for virtual server 'vserver01' to '11.11.11.11' and suppresses confirmation.
+        Sets the IP address for virtual server 'vserver01' to '11.11.11.11' with a redirect to Google.com in case the backend services/service group are not available and suppresses confirmation.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
         The name or names of the load balancer virtual servers to set.
+
+    .PARAMETER PersistenceType
+        The type of persistence for the virtual server. Possible values = SOURCEIP, COOKIEINSERT, SSLSESSION, RULE, URLPASSIVE, CUSTOMSERVERID, DESTIP, SRCIPDESTIP, CALLID, RTSPSID, DIAMETER, NONE    
 
     .PARAMETER LBMethod
         The load balancing method of the virtual server.
@@ -51,6 +54,15 @@ function Set-NSLBVirtualServer {
 
     .PARAMETER Comment
         The comment associated with the virtual server.
+
+    .PARAMETER HttpRedirectURL
+        The URL to which to redirect traffic if the virtual server becomes unavailable. 
+
+    .PARAMETER ICMPVSRResponse
+        The URL to which to redirect traffic if the virtual server becomes unavailable. The dfault value is "Passive"
+
+    .PARAMETER TimeOut
+        The time period for which a persistence session is in effect. The default value is 2 seconds.                
 
     .PARAMETER Force
         Suppress confirmation when updating a virtual server.
@@ -68,11 +80,28 @@ function Set-NSLBVirtualServer {
         [ValidateSet('ROUNDROBIN', 'LEASTCONNECTION', 'LEASTRESPONSETIME', 'LEASTBANDWIDTH', 'LEASTPACKETS', 'CUSTOMLOAD', 'LRTM', 'URLHASH', 'DOMAINHASH', 'DESTINATIONIPHASH', 'SOURCEIPHASH', 'TOKEN', 'SRCIPDESTIPHASH', 'SRCIPSRCPORTHASH', 'CALLIDHASH')]
         [string]$LBMethod = 'ROUNDROBIN',
 
+        [Parameter()]
+        [ValidateSet('SOURCEIP', 'COOKIEINSERT', 'SSLSESSION', 'CUSTOMSERVERID', 'RULE', 'URLPASSIVE', 'DESTIP', 'SRCIPDESTIP', 'CALLID' ,'RTSPID', 'FIXSESSION', 'NONE')]
+        [string]
+        $PersistenceType,        
+
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string]$IPAddress,
 
+        [Parameter()]
+        [string]
+        $HttpRedirectURL,     
+
+        [Parameter()]
         [ValidateLength(0, 256)]
         [string]$Comment = '',
+
+        [Parameter()]
+        [ValidateLength(0, 256)]
+        [string]$ICMPVSRResponse = 'PASSIVE',
+
+        [Parameter()]
+        [int]$TimeOut = 2,
 
         [Switch]$Force,
 
@@ -88,16 +117,24 @@ function Set-NSLBVirtualServer {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Edit Virtual Server')) {
                 $params = @{
                     name = $item
+                    timeout = $TimeOut
+                    icmpvsrresponse = $ICMPVSRResponse
                 }
                 if ($PSBoundParameters.ContainsKey('LBMethod')) {
                     $params.Add('lbmethod', $LBMethod)
                 }
+                if ($PSBoundParameters.ContainsKey('PersistenceType')) {
+                    $params.Add('persistencetype', $PersistenceType)
+                }                
                 if ($PSBoundParameters.ContainsKey('Comment')) {
                     $params.Add('comment', $Comment)
                 }
                 if ($PSBoundParameters.ContainsKey('IPAddress')) {
                     $params.Add('ipv46', $IPAddress)
                 }
+                if ($PSBoundParameters.ContainsKey('HttpRedirectURL')) {
+                    $params.Add('redirurl', $HttpRedirectURL)
+                }                         
 
                 _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver -Payload $params -Action update
 

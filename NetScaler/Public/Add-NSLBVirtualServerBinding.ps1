@@ -70,11 +70,11 @@ function Add-NSLBVirtualServerBinding {
         [parameter(Mandatory)]
         [string]$VirtualServerName = (Read-Host -Prompt 'LB virtual server name'),
 
-        [parameter(Mandatory, ParameterSetName='servicegroup')]
-        [string]$ServiceGroupName,
+        [parameter(ParameterSetName='servicegroup')]
+        [string]$ServiceGroupName = $null,
 
-        [parameter(Mandatory, ParameterSetName='serviceservice')]
-        [string]$ServiceName,
+        [parameter(ParameterSetName='serviceservice')]
+        [string]$ServiceName = $null,
 
         [ValidateRange(1, 100)]
         [int]$Weight = 1,

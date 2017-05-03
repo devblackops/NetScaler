@@ -109,15 +109,10 @@ function New-NSLBVirtualServer {
         * FIXSESSION - Connections that have the same SenderCompID and TargetCompID values belong to the same persistence session.
         Possible values = SOURCEIP, COOKIEINSERT, SSLSESSION, RULE, URLPASSIVE, CUSTOMSERVERID, DESTIP, SRCIPDESTIP, CALLID, RTSPSID, DIAMETER, FIXSESSION, NONE
 
-    .PARAMETER RedirectFromPort
-        Port number for the virtual server, from which we absorb the traffic for http redirect.
-        Minimum value = 1
-        Range 1 - 65535
-
     .PARAMETER HTTPSRedirectURL
         URL to which to redirect traffic if the traffic is recieved from redirect port.
 
-    .PARAMETER ICMPVSResponse
+    .PARAMETER ICMPVSRResponse
         How the NetScaler appliance responds to ping requests received for an IP address that is common to one or more virtual servers. Available settings function as follows:
         * If set to PASSIVE on all the virtual servers that share the IP address, the appliance always responds to the ping requests.
         * If set to ACTIVE on all the virtual servers that share the IP address, the appliance responds to the ping requests if at least one of the virtual servers is UP. Otherwise, the appliance does not respond.
@@ -164,22 +159,16 @@ function New-NSLBVirtualServer {
         $PersistenceType,
 
         [Parameter()]
-        [ValidateRange(1, 65535)]
-        [int]
-        $RedirectFromPort,
-
-        [Parameter()]
-        [string]
-        $HTTPSRedirectURL,
-
-        [Parameter()]
         [ValidateSet('PASSIVE', 'ACTIVE')]
         [string]
-        $ICMPVSResponse = 'PASSIVE',
+        $ICMPVSRResponse = 'PASSIVE',        
 
         [Parameter()]
-        [int]
-        $Timeout,
+        [string]
+        $HTTPRedirectURL,
+
+        [Parameter()]
+        [int]$TimeOut = 2,        
 
         [Switch]$PassThru
     )
@@ -199,24 +188,17 @@ function New-NSLBVirtualServer {
                         ipv46 = $IPAddress
                         port = $Port
                         lbmethod = $LBMethod
-                        icmpvsrresponse = $ICMPVSResponse
+                        icmpvsrresponse = $ICMPVSRResponse
+                        timeout = $TimeOut
                     }
 
                     if ($PSBoundParameters.ContainsKey('PersistenceType')) {
                         $params.Add('persistencetype', $PersistenceType)
                     }
 
-                    if ($PSBoundParameters.ContainsKey('RedirectFromPort')) {
-                        $params.Add('redirectfromport', $RedirectFromPort)
-                    }
-
-                    if ($PSBoundParameters.ContainsKey('HTTPSRedirectURL')) {
-                        $params.Add('httpsredirecturl', $HTTPSRedirectURL)
-                    }
-
-                    if ($PSBoundParameters.ContainsKey('Timeout')) {
-                        $params.Add('timeout', $Timeout)
-                    }
+                    if ($PSBoundParameters.ContainsKey('HTTPRedirectURL')) {
+                        $params.Add('redirurl', $HTTPRedirectURL)
+                    }              
 
                     _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action add
 

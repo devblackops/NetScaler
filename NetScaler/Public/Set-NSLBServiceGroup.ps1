@@ -25,7 +25,7 @@ function Set-NSLBServiceGroup {
     .EXAMPLE
         Set-NSLBServiceGroup -Name 'sg01' -Comment 'This is a comment'
 
-        Sets the comment for virtual server 'sg01'.
+        Updates the comment for virtual server 'sg01'.
 
     .EXAMPLE
         Set-NSLBServiceGroup -Name 'sg01' HTTPCompression = 'ON'
@@ -33,7 +33,7 @@ function Set-NSLBServiceGroup {
         Enable the HTTP compression feature for service group 'sg01'.
 
     .EXAMPLE
-        Set-NSLBServiceGroup -Name 'sg01' MaxBandwithKbps 819200
+        Set-NSLBServiceGroup -Name 'sg01' MaxBandwidthKbps 819200
 
         Set the maximum bandwidth for service group 'sg01' to 819200 Kbps.
 
@@ -42,6 +42,16 @@ function Set-NSLBServiceGroup {
 
     .PARAMETER Name
         The name or names of the service groups to update.
+
+    .PARAMETER State
+        Initial state of the service group.
+        Default value: ENABLED
+        Possible values = ENABLED, DISABLED      
+
+    .PARAMETER AutoScale
+        Auto scale option for a servicegroup.
+        Default value: DISABLED
+        Possible values = DISABLED, DNS, POLICY
 
     .PARAMETER Cacheable
         Use the transparent cache redirection virtual server to forward the request to the cache server.
@@ -79,10 +89,7 @@ function Set-NSLBServiceGroup {
     .PARAMETER ClientIP
         Insert the Client IP header in requests forwarded to the service.
 
-    .PARAMETER ClientIPHeader
-        Name of the HTTP header whose value must be set to the IP address of the client.
-
-    .PARAMETER MaxBandwithKbps
+    .PARAMETER MaxBandwidthKbps
         Maximum bandwidth, in Kbps, allocated for all the services in the service group.
 
     .PARAMETER MonitorThreshold
@@ -110,12 +117,20 @@ function Set-NSLBServiceGroup {
     param(
         $Session = $script:session,
 
-        [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
-        [Alias('ServiceGroupName')]
+        [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Name = (Read-Host -Prompt 'LB service group name'),
+
+        [ValidateSet('SERVER', 'FORWARD', 'TRANSPARENT', 'REVERSE')]
+        [string]$CacheType,
+
+        [ValidateSet('DISABLED', 'DNS', 'POLICY')]
+        [string]$AutoScale = 'DISABLED',
 
         [ValidateSet('NO', 'YES')]
         [string]$Cacheable = 'NO',
+
+        [ValidateSet('ENABLED', 'DISABLED')]
+        [string]$State = 'ENABLED',
 
         [ValidateSet('NO', 'YES')]
         [string]$HealthMonitor = 'YES',
@@ -123,7 +138,8 @@ function Set-NSLBServiceGroup {
         [ValidateSet('DISABLED', 'ENABLED')]
         [string]$AppFlowLog = 'ENABLED',
 
-        [string]$Comment,
+        [ValidateLength(0, 256)]
+        [string]$Comment = [string]::Empty,
 
         [ValidateSet('ON', 'OFF')]
         [string]$SureConnect = 'OFF',
@@ -140,6 +156,9 @@ function Set-NSLBServiceGroup {
         [ValidateSet('YES','NO')]
         [string]$UseClientIP = 'NO',
 
+        [ValidateSet('YES','NO')]
+        [string]$ClientKeepAlive = 'NO',
+
         [ValidateSet('YES', 'NO')]
         [string]$TCPBuffering = 'NO',
 
@@ -149,10 +168,8 @@ function Set-NSLBServiceGroup {
         [ValidateSet('ENABLED','DISABLED')]
         [string]$ClientIP = 'DISABLED',
 
-        [string]$ClientIPHeader,
-
         [ValidateRange(0, 4294967287)]
-        [int]$MaxBandwithKbps,
+        [int]$MaxBandwidthKbps,
 
         [ValidateRange(0, 65535)]
         [int]$MonitorThreshold,
@@ -169,7 +186,7 @@ function Set-NSLBServiceGroup {
         [ValidateRange(0, 31536000)]
         [int]$ServerIdleTimeout = 360,
 
-        [Switch]$Force,
+        [Switch]$Force,        
 
         [Switch]$PassThru
     )
@@ -183,10 +200,17 @@ function Set-NSLBServiceGroup {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Edit Service Group')) {
                 $params = @{
                     servicegroupname = $item
-                }
+                    state = $State
+                }                          
+                if ($PSBoundParameters.ContainsKey('CacheType')) {
+                    $params.Add('cachetype', $CacheType)
+                }                
                 if ($PSBoundParameters.ContainsKey('Cacheable')) {
                     $params.Add('cacheable', $Cacheable)
                 }
+                if ($PSBoundParameters.ContainsKey('AutoScale')) {
+                    $params.Add('autoScale', $AutoScale)
+                }                
                 if ($PSBoundParameters.ContainsKey('HealthMonitor')) {
                     $params.Add('healthmonitor', $HealthMonitor)
                 }
@@ -211,6 +235,9 @@ function Set-NSLBServiceGroup {
                 if ($PSBoundParameters.ContainsKey('UseClientIP')) {
                     $params.Add('usip', $UseClientIP)
                 }
+                if ($PSBoundParameters.ContainsKey('ClientKeepAlive')) {
+                    $params.Add('cka', $ClientKeepAlive)
+                }
                 if ($PSBoundParameters.ContainsKey('TCPBuffering')) {
                     $params.Add('tcpb', $TCPBuffering)
                 }
@@ -220,11 +247,8 @@ function Set-NSLBServiceGroup {
                 if ($PSBoundParameters.ContainsKey('ClientIP')) {
                     $params.Add('cip', $ClientIP)
                 }
-                if ($ClientIP -eq 'ENABLED') {
-                    $params.Add('cipheader', $ClientIPHeader)
-                }
-                if ($PSBoundParameters.ContainsKey('MaxBandwithKbps')) {
-                    $params.Add('maxbandwitch', $MaxBandwithKbps)
+                if ($PSBoundParameters.ContainsKey('MaxBandwidthKbps')) {
+                    $params.Add('maxbandwidth', $MaxBandwidthKbps)
                 }
                 if ($PSBoundParameters.ContainsKey('MonitorThreshold')) {
                     $params.Add('monthreshold', $MonitorThreshold)

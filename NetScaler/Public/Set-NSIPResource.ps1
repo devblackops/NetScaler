@@ -1,5 +1,5 @@
 <#
-Copyright 2015 Brandon Olin
+Copyright 2017 Juan C. Herrera
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Add-NSIPResource {
+function Set-NSIPResource {
     <#
     .SYNOPSIS
-        Add an IP resource to the NetScaler appliance.
+        Updates an IP resource to the NetScaler appliance.
 
     .DESCRIPTION
-        Add an IP resource to the NetScaler appliance.
+        Updates an IP resource to the NetScaler appliance.
 
     .EXAMPLE
-        Add-NSIPResource -IPAddress '10.10.10.10' -SubNetMask '255.255.255.0'
+        Set-NSIPResource -IPAddress '10.10.10.10' -SubNetMask '255.255.255.0'
 
-        Add IP address 10.10.10.10 to NetScaler.
+        Updates IP address 10.10.10.10 to NetScaler.
 
     .EXAMPLE
-        Add-NSIPResource -IPAddress 192.168.30.31 -SubnetMask 255.255.255.0 -Type SNIP -VServer -Telnet -FTP -SNMP -SSH -GUI
+        Set-NSIPResource -IPAddress 192.168.30.31 -SubnetMask 255.255.255.0 -Type SNIP -VServer -Telnet -FTP -SNMP -SSH -GUI
 
-        Add IP address 192.168.30.31 to NetScaler and disabled VServer,SSH, GUI and SNMP but enable but enable Telnet and FTP to Netscaler
+        Updates settings for IP address 192.168.30.31 to NetScaler and disabled VServer,SSH, GUI and SNMP but enable but enable Telnet and FTP to Netscaler
 
     .PARAMETER Session
         The NetScaler session object.
@@ -119,9 +119,6 @@ function Add-NSIPResource {
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string]$SubnetMask = (Read-Host -Prompt 'Subnet mask'),
 
-        [ValidateSet("SNIP", "VIP", "MIP", "NSIP", "GSLBsiteIP", "CLIP")]
-        [string]$Type = 'SNIP',
-
         [switch]$VServer,
 
         [switch]$Telnet,
@@ -148,16 +145,15 @@ function Add-NSIPResource {
                     $params = @{
                         ipaddress = $ipaddress
                         netmask = $SubnetMask
-                        type = $Type
                         vserver = if ($PSBoundParameters.ContainsKey('VServer')) { 'ENABLED' } else { 'DISABLED' }
                         telnet = if ($PSBoundParameters.ContainsKey('Telnet')) { 'DISABLED' } else { 'DISABLED' }
                         ftp = if ($PSBoundParameters.ContainsKey('FTP')) { 'DISABLED' } else { 'DISABLED' }
                         gui = if ($PSBoundParameters.ContainsKey('GUI')) { 'DISABLED' } else { 'ENABLED' }
                         ssh = if ($PSBoundParameters.ContainsKey('SSH')) { 'DISABLED' } else { 'ENABLED' }
                         snmp = if ($PSBoundParameters.ContainsKey('SNMP')) { 'DISABLED' } else { 'ENABLED' }
-                        mgmtaccess = if ($PSBoundParameters.ContainsKey('MgmtAccess')) { 'DISABLED' } else { 'ENABLED' }
+                        mgmtaccess = if ($PSBoundParameters.ContainsKey('MgmtAccess')) { 'ENABLED' } else { 'DISABLED' }
                     }
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type nsip -Payload $params -Action add
+                    $response = _InvokeNSRestApi -Session $Session -Method PUT -Type nsip -Payload $params -Action update
                 } catch {
                     throw $_
                 }

@@ -1,5 +1,5 @@
 <#
-Copyright 2016 Dominique Broeglin
+Copyright 2017 Juan C. Herrera
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function New-NSResponderPolicy {
+function Set-NSResponderPolicy {
     <#
     .SYNOPSIS
-        Adds a responder policy.
+        Updates a responder policy.
 
     .DESCRIPTION
-        Adds a responder policy.
+        Updates a responder policy.
 
     .EXAMPLE
-        New-NSResponderPolicy -Name 'act-redirect' -Rule 'HTTP.REQ.URL.EQ("/")' -Action 'Redirect act'
+        Set-NSResponderPolicy -Name 'act-redirect' -Rule 'HTTP.REQ.URL.EQ("/")' -Action 'Redirect act'
 
-        Creates a new responder policy which uses the 'Redirect act' responder action
+        Updates a responder policy which uses the 'Redirect act' responder action
 
     .PARAMETER Session
         The NetScaler session object.
@@ -42,11 +42,8 @@ function New-NSResponderPolicy {
         * RESET - Reset the client connection by closing it. The client program, such as a browser, will handle this and may inform the user. The client may then resend the request if desired.
         * DROP - Drop the request without sending a response to the user.
 
-    .PARAMETER Comment
-        Adds a comment to the Responder Policy.
-
     .PARAMETER Passthru
-        Return the newly created responder policy.
+        Return the responder policy.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     param(
@@ -55,11 +52,13 @@ function New-NSResponderPolicy {
         [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Name,
 
-        [Parameter(Mandatory=$True)]
-        [string]$Rule,
+        [Parameter()]
+        [string]
+        $Rule,
 
-        [Parameter(Mandatory=$True)]
-        [string]$Action,
+        [Parameter()]
+        [string]
+        $Action,
 
         [Parameter()]
         [string]$Comment,
@@ -73,14 +72,15 @@ function New-NSResponderPolicy {
 
     process {
         foreach ($Item in $Name) {
-            if ($PSCmdlet.ShouldProcess($Item, 'Create Responder Policy')) {
+            if ($PSCmdlet.ShouldProcess($Item, 'Update Responder Policy')) {
                 try {
                     $params = @{
                         name = $Item
                         rule = $Rule
                         action = $Action
+                        comment = $Comment
                     }
-                    _InvokeNSRestApi -Session $Session -Method POST -Type responderpolicy -Payload $params -Action add
+                    _InvokeNSRestApi -Session $Session -Method PUT -Type responderpolicy -Payload $params -Action update
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSResponderPolicy -Session $session -Name $item
