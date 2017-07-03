@@ -1,5 +1,5 @@
 <#
-Copyright 2015 Juan C. Herrera
+Copyright 2017 Juan C. Herrera
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,20 +17,20 @@ limitations under the License.
 function Remove-NSLBServiceGroupMemberBinding {
     <#
     .SYNOPSIS
-        Disassociates a load balancer server to a service group.
+        Disassociates a server from a service group.
 
     .DESCRIPTION
-        Disassociates a load balancer server to a service group.
+        Disassociates a server from a service group.
 
     .EXAMPLE
-        Remove-NSLBServiceGroupMember -Name 'sg01' -ServerName 'server01'
+        Remove-NSLBServiceGroupMember -Name 'sg01' -ServerName 'server01' -Port 80
 
         Disassociates server 'server01' from service group 'sg01'
 
     .EXAMPLE
-        $x = Remove-NSLBServiceGroupMember -Name 'sg01' -ServerName 'server01' -State 'DISABLED' -PassThru
+        $x = Remove-NSLBServiceGroupMember -Name 'sg01' -ServerName 'server01' -Port 80 -PassThru
     
-        Associates server 'server01' with service group 'sg01' initially in a DISABLED state and return the object.
+        Disassociates server 'server01' with service group 'sg01' and return the object.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -49,26 +49,6 @@ function Remove-NSLBServiceGroupMemberBinding {
 
         Range 1 - 65535
 
-    .PARAMETER Weight
-        Weight to assign to the servers in the service group. 
-        Specifies the capacity of the servers relative to the other servers in the load balancing configuration. 
-        The higher the weight, the higher the percentage of requests sent to the service.
-
-        Minimum value = 1
-        Maximum value = 100
-
-    .PARAMETER ServerId
-        The identifier for the service. This is used when the persistency type is set to Custom Server ID.
-
-    .PARAMETER HashId
-        The hash identifier for the service. This must be unique for each service. 
-        This parameter is used by hash based load balancing methods.
-
-        Minimum value = 1
-
-    .PARAMETER State
-        The initial state of the server in the service group.
-
     .PARAMETER Passthru
         Return the service group binding object.
     #>
@@ -77,29 +57,18 @@ function Remove-NSLBServiceGroupMemberBinding {
         $Session = $script:session,
 
         [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
-        [Alias('ServiceGroupName')]
         [string[]]$Name,
 
         [Parameter(Mandatory)]
         [string[]]$ServerName,
 
+        [Parameter(Mandatory)]
+        [ValidateRange(1, 65535)]
+        [int]$Port,
+
         [parameter()]
         [ValidateScript({$_ -match [IPAddress]$_ })]
-        [string]$IPAddress,
-
-        [ValidateRange(1, 65535)]
-        [int]$Port = 80,
-
-        [ValidateRange(1, 100)]
-        [int]$Weight = 1,
-
-        [int]$ServerId,
-
-        [ValidateRange(1, [int]::MaxValue)]
-        [int]$HashId,
-
-        [ValidateSet('ENABLED', 'DISABLED')]
-        [string]$State = 'ENABLED',
+        [string]$IPAddress,        
 
         [switch]$PassThru
     )
@@ -115,14 +84,14 @@ function Remove-NSLBServiceGroupMemberBinding {
                     try {
                         $params = @{
                             servicegroupname = $item
-                            servername = $member
-                            ip = $IPAddress
+                            servername = $ServerName
                             port = $Port
-                            weight = $Weight
-                            hashid = $HashId
-                            state = $State
-                        }
-                        _InvokeNSRestApi -Session $Session -Method DELETE -Type servicegroup_servicegroupmember_binding -Payload $params -Action delete
+                        }                     
+                        if ($PSBoundParameters.ContainsKey('ip')) {
+                            $params.ip = $IPAddress
+                        } 
+
+                        _InvokeNSRestApi -Session $Session -Method DELETE -Type servicegroup_servicegroupmember_binding -Resource $item -Arguments $params -Action delete
 
                         if ($PSBoundParameters.ContainsKey('PassThru')) {
                             return Get-NSLBServiceGroupMemberBinding -Session $session -Name $item
@@ -135,4 +104,3 @@ function Remove-NSLBServiceGroupMemberBinding {
         }
     }
 }
-

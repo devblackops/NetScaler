@@ -52,7 +52,7 @@ function Add-NSVLANInterfaceBinding {
         [parameter(Mandatory, ValueFromPipeline)]
         [string[]]$Interface,
 
-        [parameter(Mandatory)]    
+        [parameter()]    
         [switch]$Tagged,
 
         [switch]$Force

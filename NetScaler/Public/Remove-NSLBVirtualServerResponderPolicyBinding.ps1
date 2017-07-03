@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Add-NSLBVirtualServerResponderPolicyBinding {
+function Remove-NSLBVirtualServerResponderPolicyBinding {
      <#
     .SYNOPSIS
         Adds a new load balancer responder policy binding.
@@ -90,7 +90,7 @@ function Add-NSLBVirtualServerResponderPolicyBinding {
                     priority = $Priority
                 }
 
-                _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver_responderpolicy_binding -Payload $params
+                _InvokeNSRestApi -Session $Session -Method DELETE -Type lbvserver_responderpolicy_binding -Resource $VirtualServerName -Arguments $params -Action delete
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
                     return Get-NSLBVirtualServerResponderPolicyBinding -Session $Session -Name $VirtualServerName

@@ -96,11 +96,11 @@ function New-NSRewritePolicy {
             if ($PSCmdlet.ShouldProcess($Item, 'Create rewrite policy')) {
                 try {
                     $params = @{
-                        name                = $Item
-                        action              = $ActionName
-                        comment             = $Comment
-                        logaction           = $LogActionName
-                        rule                = $Rule
+                        name = $Item
+                        action = $ActionName
+                        comment = $Comment
+                        logaction = $LogActionName
+                        rule = $Rule
                     }
                     _InvokeNSRestApi -Session $Session -Method POST -Type rewritepolicy -Payload $params -Action add
 

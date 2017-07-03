@@ -83,16 +83,16 @@ function New-NSLBServiceGroupMember {
         [ValidateRange(1, 65535)]
         [int]$Port = 80,
 
+        [ValidateSet('ENABLED', 'DISABLED')]
+        [string]$State = 'ENABLED',
+
         [ValidateRange(1, 100)]
         [int]$Weight = 1,
 
-        [int]$ServerId,
+        [int]$ServerId = 0,
 
         [ValidateRange(1, [int]::MaxValue)]
-        [int]$HashId,
-
-        [ValidateSet('ENABLED', 'DISABLED')]
-        [string]$State = 'ENABLED',
+        [int]$HashId = 0,
 
         [switch]$PassThru
     )
@@ -110,8 +110,10 @@ function New-NSLBServiceGroupMember {
                             servicegroupname = $item
                             servername = $member
                             port = $Port
+                            state = $State                            
                             weight = $Weight
-                            state = $State
+                            serverid = $ServerId
+                            hashid = $Hashid
                         }
                         _InvokeNSRestApi -Session $Session -Method POST -Type servicegroup_servicegroupmember_binding -Payload $params -Action add
 
