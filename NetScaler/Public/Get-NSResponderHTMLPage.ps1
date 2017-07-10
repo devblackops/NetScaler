@@ -1,5 +1,5 @@
 <#
-Copyright 2017 Juan Herrera
+Copyright 2017 Juan C. Herrera
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,20 +17,15 @@ limitations under the License.
 function Get-NSResponderHTMLPage {
     <#
     .SYNOPSIS
-        Add server certificate to NetScaler appliance.
+        Retrieve a responder HTML page from the NetScaler appliance.
 
     .DESCRIPTION
-        Add server certificate to NetScaler appliance.
+        Retrieve a responder HTML page from the NetScaler appliance.
 
     .EXAMPLE
-        Add-NSCertKeyPair -CertKeyName 'myrootCA' -CertPath '/nsconfig/ssl/mycertificate.cert' -CertKeyFormat 'PEM'
+        Get-NSResponderHTMLPage -Name 'myHTMLpage'
 
         Creates a root certificate key pair named 'myrootCA' using the PEM formatted certificate 'mycertificate.cert' located on the appliance.
-
-    .EXAMPLE
-        Add-NSCertKeyPair -CertKeyName 'mywildcardcert' -CertPath '/nsconfig/ssl/mywildcard.cert' -KeyPath '/nsconfig/ssl/mywildcard.key' -CertKeyFormat 'PEM'
-
-        Creates a certificate key pair named 'mywildardcert' using the PEM formatted certificate 'mywildcard.cert' and 'mywildcard.key' key file located on the appliance.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -51,21 +46,6 @@ function Get-NSResponderHTMLPage {
     begin {
         _AssertSessionActive
     }
-
-#     process {
-#         if ($PSCmdlet.ShouldProcess($Name, 'Add a HTML Responder page')) {
-#             try {
-#                  $params = @{
-#                     name = $Name
-#                 }
-#                 $response = _InvokeNSRestApi  -Session $Session -Method GET -Type responderhtmlpage -Payload $params -Action get
-#             } catch {
-#                 throw $_
-#             }
-#         }
-#     }
-# }
-
 
     process {
         # Contruct a filter hash if we specified any filters

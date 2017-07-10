@@ -17,7 +17,7 @@ limitations under the License.
 function Remove-NSDnsNameServer {
     <#
     .SYNOPSIS
-        Remove a domain name server from NetScaler appliance.
+        Removes a domain name server from NetScaler appliance.
 
     .DESCRIPTION
         Remove a domain name server from NetScaler appliance.

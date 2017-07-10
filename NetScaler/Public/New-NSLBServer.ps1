@@ -113,11 +113,11 @@ function New-NSLBServer {
                     $params = @{
                         name = $item
                         comment = $Comment
-                        td = $TrafficDomainId
+                        ipaddress = $IPAddress
                         state = $State
                     }
-                    if ($PSBoundParameters.ContainsKey('IPAddress')) {
-                        $params.Add('ipaddress', $IPAddress)
+                    if ($PSBoundParameters.ContainsKey('TrafficDomainId')) {
+                        $params.Add('td', $TrafficDomainId)
                     }
                     if ($PSBoundParameters.ContainsKey('Domain')) {
                         $params.Add('domain', $Domain)
