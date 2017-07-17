@@ -29,12 +29,12 @@ function Set-NSLBVirtualServer {
 
     .EXAMPLE
         Set-NSLBVirtualServer -Name 'vserver01' -Comment 'this is a comment' -PassThru
-    
+
         Sets the comment for virtual server 'vserver01' and returns the updated object.
 
     .EXAMPLE
         Set-NSLBVirtualServer -Name 'vserver01' -IPAddress '11.11.11.11' -HttpRedirectURL "http://google.com" -Force
-    
+
         Sets the IP address for virtual server 'vserver01' to '11.11.11.11' with a redirect to Google.com in case the backend services/service group are not available and suppresses confirmation.
 
     .PARAMETER Session
@@ -44,7 +44,7 @@ function Set-NSLBVirtualServer {
         The name or names of the load balancer virtual servers to set.
 
     .PARAMETER PersistenceType
-        The type of persistence for the virtual server. Possible values = SOURCEIP, COOKIEINSERT, SSLSESSION, RULE, URLPASSIVE, CUSTOMSERVERID, DESTIP, SRCIPDESTIP, CALLID, RTSPSID, DIAMETER, NONE    
+        The type of persistence for the virtual server. Possible values = SOURCEIP, COOKIEINSERT, SSLSESSION, RULE, URLPASSIVE, CUSTOMSERVERID, DESTIP, SRCIPDESTIP, CALLID, RTSPSID, DIAMETER, NONE
 
     .PARAMETER LBMethod
         The load balancing method of the virtual server.
@@ -56,13 +56,22 @@ function Set-NSLBVirtualServer {
         The comment associated with the virtual server.
 
     .PARAMETER HttpRedirectURL
-        The URL to which to redirect traffic if the virtual server becomes unavailable. 
+        The URL to which to redirect traffic if the virtual server becomes unavailable.
 
     .PARAMETER ICMPVSRResponse
         The URL to which to redirect traffic if the virtual server becomes unavailable. The dfault value is "Passive"
 
     .PARAMETER TimeOut
-        The time period for which a persistence session is in effect. The default value is 2 seconds.                
+        The time period for which a persistence session is in effect. The default value is 2 seconds.
+
+    .PARAMETER ClientTimeout
+        Idle time, in seconds, after which a client connection is terminated.
+        Minimum value = 0
+        Maximum value = 31536000
+
+    .PARAMETER BackupVServer
+        Name of the backup virtual server to which to forward requests if the primary virtual server goes DOWN or reaches its spillover threshold.
+        Minimum length = 1
 
     .PARAMETER Force
         Suppress confirmation when updating a virtual server.
@@ -83,14 +92,14 @@ function Set-NSLBVirtualServer {
         [Parameter()]
         [ValidateSet('SOURCEIP', 'COOKIEINSERT', 'SSLSESSION', 'CUSTOMSERVERID', 'RULE', 'URLPASSIVE', 'DESTIP', 'SRCIPDESTIP', 'CALLID' ,'RTSPID', 'FIXSESSION', 'NONE')]
         [string]
-        $PersistenceType,        
+        $PersistenceType,
 
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string]$IPAddress,
 
         [Parameter()]
         [string]
-        $HttpRedirectURL,     
+        $HttpRedirectURL,
 
         [Parameter()]
         [ValidateLength(0, 256)]
@@ -102,6 +111,13 @@ function Set-NSLBVirtualServer {
 
         [Parameter()]
         [int]$TimeOut = 2,
+
+        [Parameter()]
+        [int]$ClientTimeout,
+
+        [Parameter()]
+        [string]
+        $BackupVServer,
 
         [Switch]$Force,
 
@@ -125,7 +141,7 @@ function Set-NSLBVirtualServer {
                 }
                 if ($PSBoundParameters.ContainsKey('PersistenceType')) {
                     $params.Add('persistencetype', $PersistenceType)
-                }                
+                }
                 if ($PSBoundParameters.ContainsKey('Comment')) {
                     $params.Add('comment', $Comment)
                 }
@@ -134,7 +150,14 @@ function Set-NSLBVirtualServer {
                 }
                 if ($PSBoundParameters.ContainsKey('HttpRedirectURL')) {
                     $params.Add('redirurl', $HttpRedirectURL)
-                }                         
+                }
+                if ($PSBoundParameters.ContainsKey('ClientTimeout')) {
+                    $params.Add('clttimeout', $ClientTimeout)
+                }
+
+                if ($PSBoundParameters.ContainsKey('BackupVServer')) {
+                    $params.Add('backupvserver', $BackupVServer)
+                }
 
                 _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver -Payload $params -Action update
 

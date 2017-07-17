@@ -140,6 +140,10 @@ function New-NSLBVirtualServer {
         Minimum value = 0
         Maximum value = 31536000
 
+    .PARAMETER BackupVServer
+        Name of the backup virtual server to which to forward requests if the primary virtual server goes DOWN or reaches its spillover threshold.
+        Minimum length = 1    
+
     .PARAMETER Passthru
         Return the load balancer server object.
     #>
@@ -188,7 +192,11 @@ function New-NSLBVirtualServer {
         [int]$TimeOut = 2,    
         
         [Parameter()]
-        [int]$ClientTimeout,                
+        [int]$ClientTimeout,       
+
+        [Parameter()]
+        [string]
+        $BackupVServer,         
 
         [Switch]$PassThru
     )
@@ -214,21 +222,21 @@ function New-NSLBVirtualServer {
                     if ($PSBoundParameters.ContainsKey('PersistenceType')) {
                         $params.Add('persistencetype', $PersistenceType)
                     }
-
                     if ($PSBoundParameters.ContainsKey('RedirectFromPort')) {
                         $params.Add('redirectfromport', $RedirectFromPort)
                     }
-
                     if ($PSBoundParameters.ContainsKey('HTTPSRedirectURL')) {
                         $params.Add('rediurl', $HTTPSRedirectURL)
                     }
-
                     if ($PSBoundParameters.ContainsKey('Timeout')) {
                         $params.Add('timeout', $Timeout)
                     }
                     if ($PSBoundParameters.ContainsKey('ClientTimeout')) {
                         $params.Add('clttimeout', $ClientTimeout)
                     }
+                    if ($PSBoundParameters.ContainsKey('BackupVServer')) {
+                        $params.Add('backupvserver', $BackupVServer)
+                    }                    
                     _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
