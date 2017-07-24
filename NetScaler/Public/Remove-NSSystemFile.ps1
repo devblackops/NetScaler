@@ -23,7 +23,7 @@ function Remove-NSSystemFile {
         Removes the specified system file object(s).
 
     .EXAMPLE
-        Get-NSSystemFile -Filename "foo.txt" -FileLocation "/foo/bar"
+        Remove-NSSystemFile -Filename "foo.txt" -FileLocation "/foo/bar"
     
         Removes the file "/foo/bar/foo.txt"
 
