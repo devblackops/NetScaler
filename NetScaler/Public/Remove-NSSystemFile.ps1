@@ -58,7 +58,7 @@ function Remove-NSSystemFile {
 
     process {
         $fileFullPath = "$FileLocation/$Filename"
-        if ($Force -or $PSCmdlet.ShouldProcess($fileFullPath, "Remove file: $fileFullPath")) {
+        if ($Force -or $PSCmdlet.ShouldProcess($fileFullPath, "Remove file")) {
             $Arguments = @{ 'filename' = $Filename; 'filelocation' = $FileLocation }
             _InvokeNSRestApi -Session $Session -Type systemfile -Arguments $Arguments -Method DELETE
         }
