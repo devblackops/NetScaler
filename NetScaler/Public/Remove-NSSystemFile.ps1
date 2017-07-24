@@ -35,8 +35,11 @@ function Remove-NSSystemFile {
 
     .PARAMETER FileLocation
         Location of the file.
+
+    .PARAMETER Force
+        Suppress confirmation when deleting the file.
     #>
-    [CmdletBinding(DefaultParameterSetName='get')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
         $Session = $Script:Session,
 
@@ -44,7 +47,9 @@ function Remove-NSSystemFile {
         [string]$Filename,
 
         [Parameter(Mandatory)]
-        [string]$FileLocation
+        [string]$FileLocation,
+
+        [switch]$Force
     )
 
     begin {
@@ -52,7 +57,10 @@ function Remove-NSSystemFile {
     }
 
     process {
-        $Arguments = @{ 'filename' = $Filename; 'filelocation' = $FileLocation }
-        _InvokeNSRestApi -Session $Session -Type systemfile -Arguments $Arguments -Method DELETE
+        $fileFullPath = "$FileLocation/$Filename"
+        if ($Force -or $PSCmdlet.ShouldProcess($fileFullPath, "Remove file: $fileFullPath")) {
+            $Arguments = @{ 'filename' = $Filename; 'filelocation' = $FileLocation }
+            _InvokeNSRestApi -Session $Session -Type systemfile -Arguments $Arguments -Method DELETE
+        }
     }
 }
