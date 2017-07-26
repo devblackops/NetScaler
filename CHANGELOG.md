@@ -1,5 +1,5 @@
 
-## 1.5.0 (Unreleased)
+## 1.5.0 (2017-07-25)
   * Features
     * PR57 - Added -Graceful parameter to the Disable-NSLBServer (via @daimhin)
     * PR59 - Added New-NSRewriteAction and New-NSRewritePolicy functions (via @dbroeglin)
@@ -7,16 +7,16 @@
     * PR66 - Added Add-NSLBVirtualServerTrafficPolicyBinding and Get-NSLBVirtualServerTrafficPolicyBinding functions (via @dbroeglin
     )
     * PR72 - Added Get-NSHardware and Remove-NSSystemFile functions (via @daimhin)
+    * PR77 - Added Enable-NSHighAvailability and Get-HANode functions (via @dbroeglin)
 
   * Improvements
     * PR66 - Updated comment-based help for Get-NSLBVirtualServerResponderPolicyBinding and Get-NSLBVirtualServerRewritePolicyBinding (via @dbroeglin)
+    * PR78 - Internal improvements to connecting to NetScaler URI (via @dbroeglin)
 
   * Bug fixes
     * PR68 - Fixed bug in Add-NSCertKeyPair when converting a securestring to plain text using PowerShell v6.0 on Mac OSX. (via @dbroeglin)
     * PR72 - Fix bug in Get-NSSystemFile where FileLocation parameter was not set to mandatory even though the Nitro API requires it (via @dbroeglin)
-
-  * Deprecated
-    * None
+    * PR75 - Use correct property name when returning monitor before deleting with Remove-NSLBMonitor (via @devblackops)
 
 ## 1.4.0 (2016-11-07)
   * Features
