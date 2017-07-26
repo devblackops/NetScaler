@@ -67,7 +67,6 @@ function Restart-NetScaler {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='High')]
     param(
-        [parameter(Mandatory)]
         $Session = $script:session,
 
         [switch]$SaveConfig,
@@ -120,7 +119,7 @@ function Restart-NetScaler {
                         $response = $null
                         try {
                             $params = @{
-                                Uri = "$($script:protocol)://$ip/nitro/v1/config"
+                                Uri = $Session.CreateUri("config")
                                 Method = 'GET'
                                 ContentType = 'application/json'
                                 ErrorVariable = 'connectTestError'

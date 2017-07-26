@@ -18,7 +18,6 @@ limitations under the License.
 Set-StrictMode -Version 3
 
 $script:session = $null
-$script:protocol = $null
 
 # Load DLLs
 #$dll1 = Resolve-Path -Path "$PSScriptRoot\DLL\Newtonsoft.Json.dll"

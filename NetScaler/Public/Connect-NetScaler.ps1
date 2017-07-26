@@ -71,13 +71,28 @@ function Connect-NetScaler {
         $endpoint = $Hostname
     }
 
-    if ($PSBoundParameters.ContainsKey('Https')) {
-        $Script:protocol = 'https'
+    if ($Https) {
+        $scheme = 'https'
     } else {
-        $script:protocol = 'http'
+        $scheme = 'http'
     }
 
-    Write-Verbose -Message "Connecting to $endpoint..."
+
+    $session = New-Object -TypeName PSObject
+    $session | Add-Member -NotePropertyName Endpoint -NotePropertyValue $endpoint -TypeName String
+    $session | Add-Member -NotePropertyName Scheme   -NotePropertyValue $scheme -TypeName String
+    $session | Add-Member -Name Uri -MemberType ScriptProperty -Value {
+        "$($this.scheme)://$($this.endpoint)/nitro/v1"
+    } 
+    $session | Add-Member -Name CreateUri -MemberType ScriptMethod -Value {
+        Param(
+            [String]$service,
+            [String]$type
+        )
+        "$($this.Uri)/$service/$type"
+    } 
+
+    Write-Verbose -Message "Connecting to $($session.Uri)..."
 
     try {
         $login = @{
@@ -91,7 +106,7 @@ function Connect-NetScaler {
 
         $saveSession = @{}
         $params = @{
-            Uri = "$($Script:protocol)://$endpoint/nitro/v1/config/login"
+            Uri = "$($session.Uri)/config/login"
             Method = 'POST'
             Body = $loginJson
             SessionVariable = 'saveSession'
@@ -108,11 +123,9 @@ function Connect-NetScaler {
         throw $_
     }
 
-    $session = New-Object -TypeName PSObject
-    $session | Add-Member -NotePropertyName Endpoint -NotePropertyValue $endpoint -TypeName String
-    $session | Add-Member -NotePropertyName WebSession  -NotePropertyValue $saveSession -TypeName Microsoft.PowerShell.Commands.WebRequestSession   
-
+    $session | Add-Member -NotePropertyName WebSession -NotePropertyValue $saveSession -TypeName Microsoft.PowerShell.Commands.WebRequestSession
     $script:session = $session
+
 
     if ($PSBoundParameters.ContainsKey('PassThru')) {
         return $session

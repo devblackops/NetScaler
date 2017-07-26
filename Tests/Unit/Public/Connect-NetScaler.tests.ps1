@@ -29,9 +29,14 @@ describe 'Connect-NetScaler' {
                 $script:session | should not benullorempty
             }
 
+            it 'Connects via HTTP' {
+                Connect-NetScaler -Hostname 'localhost' -Credential $credential
+                $script:session.scheme | should be 'http'
+            }
+
             it 'Connects via HTTPs' {
                 Connect-NetScaler -Hostname 'localhost' -Credential $credential -HTTPs
-                $script:protocol | should be 'https'
+                $script:session.scheme | should be 'https'
             }
         }
 
