@@ -51,7 +51,7 @@ function Remove-NSSSLCertificateLink {
                 $params = @{
                     certkey = $CertKeyName
                 }
-                $response = _InvokeNSRestApi -Session $Session -Method POST -Type sslcertkey -Payload $params -Action unlink
+                _InvokeNSRestApi -Session $Session -Method POST -Type sslcertkey -Payload $params -Action unlink > $null
             }
             catch {
                 throw $_

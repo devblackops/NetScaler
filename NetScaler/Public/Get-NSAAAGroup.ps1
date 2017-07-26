@@ -22,7 +22,7 @@ function Get-NSAAAGroup {
     .DESCRIPTION
         Gets NetScaler AAA group(s). If no parameters are provided all AAA
         groups are returned. The 'Groupname' and 'Filter' parameters can be
-        used to select a specific group or groups. 
+        used to select a specific group or groups.
 
     .EXAMPLE
         Get-NSAAAGroup
@@ -72,13 +72,13 @@ function Get-NSAAAGroup {
             if (-Not([string]::IsNullOrEmpty($Name))) {
                 foreach ($Group in $Name) {
                     $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaagroup -Resource $Group -Action Get
-                    if ($response.psobject.properties | where name -eq aaagroup) {
+                    if ($response.psobject.properties | Where-Object {$_.name -eq 'aaagroup'}) {
                         $response.aaagroup
                     }
                 }
             } else {
                 $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaagroup -Action Get
-                if ($response.psobject.properties | where name -eq aaagroup) {
+                if ($response.psobject.properties | Where-Object {$_.name -eq 'aaagroup'}) {
                     if (-Not([string]::IsNullOrEmpty($Filter))) {
                         foreach ($item in $response.aaagroup) {
                             if ($item.groupname -match "$Filter") {

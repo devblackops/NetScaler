@@ -20,7 +20,7 @@ function Get-NSAAAGroupBinding {
         Gets NetScaler AAA group(s) session policy bindings.
 
     .DESCRIPTION
-        Gets NetScaler AAA group(s) session policy bindings. 
+        Gets NetScaler AAA group(s) session policy bindings.
 
     .EXAMPLE
         Get-NSAAAGroupBinding -Groupname Group1
@@ -61,7 +61,7 @@ function Get-NSAAAGroupBinding {
         Try {
             foreach ($Group in $Name) {
                 $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaagroup_binding -Resource $Group -Action Get
-                if ($response.psobject.properties | where name -eq aaagroup_binding) {
+                if ($response.psobject.properties | Where-Object {$_.name -eq 'aaagroup_binding'}) {
                     $response.aaagroup_binding
                 }
             }

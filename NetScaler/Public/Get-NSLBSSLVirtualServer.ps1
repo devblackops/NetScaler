@@ -66,7 +66,7 @@ function Get-NSLBSSLVirtualServer {
             $response = _InvokeNSRestApi -Session $Session -Method Get -Type sslvserver -Action Get
         }
         if ($response.errorcode -ne 0) { throw $response }
-        if ($response.psobject.properties | where name -eq sslvserver) {
+        if ($response.psobject.properties | Where-Object {$_.name -eq 'sslvserver'}) {
             return $response.sslvserver
         }
     }

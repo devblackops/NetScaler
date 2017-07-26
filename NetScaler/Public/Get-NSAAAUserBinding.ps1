@@ -20,7 +20,7 @@ function Get-NSAAAUserBinding {
         Gets NetScaler AAA user(s) session policy bindings.
 
     .DESCRIPTION
-        Gets NetScaler AAA user(s) session policy bindings. 
+        Gets NetScaler AAA user(s) session policy bindings.
 
     .EXAMPLE
         Get-NSAAAUserBinding -Username User1
@@ -61,7 +61,7 @@ function Get-NSAAAUserBinding {
         Try {
             foreach ($User in $Name) {
                 $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaauser_binding -Resource $User -Action Get
-                if ($response.psobject.properties | where name -eq aaauser_binding) {
+                if ($response.psobject.properties | Where-Object {$_.name -eq 'aaauser_binding'}) {
                     $response.aaauser_binding
                 }
             }

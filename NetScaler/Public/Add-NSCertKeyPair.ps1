@@ -108,7 +108,7 @@ function Add-NSCertKeyPair {
                     $unsecurePassword = $creds.GetNetworkCredential().Password
                     $params.Add("passplain",$unsecurePassword)
                 }
-                $response = _InvokeNSRestApi  -Session $Session -Method POST -Type sslcertkey -Payload $params -Action add
+                _InvokeNSRestApi  -Session $Session -Method POST -Type sslcertkey -Payload $params -Action add > Out-Null
             } catch {
                 throw $_
             }

@@ -22,7 +22,7 @@ function Get-NSAAAUser {
     .DESCRIPTION
         Gets NetScaler AAA user(s). If no parameters are provided all AAA
         users are returned. The 'Username' and 'Filter' parameters can be
-        used to select a specific user or a subset of users. 
+        used to select a specific user or a subset of users.
 
     .EXAMPLE
         Get-NSAAAUser
@@ -72,13 +72,13 @@ function Get-NSAAAUser {
             if (-Not([string]::IsNullOrEmpty($Name))) {
                 foreach ($User in $Name) {
                     $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaauser -Resource $User -Action Get
-                    if ($response.psobject.properties | where name -eq aaauser) {
+                    if ($response.psobject.properties | Where-Object {$_.name -eq 'aaauser'}) {
                         $response.aaauser
                     }
                 }
             } else {
                 $response = _InvokeNSRestApi -Session $Session -Method Get -Type aaauser -Action Get
-                if ($response.psobject.properties | where name -eq aaauser) {
+                if ($response.psobject.properties | Where-Object {$_.name -eq 'aaauser'}) {
                     if (-Not([string]::IsNullOrEmpty($Filter))) {
                         foreach ($item in $response.aaauser) {
                             if ($item.username -match "$Filter") {

@@ -29,7 +29,7 @@ function Remove-NSLBVirtualServerBinding {
 
     .EXAMPLE
         'binding01', 'binding02' | Remove-NSLBVirtualServerBinding
-    
+
         Removes the load balancer virtual servers named 'binding01' and 'binding02'.
 
     .PARAMETER Session
@@ -76,11 +76,11 @@ function Remove-NSLBVirtualServerBinding {
                     $params = @{}
 
                     if ($PSBoundParameters.ContainsKey('ServiceGroupName')) {
-                        $match = $bindings | where servicegroupname -eq $ServiceGroupName | Select-Object -First 1
+                        $match = $bindings | Where-Object {$_.servicegroupname -eq $ServiceGroupName} | Select-Object -First 1
                         $params.servicegroupname = $match.servicegroupname
 
                     } elseif ($PSBoundParameters.ContainsKey('ServiceName')) {
-                        $match = @($bindings | where servicename -eq $ServiceName) | Select-Object -First 1
+                        $match = @($bindings | Where-Object {$_.servicename -eq $ServiceName}) | Select-Object -First 1
                         $params.servicename = $match.servicename
                     }
 

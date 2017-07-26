@@ -58,7 +58,7 @@ function Add-NSSSLCertificateLink {
                     certkey = $CertKeyName
                     linkcertkeyname = $IntermediateCertKeyName
                 }
-                $response = _InvokeNSRestApi -Session $Session -Method POST -Type sslcertkey -Payload $params -Action link
+                _InvokeNSRestApi -Session $Session -Method POST -Type sslcertkey -Payload $params -Action link > Out-Null
             }
             catch {
                 throw $_

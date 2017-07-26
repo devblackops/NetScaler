@@ -103,8 +103,7 @@ function Add-NSDnsNameServer {
                         $params.Add('dnsvservername', $DNSVServerName)
                     }
 
-                    $response = _InvokeNSRestApi -Session $Session -Method POST -Type dnsnameserver -Payload $params -Action add
-
+                    _InvokeNSRestApi -Session $Session -Method POST -Type dnsnameserver -Payload $params -Action add > Out-Null
                 } catch {
                     throw $_
                 }

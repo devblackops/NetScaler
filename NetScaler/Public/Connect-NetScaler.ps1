@@ -56,7 +56,7 @@ function Connect-NetScaler {
         [string]$Hostname,
 
         [parameter(Mandatory)]
-        [pscredential]$Credential = (Get-Credential -Message 'NetScaler credential'),
+        [pscredential]$Credential,
 
         [int]$Timeout = 900,
 
@@ -83,14 +83,14 @@ function Connect-NetScaler {
     $session | Add-Member -NotePropertyName Scheme   -NotePropertyValue $scheme -TypeName String
     $session | Add-Member -Name Uri -MemberType ScriptProperty -Value {
         "$($this.scheme)://$($this.endpoint)/nitro/v1"
-    } 
+    }
     $session | Add-Member -Name CreateUri -MemberType ScriptMethod -Value {
         Param(
             [String]$service,
             [String]$type
         )
         "$($this.Uri)/$service/$type"
-    } 
+    }
 
     Write-Verbose -Message "Connecting to $($session.Uri)..."
 

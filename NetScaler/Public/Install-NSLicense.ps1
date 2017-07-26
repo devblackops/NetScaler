@@ -38,9 +38,8 @@ function Install-NSLicense {
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='medium')]
     param(
-        [parameter(Mandatory)]
         $Session = $script:session,
-        
+
         [parameter(Mandatory)]
         [ValidateScript({
             if (Test-Path -Path $_) {
@@ -77,7 +76,7 @@ function Install-NSLicense {
                 $response = _InvokeNSRestApi -Session $Session -Method POST -Type systemfile systemfile -Payload $params -Action add
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
-                   return $response 
+                   return $response
                 }
             }
         } catch {

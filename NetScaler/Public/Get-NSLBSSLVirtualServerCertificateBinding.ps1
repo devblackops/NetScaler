@@ -62,7 +62,7 @@ function Get-NSLBSSLVirtualServerCertificateBinding {
 
         if ($response.errorcode -ne 0) { throw $response }
 
-        if ($response.psobject.properties | where name -eq sslvserver_sslcertkey_binding) {
+        if ($response.psobject.properties | Where-Object {$_.name -eq 'sslvserver_sslcertkey_binding'}) {
             return $response.sslvserver_sslcertkey_binding
         }
     }

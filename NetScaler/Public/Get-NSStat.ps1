@@ -74,13 +74,13 @@ function Get-NSStat {
             if ($Name.Count -gt 0) {
                 foreach ($item in $Name) {
                     $stats = _InvokeNSRestApi -Session $Session -Method Get -Type $statType -Stat -Resource $item
-                    if ($stats | Get-Member -MemberType NoteProperty | Where Name -eq $statType) {
+                    if ($stats | Get-Member -MemberType NoteProperty | Where-Object {$_.name -eq $statType}) {
                         $stats.$statType
                     }
                 }
             } else {
                 $stats = _InvokeNSRestApi -Session $Session -Method Get -Type $statType -Stat
-                if ($stats | Get-Member -MemberType NoteProperty | Where Name -eq $statType) {
+                if ($stats | Get-Member -MemberType NoteProperty | Where-Object {$_.name -eq $statType}) {
                     $stats.$statType
                 }
             }

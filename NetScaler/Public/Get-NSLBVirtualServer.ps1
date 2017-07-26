@@ -29,7 +29,7 @@ function Get-NSLBVirtualServer {
 
     .EXAMPLE
         Get-NSLBVirtualServer -Name 'vserver01'
-    
+
         Get the load balancer virtual server named 'vserver01'.
 
     .PARAMETER Session
@@ -92,7 +92,7 @@ function Get-NSLBVirtualServer {
             $response = _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver -Action Get
         }
         if ($response.errorcode -ne 0) { throw $response }
-        if ($response.psobject.properties | where name -eq lbvserver) {
+        if ($response.psobject.properties | Where-Object {$_.name -eq 'lbvserver'}) {
             return $response.lbvserver
         }
     }

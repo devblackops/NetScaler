@@ -97,7 +97,7 @@ function Get-NSResponderAction {
     process {
         # Contruct a filter hash if we specified any filters
         $filters = @{}
-        "Name","Type","Target","HtmlPage","ResponseStatusCode","Hits","UndefHits","ReferenceCount" | ForEach {
+        "Name","Type","Target","HtmlPage","ResponseStatusCode","Hits","UndefHits","ReferenceCount" | ForEach-Object {
             if ($PSBoundParameters.ContainsKey($_)) {
                 $filters[$_.ToLower()] = (Get-Variable -Name $_).Value
             }
@@ -105,7 +105,7 @@ function Get-NSResponderAction {
 
         $response = _InvokeNSRestApi -Session $Session -Method Get -Type responderaction -Action Get -Filters $filters
         if ($response.errorcode -ne 0) { throw $response }
-        if ($response.psobject.properties | where name -eq responderaction) {
+        if ($response.psobject.properties | Where-Object {$_.name -eq 'responderaction'}) {
             return $response.responderaction
         }
     }
