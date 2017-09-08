@@ -22,7 +22,7 @@ function Get-NSCurrentTime {
     .PARAMETER NSSession
         An existing custom NetScaler Web Request Session object returned by Connect-NSAppliance
     .EXAMPLE
-        Get-NSCurrentTime -NSSession $Session
+        Get-NSCurrentTime -Session $Session
     .NOTES
         Author: Ryan Butler - @ryan_c_butler
         Date Created: 09-07-2017
