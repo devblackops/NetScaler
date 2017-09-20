@@ -1,5 +1,5 @@
 <#
-Copyright 2017 Juan C. Herrera
+Copyright 2015 Brandon Olin
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,26 +17,50 @@ limitations under the License.
 function Remove-NSDnsNameServer {
     <#
     .SYNOPSIS
-        Removes a domain name server from NetScaler appliance.
+        Add domain name server to NetScaler appliance.
 
     .DESCRIPTION
-        Remove a domain name server from NetScaler appliance.
+        Add domain name server to NetScaler appliance.
 
     .EXAMPLE
-        Remove-NSDnsNameServer -IPAddress '8.8.8.8'
+        Add-NSDnsNameServer -DNSServerIP '8.8.8.8'
 
-        Remove DNS server IP 8.8.8.8 from NetScaler.
+        Adds DNS server IP 8.8.8.8 to NetScaler.
 
     .EXAMPLE
-        '2.2.2.2', '8.8.8.8' | Remove-NSDnsNameServer -Session $session
+        '2.2.2.2', '8.8.8.8' | Add-NSDnsNameServer -Session $session
 
-        Removes DNS servers with IPs 2.2.2.2 and 8.8.8.8 from NetScaler using the pipeline.
+        Adds DNS server IP 8.8.8.8 to NetScaler using the pipeline.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER IPAddress
         IP address of an external name server or, if the Local parameter is set, IP address of a local DNS server (LDNS).
+
+    .PARAMETER DNSVServerName
+        Name of a DNS virtual server. Overrides any IP address-based name servers configured on the NetScaler appliance.
+
+    .PARAMETER Local
+        Mark the IP address as one that belongs to a local recursive DNS server on the NetScaler appliance.
+        The appliance recursively resolves queries received on an IP address that is marked as being local.
+        For recursive resolution to work, the global DNS parameter, Recursion, must also be set.
+        If no name server is marked as being local, the appliance functions as a stub resolver and load balances the name servers.
+
+    .PARAMETER State
+        Administrative state of the name server.
+
+        Default value: ENABLED
+        Possible values = ENABLED, DISABLED
+
+    .PARAMETER Type
+        Protocol used by the name server. UDP_TCP is not valid if the name server is a DNS virtual server configured on the appliance.
+
+        Default value: UDP
+        Possible values = UDP, TCP, UDP_TCP
+
+    .PARAMETER Passthru
+        Return the load balancer server object.
 
     .PARAMETER Force
         Suppress confirmation adding certificate binding
@@ -46,10 +70,11 @@ function Remove-NSDnsNameServer {
         $Session = $script:session,
 
         [parameter()]
-        # [ValidateScript({$_ -match [IPAddress]$_ })]
+        [ValidateScript({$_ -match [IPAddress]$_ })]
         [string[]]$IPAddress = (Read-Host -Prompt 'DNS server IP'),
 
-        [Switch]$Force
+        [string]$DNSVServerName = [string]::Empty
+
     )
 
     begin {
@@ -58,10 +83,17 @@ function Remove-NSDnsNameServer {
 
     process {
         foreach ($item in $IPAddress) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Remove DNS server IP')) {
+            if ($PSCmdlet.ShouldProcess($item, 'Add DNS server IP')) {
                 try {
 
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type dnsnameserver -Resource $item -Action delete
+                    $params = @{
+                        ip = $IPAddress
+                    }
+                    if ($PSBoundParameters.ContainsKey('DNSVServerName')) {
+                        $params.Add('dnsvservername', $DNSVServerName)
+                    }
+
+                    $response = _InvokeNSRestApi -Session $Session -Method DELETE -Type dnsnameserver -Payload $params -Action delete
 
                 } catch {
                     throw $_

@@ -40,7 +40,7 @@ function Add-NSVLAN {
         Enable all IPv6 dynamic routing protocols on this VLAN. Note: For the ENABLED setting to work, you must configure IPv6 dynamic routing protocols from the VTYSH command line. Possible values = ENABLED, DISABLED
 
     .PARAMETER MTU
-        Specifies the maximum transmission unit (MTU), in bytes.                        
+        Specifies the maximum transmission unit (MTU), in bytes.
 
     .PARAMETER Force
         Suppress confirmation when adding a DNS suffix.
@@ -50,7 +50,7 @@ function Add-NSVLAN {
         $Session = $script:session,
 
         [parameter(Mandatory, ValueFromPipeline)]
-        [int]$VLANID,
+        [int[]]$VLANID,
 
         [parameter(Mandatory, ValueFromPipeline)]
         [string[]]$AliasName,

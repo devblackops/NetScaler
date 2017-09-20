@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function New-NSLBServiceGroupMember {
+function Add-NSLBServiceGroupMemberBinding {
     <#
     .SYNOPSIS
         Adds a load balancer server to a service group.
@@ -29,13 +29,13 @@ function New-NSLBServiceGroupMember {
 
     .EXAMPLE
         $x = New-NSLBServiceGroupMember -Name 'sg01' -ServerName 'server01' -State 'DISABLED' -PassThru
-    
+
         Associates server 'server01' with service group 'sg01' initially in a DISABLED state and return the object.
 
     .PARAMETER Session
         The NetScaler session object.
 
-    .PARAMETER Name
+    .PARAMETER ServiceName
         The name of the service group to associated the server with.
 
     .PARAMETER ServerName
@@ -47,8 +47,8 @@ function New-NSLBServiceGroupMember {
         Range 1 - 65535
 
     .PARAMETER Weight
-        Weight to assign to the servers in the service group. 
-        Specifies the capacity of the servers relative to the other servers in the load balancing configuration. 
+        Weight to assign to the servers in the service group.
+        Specifies the capacity of the servers relative to the other servers in the load balancing configuration.
         The higher the weight, the higher the percentage of requests sent to the service.
 
         Minimum value = 1
@@ -58,7 +58,7 @@ function New-NSLBServiceGroupMember {
         The identifier for the service. This is used when the persistency type is set to Custom Server ID.
 
     .PARAMETER HashId
-        The hash identifier for the service. This must be unique for each service. 
+        The hash identifier for the service. This must be unique for each service.
         This parameter is used by hash based load balancing methods.
 
         Minimum value = 1
@@ -75,7 +75,7 @@ function New-NSLBServiceGroupMember {
 
         [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
         [Alias('ServiceGroupName')]
-        [string[]]$Name,
+        [string[]]$ServiceName,
 
         [Parameter(Mandatory)]
         [string[]]$ServerName,
@@ -102,7 +102,7 @@ function New-NSLBServiceGroupMember {
     }
 
     process {
-        foreach ($item in $Name) {
+        foreach ($item in $ServiceName) {
             foreach ($member in $ServerName) {
                 if ($PSCmdlet.ShouldProcess($item, "Add Service Group Member: $Member")) {
                     try {
@@ -110,7 +110,7 @@ function New-NSLBServiceGroupMember {
                             servicegroupname = $item
                             servername = $member
                             port = $Port
-                            state = $State                            
+                            state = $State
                             weight = $Weight
                             serverid = $ServerId
                             hashid = $Hashid
@@ -118,7 +118,7 @@ function New-NSLBServiceGroupMember {
                         _InvokeNSRestApi -Session $Session -Method POST -Type servicegroup_servicegroupmember_binding -Payload $params -Action add
 
                         if ($PSBoundParameters.ContainsKey('PassThru')) {
-                            return Get-NSLBServiceGroupMemberBinding -Session $session -Name $item
+                            return Get-NSLBServiceGroupMemberBinding -Session $session -ServerName $item
                         }
                     } catch {
                         throw $_

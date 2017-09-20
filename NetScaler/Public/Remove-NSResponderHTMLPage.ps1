@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSResponderHTMLPage {
+function Remove-NSResponderHTMLPage {
     <#
     .SYNOPSIS
-        Retrieve a responder HTML page from the NetScaler appliance.
+        Removes a responder HTML page from the NetScaler appliance.
 
     .DESCRIPTION
-        Retrieve a responder HTML page from the NetScaler appliance.
+        Removes a responder HTML page from the NetScaler appliance.
 
     .EXAMPLE
-        Get-NSResponderHTMLPage -Name 'myHTMLpage'
+        Remove-NSResponderHTMLPage -Name 'myHTMLpage'
 
-        Creates a root certificate key pair named 'myrootCA' using the PEM formatted certificate 'mycertificate.cert' located on the appliance.
+        Removes a Responder Policy HTML page from the appliance.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -40,7 +40,9 @@ function Get-NSResponderHTMLPage {
         $Session = $script:session,
 
         [Parameter()]
-        [string]$Name
+        [string]$Name,
+
+        [switch]$Force
     )
 
     begin {
@@ -48,7 +50,14 @@ function Get-NSResponderHTMLPage {
     }
 
     process {
-        $response = _InvokeNSRestApiGet -Session $Session -Type responderhtmlpage -Name $Name
-        $response.name
+        foreach ($item in $Name) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete ResponderHTML Page')) {
+                try {
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type responderhtmlpage -Resource $item -Action DELETE
+                } catch {
+                    throw $_
+                }
+            }
+        }
     }
 }

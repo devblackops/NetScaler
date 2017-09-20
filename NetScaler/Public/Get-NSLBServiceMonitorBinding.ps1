@@ -1,5 +1,5 @@
 <#
-Copyright 2015 Brandon Olin
+Copyright 2017 Juan C. Herrera
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSLBServiceGroupMonitorBinding {
+function Get-NSLBServiceMonitorBinding {
     <#
     .SYNOPSIS
-        Gets the service group binding for a service group.
+        Gets the monitor binding for a service.
 
     .DESCRIPTION
-        Gets the service group binding for a service group.
+        Gets the monitor binding for a service.
 
     .EXAMPLE
-        Get-NSLBServiceGroupMonitorBinding -Name $sg
+        Get-NSLBServiceMonitorBinding -ServiceName $svc
 
-        Gets the service group bindings for the 'sg' service group.
+        Gets the monitor bindings for the 'svc' service.
 
     .PARAMETER Session
         The NetScaler session object.
 
-    .PARAMETER Name
-        The name or names of the service group to get the service group member binding for.
+    .PARAMETER ServiceName
+        The name or names of the monitor to get the service binding for.
 
     .PARAMETER MonitorName
         Filters the returned monitors to only include the name specified
@@ -41,7 +41,7 @@ function Get-NSLBServiceGroupMonitorBinding {
         $Session = $script:session,
 
         [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
-        [string[]]$ServiceGroupName,
+        [string[]]$ServiceName,
 
         [parameter()]
         [string]$MonitorName
@@ -58,7 +58,7 @@ function Get-NSLBServiceGroupMonitorBinding {
             if ($PSBoundParameters.ContainsKey('MonitorName')) {
                 $Filters['monitor_name'] = $MonitorName
             }
-            _InvokeNSRestApiGet -Session $Session -Type servicegroup_lbmonitor_binding -Name $ServiceGroupName -Filters $Filters
+            _InvokeNSRestApiGet -Session $Session -Type service_lbmonitor_binding -Name $ServiceName -Filters $Filters
         }
         catch {
             throw $_

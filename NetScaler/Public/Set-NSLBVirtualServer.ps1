@@ -73,6 +73,11 @@ function Set-NSLBVirtualServer {
         Name of the backup virtual server to which to forward requests if the primary virtual server goes DOWN or reaches its spillover threshold.
         Minimum length = 1
 
+    .PARAMETER RedirectPortRewrite
+        Rewrite the port and change the protocol to ensure successful HTTP redirects from services.
+        Default value: DISABLED
+        Possible values = ENABLED, DISABLED
+
     .PARAMETER Force
         Suppress confirmation when updating a virtual server.
 
@@ -119,6 +124,10 @@ function Set-NSLBVirtualServer {
         [string]
         $BackupVServer,
 
+        [Parameter()]
+        [ValidateSet('ENABLED', 'DISABLED')]
+        [string]$RedirectPortRewrite = 'DISABLED',
+
         [Switch]$Force,
 
         [Switch]$PassThru
@@ -154,11 +163,12 @@ function Set-NSLBVirtualServer {
                 if ($PSBoundParameters.ContainsKey('ClientTimeout')) {
                     $params.Add('clttimeout', $ClientTimeout)
                 }
-
                 if ($PSBoundParameters.ContainsKey('BackupVServer')) {
                     $params.Add('backupvserver', $BackupVServer)
                 }
-
+                if ($PSBoundParameters.ContainsKey('RedirectPortRewrite')) {
+                    $params.Add('RedirectPortRewrite', $RedirectPortRewrite)
+                }
                 _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver -Payload $params -Action update
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {

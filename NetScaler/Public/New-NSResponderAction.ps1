@@ -23,10 +23,13 @@ function New-NSResponderAction {
         Adds a responder action.
 
     .EXAMPLE
-        New-NSResponderAction -Name 'act-redirect' -Type Redirect `
-            -Target '"https://" + HTTP.REQ.HOSTNAME.HTTP_URL_SAFE + "/test/"' -ResponseStatusCode 302
+        New-NSResponderAction -Name 'act-redirect' -Type Redirect -Target '"https://" + HTTP.REQ.HOSTNAME.HTTP_URL_SAFE + "/test/"' -ResponseStatusCode 302
 
         Creates a new responder action which redirects to /test
+
+        New-NSResponderAction -Name NewHTMLPage -Type RespondWithHTMLPage -HTMLPage "NewHTMLPage"
+        Creates a new responder action that uses a html page. Html pages are uploaded via the New-NSResponderHTMLPage function. The HTML page used in this example is just a label
+
 
     .PARAMETER Session
         The NetScaler session object.
@@ -36,7 +39,7 @@ function New-NSResponderAction {
 
     .PARAMETER Type
         The type of responder action to create.
-        
+
         Default value: NOOP
         Possible values = NOOP, Redirect, RespondWith, RespondWithSQLOK, RespondWithSQLError, RespondWithHTMLPage
 
@@ -47,7 +50,7 @@ function New-NSResponderAction {
     .PARAMETER ResponseStatusCode
         The HTTP response status code returned by the responder action.
         Valid only for types Redirect, RespondWith, RespondWithSQLOK and RespondWithSQLError.
-        
+
         Range: 100 - 599
 
     .PARAMETER ReasonPhrase
@@ -59,9 +62,9 @@ function New-NSResponderAction {
 
     .PARAMETER HtmlPage
         The name of the HTML page to respond with.
-        
+
         Valid only for type RespondWithHTMLPage.
-        
+
     .PARAMETER Comment
         Any information about the responder action.
 
@@ -78,7 +81,7 @@ function New-NSResponderAction {
         [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Name,
 
-        [ValidateSet('NOOP','Redirect','RespondWith', 'RespondWithSQLOK','RespondWithSQLError','RespondWithHTMLPage')] 
+        [ValidateSet('NOOP','Redirect','RespondWith', 'RespondWithSQLOK','RespondWithSQLError','RespondWithHTMLPage')]
         [string]$Type = 'NOOP',
 
         [ValidateLength(0, 8191)]
@@ -91,9 +94,12 @@ function New-NSResponderAction {
         [ValidateLength(0, 8191)]
         [string]$ReasonPhrase = [string]::Empty,
 
+        [ValidateLength(0, 8191)]
+        [string]$HTMLPage = [string]::Empty,
+
         [ValidateLength(0, 256)]
         [string]$Comment = [string]::Empty,
-        
+
         [Switch]$PassThru
     )
 
@@ -113,7 +119,7 @@ function New-NSResponderAction {
                             default { $Type.ToLower() }
                         }
                     )
-                    
+
                     $params = @{
                         name        = $Item
                         type        = $NitroType
@@ -124,8 +130,8 @@ function New-NSResponderAction {
                             if ($PSBoundParameters.ContainsKey('Target')) {
                                 $params.Add('target', $Target)
                             } else {
-                                throw "Target is mandatory if type is NOOP, Redirect or RespondWith"                            
-                            }                            
+                                throw "Target is mandatory if type is NOOP, Redirect or RespondWith"
+                            }
                         }
                         "^(redirect|sqlresponse_ok|sqlresponse_error|respondwithhtmlpage)$" {
                             if ($PSBoundParameters.ContainsKey('ResponseStatusCode')) {
@@ -133,7 +139,7 @@ function New-NSResponderAction {
                             }
                             if ($PSBoundParameters.ContainsKey('ReasonPhrase')) {
                                 $params.Add('reasonphrase', $ReasonPhrase)
-                            }                            
+                            }
                         }
                         "respondwithhtmlpage" {
                             if ($PSBoundParameters.ContainsKey('HtmlPage')) {

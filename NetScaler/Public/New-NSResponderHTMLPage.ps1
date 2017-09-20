@@ -17,20 +17,15 @@ limitations under the License.
 function New-NSResponderHTMLPage {
     <#
     .SYNOPSIS
-        Add server certificate to NetScaler appliance.
+        Add Responder HTML page to NetScaler appliance.
 
     .DESCRIPTION
-        Add server certificate to NetScaler appliance.
+        Add Responder HTML page to NetScaler appliance.
 
     .EXAMPLE
-        Add-NSCertKeyPair -CertKeyName 'myrootCA' -CertPath '/nsconfig/ssl/mycertificate.cert' -CertKeyFormat 'PEM'
+        New-NSResponderHTMLPage -Name 'myrootCA' -Source 'http://somewebsite.com/somefile' -Comment 'Application XYZ page'
 
-        Creates a root certificate key pair named 'myrootCA' using the PEM formatted certificate 'mycertificate.cert' located on the appliance.
-
-    .EXAMPLE
-        Add-NSCertKeyPair -CertKeyName 'mywildcardcert' -CertPath '/nsconfig/ssl/mywildcard.cert' -KeyPath '/nsconfig/ssl/mywildcard.key' -CertKeyFormat 'PEM'
-
-        Creates a certificate key pair named 'mywildardcert' using the PEM formatted certificate 'mywildcard.cert' and 'mywildcard.key' key file located on the appliance.
+        Creates a Responder HTML page sourcing from a repo named 'http://somewebsite.com/somefile' into the appliance.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -39,9 +34,9 @@ function New-NSResponderHTMLPage {
         Name to assign to the HTML page object on the NetScaler appliance.
         Minimum length = 1
         Maximum length = 31
-        
+
     .PARAMETER Source
-        Local path to and name of, or URL \(protocol, host, path, and file name\) for, the file in which to store the imported HTML page. NOTE: The import fails if the object to be imported is on an HTTPS server that requires client certificate authentication for access.
+        Local path to and name of, or URL \(protocol, host, path, and file name\) for, the file in which to store the imported HTML page. NOTE: The import fails if the object to be imported is on an HTTPS server that requires client certificate authentication for access. Also, check any firewall rules in between source and destination.
         Minimum length = 1
         Maximum length = 2047
 
@@ -64,9 +59,6 @@ function New-NSResponderHTMLPage {
         [string]$Source,
 
         [Parameter()]
-        [string]$Comment,
-
-        [Parameter()]
         [switch]$Overwrite = $false
     )
 
@@ -80,7 +72,6 @@ function New-NSResponderHTMLPage {
                  $params = @{
                     src = $Source
                     name = $Name
-                    comment = $Comment
                     overwrite = $Overwrite.ToBool()
                 }
                 $response = _InvokeNSRestApi  -Session $Session -Method POST -Type responderhtmlpage -Payload $params -Action import

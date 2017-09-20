@@ -51,7 +51,7 @@ function Get-NSVLANBindings {
             if ($PSCmdlet.ShouldProcess($item, 'Get VLAN information')) {
                 try {
                     $t = _InvokeNSRestApi -Session $Session -Method GET -Type vlan_binding -Resource $item -Action get
-                    $t.vlan_binding | fl
+                    # $t.vlan_binding | fl
                 }
                 catch {
                     throw $_

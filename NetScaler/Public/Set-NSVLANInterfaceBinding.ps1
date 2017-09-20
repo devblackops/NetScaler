@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSVLANInterfaceBinding {
+function Set-NSVLANInterfaceBinding {
     <#
     .SYNOPSIS
-        Removes the binding of an interface as well as untagged/unbound from NetScaler appliance.
+        Binds a VLAN to an interface and tags/untags to NetScaler appliance.
 
     .DESCRIPTION
-        Removes the binding of an interface as well as untagged/unbound from NetScaler appliance.
+        Binds a VLAN to an interface and tags/untags to NetScaler appliance.
 
     .EXAMPLE
-        Remove-NSVLANInterfaceBinding -VLANID 150 -interface '0/1' -tagged
+        Set-NSVLANInterfaceBinding -VLANID 150 -Interface '0/1' -Tagged
 
-        Adds binding for interface '0/1' and tags the vlan on the NetScaler appliance.
+        Binds VLAN 150 to interface '0/1' and tags it on the NetScaler appliance.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -38,6 +38,9 @@ function Remove-NSVLANInterfaceBinding {
 
     .PARAMETER Tagged
         Make the interface an 802.1q tagged interface.
+
+    .PARAMETER Force
+        Suppress confirmation when adding a DNS suffix.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
     param (
@@ -46,11 +49,13 @@ function Remove-NSVLANInterfaceBinding {
         [parameter(Mandatory, ValueFromPipeline)]
         [string[]]$VLANID,
 
+        [parameter(Mandatory, ValueFromPipeline)]
+        [string[]]$Interface,
+
         [parameter()]
-        [string[]]$Interface = '0/1',
+        [switch]$Tagged,
 
-        [Switch]$Force
-
+        [switch]$Force
     )
 
     begin {
@@ -58,16 +63,15 @@ function Remove-NSVLANInterfaceBinding {
     }
 
     process {
-
-        $params = @{
-            id = $VLANID
-            ifnum = $Interface
-        }
-
         foreach ($item in $VLANID) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Remove VLAN interaface binding')) {
+            if ($PSCmdlet.ShouldProcess($item, 'Add VLAN Binding')) {
                 try {
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type vlan_interface_binding -Resource $item -Arguments $params -Action delete
+                    $params = @{
+                         id = $item
+                         ifnum = $Interface
+                         tagged = $Tagged.ToBool()
+                    }
+                    $response = _InvokeNSRestApi -Session $Session -Method PUT -Type vlan_interface_binding -Payload $params -Action add
                 }
                 catch {
                     throw $_

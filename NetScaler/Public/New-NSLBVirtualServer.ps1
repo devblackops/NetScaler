@@ -52,7 +52,7 @@ function New-NSLBVirtualServer {
 
     .PARAMETER NonAddressable
         Bypasses the need for an IPAddress and port for the virtual server to configure it as "Non Addressable"
-    
+
     .PARAMETER Comment
         Any comments that you might want to associate with the virtual server.
 
@@ -142,7 +142,12 @@ function New-NSLBVirtualServer {
 
     .PARAMETER BackupVServer
         Name of the backup virtual server to which to forward requests if the primary virtual server goes DOWN or reaches its spillover threshold.
-        Minimum length = 1    
+        Minimum length = 1
+
+    .PARAMETER RedirectPortRewrite
+        Rewrite the port and change the protocol to ensure successful HTTP redirects from services.
+        Default value: DISABLED
+        Possible values = ENABLED, DISABLED
 
     .PARAMETER Passthru
         Return the load balancer server object.
@@ -153,21 +158,21 @@ function New-NSLBVirtualServer {
 
         [parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB virtual server name'),
-        
+
         [Parameter(Mandatory = $true, ParameterSetName = "Addressable")]
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string]$IPAddress,
-        
+
         [Parameter(Mandatory = $true, ParameterSetName = "NonAddressable")]
         [Switch]$NonAddressable,
-        
+
         [Parameter(Mandatory = $true, ParameterSetName = "Addressable")]
         [ValidateRange(0, 65534)]
         [int]$Port = 80,
-        
+
         [ValidateLength(0, 256)]
         [string]$Comment = '',
-        
+
         [ValidateSet('DHCPRA','DIAMTER', 'DNS', 'DNS_TCP', 'DLTS', 'FTP', 'HTTP', 'MSSQL', 'MYSQL', 'NNTP', 'PUSH','RADIUS', 'RDP', 'RTSP', 'SIP_UDP', 'SSL', 'SSL_BRIDGE', 'SSL_DIAMETER', 'SSL_PUSH', 'SSL_TCP', 'TCP', 'TFTP', 'UDP')]
         [string]$ServiceType = 'HTTP',
 
@@ -182,21 +187,25 @@ function New-NSLBVirtualServer {
         [Parameter()]
         [ValidateSet('PASSIVE', 'ACTIVE')]
         [string]
-        $ICMPVSRResponse = 'PASSIVE',        
+        $ICMPVSRResponse = 'PASSIVE',
 
         [Parameter()]
         [string]
         $HTTPRedirectURL,
 
         [Parameter()]
-        [int]$TimeOut = 2,    
-        
+        [int]$TimeOut = 2,
+
         [Parameter()]
-        [int]$ClientTimeout,       
+        [int]$ClientTimeout,
 
         [Parameter()]
         [string]
-        $BackupVServer,         
+        $BackupVServer,
+
+        [Parameter()]
+        [ValidateSet('ENABLED', 'DISABLED')]
+        [string]$RedirectPortRewrite = 'DISABLED',
 
         [Switch]$PassThru
     )
@@ -217,6 +226,7 @@ function New-NSLBVirtualServer {
                         port = $Port
                         lbmethod = $LBMethod
                         icmpvsrresponse = $ICMPVSRResponse
+                        redirectportrewrite = $RedirectPortRewrite
                     }
 
                     if ($PSBoundParameters.ContainsKey('PersistenceType')) {
@@ -225,8 +235,8 @@ function New-NSLBVirtualServer {
                     if ($PSBoundParameters.ContainsKey('RedirectFromPort')) {
                         $params.Add('redirectfromport', $RedirectFromPort)
                     }
-                    if ($PSBoundParameters.ContainsKey('HTTPSRedirectURL')) {
-                        $params.Add('rediurl', $HTTPSRedirectURL)
+                    if ($PSBoundParameters.ContainsKey('HTTPRedirectURL')) {
+                        $params.Add('redirurl', $HTTPRedirectURL)
                     }
                     if ($PSBoundParameters.ContainsKey('Timeout')) {
                         $params.Add('timeout', $Timeout)
@@ -234,9 +244,9 @@ function New-NSLBVirtualServer {
                     if ($PSBoundParameters.ContainsKey('ClientTimeout')) {
                         $params.Add('clttimeout', $ClientTimeout)
                     }
-                    if ($PSBoundParameters.ContainsKey('BackupVServer')) {
+                    if (($PSBoundParameters.ContainsKey('BackupVServer')) -AND ($Port -eq 443) -AND ($ServiceType -eq 'ssl')) {
                         $params.Add('backupvserver', $BackupVServer)
-                    }                    
+                    }
                     _InvokeNSRestApi -Session $Session -Method POST -Type lbvserver -Payload $params -Action add
 
                     if ($PSBoundParameters.ContainsKey('PassThru')) {

@@ -29,7 +29,7 @@ function Remove-NSLBServiceGroupMemberBinding {
 
     .EXAMPLE
         $x = Remove-NSLBServiceGroupMember -Name 'sg01' -ServerName 'server01' -Port 80 -PassThru
-    
+
         Disassociates server 'server01' with service group 'sg01' and return the object.
 
     .PARAMETER Session
@@ -42,7 +42,7 @@ function Remove-NSLBServiceGroupMemberBinding {
         Name of the server to which to bind the service group.
 
     .PARAMETER IPAddress
-        IP Address of the server/resource.        
+        IP Address of the server/resource.
 
     .PARAMETER Port
         Server port number.
@@ -57,7 +57,7 @@ function Remove-NSLBServiceGroupMemberBinding {
         $Session = $script:session,
 
         [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name,
+        [string[]]$ServiceName,
 
         [Parameter(Mandatory)]
         [string[]]$ServerName,
@@ -65,10 +65,6 @@ function Remove-NSLBServiceGroupMemberBinding {
         [Parameter(Mandatory)]
         [ValidateRange(1, 65535)]
         [int]$Port,
-
-        [parameter()]
-        [ValidateScript({$_ -match [IPAddress]$_ })]
-        [string]$IPAddress,        
 
         [switch]$PassThru
     )
@@ -78,7 +74,7 @@ function Remove-NSLBServiceGroupMemberBinding {
     }
 
     process {
-        foreach ($item in $Name) {
+        foreach ($item in $ServiceName) {
             foreach ($member in $ServerName) {
                 if ($PSCmdlet.ShouldProcess($item, "Remove Service Group Member: $Member")) {
                     try {
@@ -86,10 +82,7 @@ function Remove-NSLBServiceGroupMemberBinding {
                             servicegroupname = $item
                             servername = $ServerName
                             port = $Port
-                        }                     
-                        if ($PSBoundParameters.ContainsKey('ip')) {
-                            $params.ip = $IPAddress
-                        } 
+                        }
 
                         _InvokeNSRestApi -Session $Session -Method DELETE -Type servicegroup_servicegroupmember_binding -Resource $item -Arguments $params -Action delete
 

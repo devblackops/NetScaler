@@ -89,6 +89,9 @@ function Set-NSResponderAction {
         [ValidateLength(0, 256)]
         [string]$Comment = [string]::Empty,
 
+        [ValidateLength(0, 256)]
+        [string]$HtmlPage = [string]::Empty,
+
         [switch]$Force,
 
         [switch]$PassThru

@@ -39,7 +39,7 @@ function Get-NSLBServiceGroupMemberBinding {
 
         [parameter(Mandatory, ValueFromPipeline = $true, Position = 0, ValueFromPipelineByPropertyName)]
         [alias('servicegroupname')]
-        [string[]]$Name
+        [string[]]$ServiceName
     )
 
     begin {
@@ -47,9 +47,9 @@ function Get-NSLBServiceGroupMemberBinding {
     }
 
     process {
-        foreach ($item in $Name) {
+        foreach ($item in $ServiceName) {
             try {
-                $bindings = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup_servicegroupmember_binding -Resource $item -Action Get 
+                $bindings = _InvokeNSRestApi -Session $Session -Method Get -Type servicegroup_servicegroupmember_binding -Resource $item -Action Get
                 return $bindings.servicegroup_servicegroupmember_binding
             } catch {
                 throw $_

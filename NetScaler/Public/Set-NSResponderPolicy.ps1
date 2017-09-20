@@ -42,6 +42,9 @@ function Set-NSResponderPolicy {
         * RESET - Reset the client connection by closing it. The client program, such as a browser, will handle this and may inform the user. The client may then resend the request if desired.
         * DROP - Drop the request without sending a response to the user.
 
+    .PARAMETER UndefinedAction
+        Action to perform if the result of policy evaluation is undefined (UNDEF). An UNDEF event indicates an internal error condition. Only the above built-in actions can be used
+
     .PARAMETER Passthru
         Return the responder policy.
     #>
@@ -53,12 +56,14 @@ function Set-NSResponderPolicy {
         [string[]]$Name,
 
         [Parameter()]
-        [string]
-        $Rule,
+        [string]$Rule,
 
         [Parameter()]
-        [string]
-        $Action,
+        [string]$Action,
+
+        [Parameter()]
+        [ValidateSet('NOOP','RESET','DROP')]
+        [string]$UndefinedAction = '',
 
         [Parameter()]
         [string]$Comment,
@@ -79,6 +84,7 @@ function Set-NSResponderPolicy {
                         rule = $Rule
                         action = $Action
                         comment = $Comment
+                        undefaction = $UndefinedAction
                     }
                     _InvokeNSRestApi -Session $Session -Method PUT -Type responderpolicy -Payload $params -Action update
 

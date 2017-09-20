@@ -71,10 +71,10 @@ function Add-NSCertKeyPair {
     param(
         $Session = $script:session,
 
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string]$CertKeyName,
 
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string]$CertPath,
 
         [Parameter()]
