@@ -19,7 +19,7 @@ function Get-NSCurrentTime {
         Retrieve the current NetScaler Time and returns as date object
     .DESCRIPTION
         Retrieve the current NetScaler Time and returns as date object
-    .PARAMETER NSSession
+    .PARAMETER Session
         An existing custom NetScaler Web Request Session object returned by Connect-NSAppliance
     .EXAMPLE
         Get-NSCurrentTime -Session $Session
@@ -29,22 +29,19 @@ function Get-NSCurrentTime {
     #>
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)] [PSObject]$Session
+        $Session = $Script:Session
     )
 
     begin {
         _AssertSessionActive
     }
-    
+
     process {
         $response = _InvokeNSRestApi -Session $Session -Method GET -Type nsconfig
         $currentdatestr = $response.nsconfig.systemtime
         Write-Verbose "systemtime: $currentdatestr"
-        $date = get-date "1/1/1970"
+        $date = Get-Date -Date '1/1/1970'
         $nsdate = $date.AddSeconds($currentdatestr)
-    }
-    
-    end{  
-        return $nsdate
+        $nsdate
     }
 }

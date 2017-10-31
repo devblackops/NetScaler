@@ -17,16 +17,16 @@ limitations under the License.
 function Update-NSAppliance {
     <#
     .SYNOPSIS
-        Grabs Netscaler license expiration information via REST
+        Updates a Netscaler and uses firmware from a remote location.
     .DESCRIPTION
-        Grabs Netscaler license expiration information via REST.
-    .PARAMETER NSSession
+        Updates a Netscaler and uses firmware from a remote location.
+    .PARAMETER Session
         An existing custom NetScaler Web Request Session object returned by Connect-NSAppliance
-    .PARAMETER url
+    .PARAMETER Url
         URL for Netscaler firmware (MANDATORY)
-    .PARAMETER noreboot
+    .PARAMETER NoReboot
         Don't reboot after upgrade
-    .PARAMETER nocallhome
+    .PARAMETER NoCallhome
         Don't enable CallHome
     .EXAMPLE
         Update-NSAppliance -Session $Session -url "https://mywebserver/build-11.1-47.14_nc.tgz"
@@ -37,56 +37,49 @@ function Update-NSAppliance {
     #>
     [CmdletBinding()]
     param (
-    [Parameter(Mandatory=$true)] [PSObject]$Session,
-    [Parameter(Mandatory=$true)] $url,
-    [switch]$noreboot,
-    [switch]$nocallhome
+        [Parameter(Mandatory = $true)]
+        [string]$Url,
+
+        $Session = $Script:Session,
+
+        [switch]$NoReboot,
+
+        [switch]$NoCallhome
     )
 
-    begin{
+    begin {
         _AssertSessionActive
     }
 
     process {
-
-        if(!$nocallhome)
-        {
-        write-verbose "Enabling callhome"
-        $ch = $true
-        }
-        else
-        {
-            write-verbose"Disabling callhome"
+        if (-not $nocallhome) {
+            Write-Verbose -Message 'Enabling callhome'
+            $ch = $true
+        } else {
+            Write-Verbose -Message 'Disabling callhome'
             $ch = $false
         }
 
-        if(!$noreboot)
-        {
-            Write-Verbose "Rebooting NS Appliance"
+        if (-not $NoReboot) {
+            Write-Verbose -Message 'Rebooting NS Appliance'
             $reboot = $true
-        }
-        else
-        {
-            Write-Verbose "Skipping reboot"
+        } else {
+            Write-Verbose -Message 'Skipping reboot'
             $reboot = $false
         }
 
-        #Build upgrade payload
+        # Build upgrade payload
         $payload = @{
-                "url" = $url;
-                "y" = $reboot;
-                "l" = $ch;
-                }
-        
-        #Attempt upgrade
-        try{
-            _InvokeNSRestApi -Session $Session -Method POST -Type install -Payload $payload
-        }
-        Catch{
-            throw $_
+            'url' = $Url
+            'y' = $reboot
+            'l' = $ch
         }
 
-    
+        # Attempt upgrade
+        try {
+            _InvokeNSRestApi -Session $Session -Method POST -Type install -Payload $payload
+        } catch{
+            throw $_
+        }
     }
-    
 }

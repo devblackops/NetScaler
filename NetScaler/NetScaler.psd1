@@ -138,7 +138,7 @@ FunctionsToExport = @(
     'Get-NSLBVirtualServerTrafficPolicyBinding',
     'Get-NSLDAPAuthenticationPolicy',
     'Get-NSLDAPAuthenticationServer',
-    'Get-NSlicenseExpiration',
+    'Get-NSLicenseExpiration',
     'Get-NSMode',
     'Get-NSNTPServer',
     'Get-NSResponderAction',
