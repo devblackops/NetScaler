@@ -1,5 +1,12 @@
 
-## 1.X.0 (Unreleased)
+# Change Log
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## 1.6.0 (2017-10-31)
   * Features
     * PR82 - Added Get-NSCurrentTime, Get-NSlicenseExpiration, and Update-NSAppliance functions (via @ryancbutler)
 
