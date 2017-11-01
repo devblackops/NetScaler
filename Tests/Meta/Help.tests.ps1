@@ -3,7 +3,7 @@
 # Get module commands
 # Remove all versions of the module from the session. Pester can't handle multiple versions.
 Get-Module $env:BHProjectName | Remove-Module
-Import-Module $env:BHPSModulePath -Verbose:$false -ErrorAction Stop
+Import-Module $env:BHModulePath -Verbose:$false -ErrorAction Stop
 $moduleVersion = (Test-ModuleManifest $env:BHPSModuleManifest | select -ExpandProperty Version).ToString()
 $ms = [Microsoft.PowerShell.Commands.ModuleSpecification]@{ ModuleName = $env:BHProjectName; RequiredVersion = $moduleVersion }
 $commands = Get-Command -FullyQualifiedModule $ms -CommandType Cmdlet, Function, Workflow  # Not alias

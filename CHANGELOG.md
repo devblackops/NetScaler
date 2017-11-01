@@ -1,4 +1,8 @@
 
+## 1.X.0 (Unreleased)
+  * Features
+    * PR82 - Added Get-NSCurrentTime, Get-NSlicenseExpiration, and Update-NSAppliance functions (via @ryancbutler)
+
 ## 1.5.0 (2017-07-25)
   * Features
     * PR57 - Added -Graceful parameter to the Disable-NSLBServer (via @daimhin)
