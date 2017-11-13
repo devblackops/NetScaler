@@ -105,9 +105,6 @@ function New-NSSSLProfile {
         [string]$ProfileType,
 
         [ValidateSet('ENABLED','DISABLED')]
-        [string]$SSL2,
-
-        [ValidateSet('ENABLED','DISABLED')]
         [string]$SSL3,
 
         [ValidateSet('ENABLED','DISABLED')]
@@ -145,9 +142,6 @@ function New-NSSSLProfile {
                 }
                 if ($PSBoundParameters.ContainsKey('DenySslRenegotiation')) {
                     $params.Add('denysslreneg', $DenySslRenegotiation)
-                }
-                if ($PSBoundParameters.ContainsKey('SSL2')) {
-                    $params.Add('ssl2', $SSL2)
                 }
                 if ($PSBoundParameters.ContainsKey('SSL3')) {
                     $params.Add('ssl3', $SSL3)

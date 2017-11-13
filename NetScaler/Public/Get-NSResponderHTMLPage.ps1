@@ -49,6 +49,6 @@ function Get-NSResponderHTMLPage {
 
     process {
         $response = _InvokeNSRestApiGet -Session $Session -Type responderhtmlpage -Name $Name
-        $response.name
+        if (!$response) { $response.name }
     }
 }

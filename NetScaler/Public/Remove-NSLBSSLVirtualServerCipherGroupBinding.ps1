@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSLBSSLCipherGroupBinding {
+function Remove-NSLBSSLVirtualServerCipherGroupBinding {
      <#
     .SYNOPSIS
-        Removes a new load balancer cipher group binding.
+        Unbinds a new load balancer cipher group binding.
 
     .DESCRIPTION
-        Removes a new load balancer cipher group binding.
+        Unbinds a new load balancer cipher group binding.
 
     .EXAMPLE
-        Remove-NSLBSSLCipherBinding -VirtualServerName 'vserver01' -Ciphername 'somecipher'
+        Remove-NSLBSSLVirtualServerCipherGroupBinding -VirtualServerName 'vserver01' -Ciphername 'somecipher'
 
-        Removes the SSL cipher group 'somecipher' from the virtual server 'vserver01'.
+        Unbinds the SSL cipher group 'somecipher' from the virtual server 'vserver01'.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -73,7 +73,7 @@ function Remove-NSLBSSLCipherGroupBinding {
                 _InvokeNSRestApi -Session $Session -Method DELETE -Type sslvserver_sslcipher_binding -Resource $VirtualServerName -Arguments $params -Action delete
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBSSLCipherGroupBinding -Session $Session -VirtualServerName $VirtualServerName
+                    return Get-NSLBSSLVirtualServerCipherGroupBinding -Session $Session -VirtualServerName $VirtualServerName
                 }
             } catch {
                 throw $_

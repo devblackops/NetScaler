@@ -426,14 +426,8 @@ function Set-NSLBMonitor {
                         }
                     }
                     if ($PSBoundParameters.ContainsKey('ResponseCode')) {
-                        ## Add each custom property to the $params Hashtable
-                        foreach ($rc in $ResponseCode.Keys) {
-                            $params.Add($rc.ToLower(), $ResponseCode[$rc])
-                        }
-                    }                    
-                    # if ($PSBoundParameters.ContainsKey('ResponseCode')) {
-                    #     $params.Add('respcode', $ResponseCode)
-                    # }
+                        $params.Add('respcode', $ResponseCode)
+                    }
                     if ($PSBoundParameters.ContainsKey('HTTPRequest')) {
                         $params.Add('httprequest', $HTTPRequest)
                     }

@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Add-NSLBSSLCipherSuiteBinding {
+function Remove-NSLBSSLVirtualServerCipherSuiteBinding {
      <#
     .SYNOPSIS
-        Adds a new load balancer server to cipher suite binding.
+        Unbinds a cipher suite from a virtual server
 
     .DESCRIPTION
-        Adds a new load balancer server to cipher suite binding.
+        Unbinds a cipher suite from a virtual server
 
     .EXAMPLE
-        Add-NSLBSSLCipherSuiteBinding -VirtualServerName 'vserver01' -CipherName 'somecipher'
+        Remove-NSLBSSLVirtualServerCipherSuiteBinding -VirtualServerName 'vserver01' -CipherName 'somecipher'
 
-        Adds the binding of the SSL cipher suite 'somecipher' to virtual server 'vserver01'.
+        Unbinds a cipher suite named 'somecipher' from the virtual server 'vserver01'.
 
     .PARAMETER Session
         The NetScaler session object.
@@ -34,7 +34,7 @@ function Add-NSLBSSLCipherSuiteBinding {
         Name of the SSL virtual server
 
     .PARAMETER CipherName
-        The cipher group/alias/individual cipher configuration.
+        The name of the cipher group
 
     .PARAMETER Passthru
         Return the load balancer server object.
@@ -62,7 +62,7 @@ function Add-NSLBSSLCipherSuiteBinding {
     }
 
     process {
-        if ($Force -or $PSCmdlet.ShouldProcess($VirtualServerName, 'Add a Cipher Suite Binding')) {
+        if ($Force -or $PSCmdlet.ShouldProcess($VirtualServerName, 'Removes Cipher Suite Binding')) {
             try {
 
                 $params = @{
@@ -70,10 +70,10 @@ function Add-NSLBSSLCipherSuiteBinding {
                     ciphername = $CipherName
                 }
 
-                _InvokeNSRestApi -Session $Session -Method PUT -Type sslvserver_sslciphersuite_binding -Payload $params
+                _InvokeNSRestApi -Session $Session -Method DELETE -Type sslvserver_sslciphersuite_binding -Resource $VirtualServerName -Arguments $params -Action delete
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBSSLCipherSuiteBinding -Session $Session -VirtualServerName $VirtualServerName
+                    return Get-NSLBSSLVirtualServerCipherSuiteBinding -Session $Session -VirtualServerName $VirtualServerName
                 }
             } catch {
                 throw $_

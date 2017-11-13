@@ -17,15 +17,15 @@ limitations under the License.
 function Remove-NSLBSSLVirtualServerCertificateBinding {
      <#
     .SYNOPSIS
-        Adds a new load balancer server certificate binding.
+        Unbinds a virtual server from a certificate certificate.
 
     .DESCRIPTION
-        Adds a new load balancer server certificate binding.
+        Unbinds a virtual server from a certificate certificate.
 
     .EXAMPLE
-        Add-NSLBSSLVirtualServerCertificateBinding -VirtualServerName 'vserver01' -Certificate 'cert'
+        Remove-NSLBSSLVirtualServerCertificateBinding -VirtualServerName 'vserver01' -Certificate 'cert'
 
-        Bind the SSL certificate 'cert' to virtual server 'vserver01'.
+        Unbinds the certificate 'cert' from virtual server 'vserver01'.
 
     .PARAMETER Session
         The NetScaler session object.

@@ -17,15 +17,15 @@ limitations under the License.
 function Remove-NSVLANInterfaceBinding {
     <#
     .SYNOPSIS
-        Removes the binding of an interface as well as untagged/unbound from NetScaler appliance.
+        Unbinds an interface from a vlan
 
     .DESCRIPTION
-        Removes the binding of an interface as well as untagged/unbound from NetScaler appliance.
+        Unbinds an interface from a vlan
 
     .EXAMPLE
         Remove-NSVLANInterfaceBinding -VLANID 150 -interface '0/1' -tagged
 
-        Adds binding for interface '0/1' and tags the vlan on the NetScaler appliance.
+        Unbinds interface '0/1' from vlan 150
 
     .PARAMETER Session
         The NetScaler session object.

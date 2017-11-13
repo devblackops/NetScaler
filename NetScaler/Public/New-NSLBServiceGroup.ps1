@@ -29,7 +29,7 @@ function New-NSLBServiceGroup {
 
     .EXAMPLE
         'sg01' | New-NSLBServiceGroup -ServiceType HTTP -Comment 'test service group'
-    
+
         Creates a new HTTP service group called 'sg01' with a comment.
 
     .PARAMETER Session
@@ -65,10 +65,10 @@ function New-NSLBServiceGroup {
         Possible values = ENABLED, DISABLED
 
     .PARAMETER HealthMonitor
-        Monitor the health of this service. 
-        Available settings function as follows: 
-            YES - Send probes to check the health of the service. 
-            NO - Do not send probes to check the health of the service. 
+        Monitor the health of this service.
+        Available settings function as follows:
+            YES - Send probes to check the health of the service.
+            NO - Do not send probes to check the health of the service.
                  With the NO option, the appliance shows the service as UP at all times.
         Default value: YES
         Possible values = YES, NO
@@ -92,20 +92,20 @@ function New-NSLBServiceGroup {
         Possible values = ON, OFF
 
     .PARAMETER UseProxyPort
-        Use the proxy port as the source port when initiating connections with the server. 
-        With the NO setting, the client-side connection port is used as the source port for the server-side connection. 
+        Use the proxy port as the source port when initiating connections with the server.
+        With the NO setting, the client-side connection port is used as the source port for the server-side connection.
         Note: This parameter is available only when the Use Source IP (USIP) parameter is set to YES.
         Possible values = YES, NO
 
     .PARAMETER DownStateFlush
-        Flush all active transactions associated with all the services in the service group whose state transitions from UP to DOWN. 
+        Flush all active transactions associated with all the services in the service group whose state transitions from UP to DOWN.
         Note: Do not enable this option for applications that must complete their transactions.
         Default value: ENABLED
         Possible values = ENABLED, DISABLED
 
     .PARAMETER UseClientIP
-        Use client's IP address as the source IP address when initiating connection to the server. 
-        With the NO setting, which is the default, a mapped IP (MIP) address or subnet IP (SNIP) address 
+        Use client's IP address as the source IP address when initiating connection to the server.
+        With the NO setting, which is the default, a mapped IP (MIP) address or subnet IP (SNIP) address
         is used as the source IP address to initiate server side connections.
         Possible values = YES, NO
 
@@ -126,9 +126,9 @@ function New-NSLBServiceGroup {
         Possible values = ENABLED, DISABLED
 
     .PARAMETER ClientIPHeader
-        Name of the HTTP header whose value must be set to the IP address of the client. 
-        Used with the Client IP parameter. If client IP insertion is enabled, and the 
-        client IP header is not specified, the value of Client IP Header parameter or the 
+        Name of the HTTP header whose value must be set to the IP address of the client.
+        Used with the Client IP parameter. If client IP insertion is enabled, and the
+        client IP header is not specified, the value of Client IP Header parameter or the
         value set by the set ns config command is used as client's IP header name.
         Minimum length = 1
 
@@ -138,7 +138,7 @@ function New-NSLBServiceGroup {
         Maximum value = 4294967287
 
     .PARAMETER MonitorThreshold
-        Minimum sum of weights of the monitors that are bound to this service. 
+        Minimum sum of weights of the monitors that are bound to this service.
         Used to determine whether to mark a service as UP or DOWN.
         Minimum value = 0
         Maximum value = 65535
@@ -159,7 +159,7 @@ function New-NSLBServiceGroup {
         Minimum value = 0
         Maximum value = 31536000
 
-    .PARAMETER ServerIdleTimeout        
+    .PARAMETER ServerIdleTimeout
         Time, in seconds, after which to terminate an idle server connection.
         Minimum value = 0
         Maximum value = 31536000

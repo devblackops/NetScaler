@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSLBSSLCipherGroupBinding {
+function Get-NSLBSSLVirtualServerCipherGroupBinding {
     <#
     .SYNOPSIS
         Gets the specified load balancer SSL virtual server object binding to a cipher group.
@@ -23,12 +23,12 @@ function Get-NSLBSSLCipherGroupBinding {
         Gets the specified load balancer SSL virtual server object binding to a cipher group
 
     .EXAMPLE
-        Get-NSLBSSLCipherBinding
+        Get-NSLBSSLVirtualServerCipherGroupBinding
 
         Get the cypher group bindings for all load balancer SSL virtual server objects.
 
     .EXAMPLE
-        Get-NSLBSSLCipherBinding -VirtualServerName 'vserver01'
+        Get-NSLBSSLVirtualServerCipherGroupBinding -VirtualServerName 'vserver01'
 
         Get the cipher group bindings for the load balancer SSL virtual server named 'vserver01'.
 

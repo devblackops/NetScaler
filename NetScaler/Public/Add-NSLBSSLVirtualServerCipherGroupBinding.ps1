@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Add-NSLBSSLCipherGroupBinding {
+function Add-NSLBSSLVirtualServerCipherGroupBinding {
      <#
     .SYNOPSIS
         Adds a new load balancer server to cipher group binding.
@@ -23,7 +23,7 @@ function Add-NSLBSSLCipherGroupBinding {
         Adds a new load balancer server to cipher group binding.
 
     .EXAMPLE
-        Add-NSLBSSLCipherBinding -VirtualServerName 'vserver01' -CipherName 'somecipher'
+        Add-NSLBSSLVirtualServerCipherGroupBinding -VirtualServerName 'vserver01' -CipherName 'somecipher'
 
         Adds the binding of the SSL cipher group 'somecipher' to virtual server 'vserver01'.
 
@@ -70,10 +70,10 @@ function Add-NSLBSSLCipherGroupBinding {
                     ciphername = $CipherName
                 }
 
-                _InvokeNSRestApi -Session $Session -Method PUT -Type sslvserver_sslcipher_binding -Payload $params
+                _InvokeNSRestApi -Session $Session -Method PUT -Type sslvserver_sslcipher_binding -Payload $params -action add
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSLBSSLCipherGroupBinding -Session $Session -VirtualServerName $VirtualServerName
+                    return Get-NSLBSSLVirtualServerCipherGroupBinding -Session $Session -VirtualServerName $VirtualServerName
                 }
             } catch {
                 throw $_

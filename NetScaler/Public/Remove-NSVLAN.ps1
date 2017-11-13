@@ -17,15 +17,15 @@ limitations under the License.
 function Remove-NSVLAN {
     <#
     .SYNOPSIS
-        Deletes an untagged/unbound VLAN from NetScaler appliance.
+        Removes an untagged/unbound VLAN from NetScaler appliance.
 
     .DESCRIPTION
-        Deletes an untagged/unbound VLAN from NetScaler appliance.
+        Removes an untagged/unbound VLAN from NetScaler appliance.
 
     .EXAMPLE
         Remove-NSVLAN -VLANID 150
 
-        Deletes VLAN 150 from the NetScaler appliance.
+        Removes VLAN 150 from the NetScaler appliance.
 
     .PARAMETER Session
         The NetScaler session object.

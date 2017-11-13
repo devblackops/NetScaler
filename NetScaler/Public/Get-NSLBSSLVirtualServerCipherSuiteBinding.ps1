@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSLBSSLCipherSuiteBinding {
+function Get-NSLBSSLVirtualServerCipherSuiteBinding {
     <#
     .SYNOPSIS
         Gets the specified load balancer SSL virtual server object.
@@ -23,12 +23,12 @@ function Get-NSLBSSLCipherSuiteBinding {
         Gets the specified load balancer SSL virtual server object.
 
     .EXAMPLE
-        Get-NSLBSSLCipherSuiteBinding
+        Get-NSLBSSLVirtualServerCipherSuiteBinding
 
         Get the cypher suite bindings for all load balancer SSL virtual server objects.
 
     .EXAMPLE
-        Get-NSLBSSLCipherSuiteBinding -VirtualServerName 'vserver01'
+        Get-NSLBSSLVirtualServerCipherSuiteBinding -VirtualServerName 'vserver01'
 
         Get the cipher suite bindings for the load balancer SSL virtual server named 'vserver01'.
 

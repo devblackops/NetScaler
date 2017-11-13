@@ -46,7 +46,7 @@ function Set-NSLBServiceGroup {
     .PARAMETER State
         Initial state of the service group.
         Default value: ENABLED
-        Possible values = ENABLED, DISABLED      
+        Possible values = ENABLED, DISABLED
 
     .PARAMETER AutoScale
         Auto scale option for a servicegroup.
@@ -186,7 +186,7 @@ function Set-NSLBServiceGroup {
         [ValidateRange(0, 31536000)]
         [int]$ServerIdleTimeout = 360,
 
-        [Switch]$Force,        
+        [Switch]$Force,
 
         [Switch]$PassThru
     )
@@ -200,17 +200,19 @@ function Set-NSLBServiceGroup {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Edit Service Group')) {
                 $params = @{
                     servicegroupname = $item
-                    state = $State
-                }                          
+                }
+                if ($PSBoundParameters.ContainsKey('State')) {
+                    $params.Add('state', $State)
+                }
                 if ($PSBoundParameters.ContainsKey('CacheType')) {
                     $params.Add('cachetype', $CacheType)
-                }                
+                }
                 if ($PSBoundParameters.ContainsKey('Cacheable')) {
                     $params.Add('cacheable', $Cacheable)
                 }
                 if ($PSBoundParameters.ContainsKey('AutoScale')) {
                     $params.Add('autoScale', $AutoScale)
-                }                
+                }
                 if ($PSBoundParameters.ContainsKey('HealthMonitor')) {
                     $params.Add('healthmonitor', $HealthMonitor)
                 }
