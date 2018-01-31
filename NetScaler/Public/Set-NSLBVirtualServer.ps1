@@ -92,9 +92,8 @@ function Set-NSLBVirtualServer {
         [string[]]$Name = (Read-Host -Prompt 'LB virtual server name'),
 
         [ValidateSet('ROUNDROBIN', 'LEASTCONNECTION', 'LEASTRESPONSETIME', 'LEASTBANDWIDTH', 'LEASTPACKETS', 'CUSTOMLOAD', 'LRTM', 'URLHASH', 'DOMAINHASH', 'DESTINATIONIPHASH', 'SOURCEIPHASH', 'TOKEN', 'SRCIPDESTIPHASH', 'SRCIPSRCPORTHASH', 'CALLIDHASH')]
-        [string]$LBMethod = 'ROUNDROBIN',
+        [string]$LBMethod,
 
-        [Parameter()]
         [ValidateSet('SOURCEIP', 'COOKIEINSERT', 'SSLSESSION', 'CUSTOMSERVERID', 'RULE', 'URLPASSIVE', 'DESTIP', 'SRCIPDESTIP', 'CALLID' ,'RTSPID', 'FIXSESSION', 'NONE')]
         [string]
         $PersistenceType,
@@ -102,31 +101,22 @@ function Set-NSLBVirtualServer {
         [ValidateScript({$_ -match [IPAddress]$_ })]
         [string]$IPAddress,
 
-        [Parameter()]
-        [string]
-        $HttpRedirectURL,
+        [string]$HttpRedirectURL,
 
-        [Parameter()]
         [ValidateLength(0, 256)]
-        [string]$Comment = '',
+        [string]$Comment,
 
-        [Parameter()]
-        [ValidateLength(0, 256)]
-        [string]$ICMPVSRResponse = 'PASSIVE',
+        [ValidateSet('PASSIVE', 'ACTIVE')]
+        [string]$ICMPVSRResponse,
 
-        [Parameter()]
-        [int]$TimeOut = 2,
+        [int]$TimeOut,
 
-        [Parameter()]
         [int]$ClientTimeout,
 
-        [Parameter()]
-        [string]
-        $BackupVServer,
+        [string]$BackupVServer,
 
-        [Parameter()]
         [ValidateSet('ENABLED', 'DISABLED')]
-        [string]$RedirectPortRewrite = 'DISABLED',
+        [string]$RedirectPortRewrite,
 
         [Switch]$Force,
 
@@ -142,8 +132,12 @@ function Set-NSLBVirtualServer {
             if ($Force -or $PSCmdlet.ShouldProcess($item, 'Edit Virtual Server')) {
                 $params = @{
                     name = $item
-                    timeout = $TimeOut
-                    icmpvsrresponse = $ICMPVSRResponse
+                }
+                if ($PSBoundParameters.ContainsKey('TimeOut')) {
+                    $params.Add('timeout', $TimeOut)
+                }
+                if ($PSBoundParameters.ContainsKey('ICMPVSRResponse')) {
+                    $params.Add('icmpvsrresponse', $ICMPVSRResponse)
                 }
                 if ($PSBoundParameters.ContainsKey('LBMethod')) {
                     $params.Add('lbmethod', $LBMethod)
@@ -169,7 +163,7 @@ function Set-NSLBVirtualServer {
                 if ($PSBoundParameters.ContainsKey('RedirectPortRewrite')) {
                     $params.Add('RedirectPortRewrite', $RedirectPortRewrite)
                 }
-                _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver -Payload $params -Action update
+                _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver -Payload $params #-Action update
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
                     return Get-NSLBVirtualServer -Session $Session -Name $item
