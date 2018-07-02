@@ -12,7 +12,7 @@
 RootModule = 'NetScaler.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.5.0'
+ModuleVersion = '1.6.0'
 
 # ID used to uniquely identify this module
 GUID = 'bd4390dc-a8ad-4bce-8d69-f53ccf8e4163'
@@ -111,6 +111,7 @@ FunctionsToExport = @(
     'Get-NSCSPolicy',
     'Get-NSCSVirtualServer',
     'Get-NSCSVirtualServerResponderPolicyBinding',
+    'Get-NSCurrentTime',
     'Get-NSDnsNameServer',
     'Get-NSDnsSuffix',
     'Get-NSFeature',
@@ -137,6 +138,7 @@ FunctionsToExport = @(
     'Get-NSLBVirtualServerTrafficPolicyBinding',
     'Get-NSLDAPAuthenticationPolicy',
     'Get-NSLDAPAuthenticationServer',
+    'Get-NSLicenseExpiration',
     'Get-NSMode',
     'Get-NSNTPServer',
     'Get-NSResponderAction',
@@ -209,7 +211,8 @@ FunctionsToExport = @(
     'Set-NSResponderAction',
     'Set-NSSSLProfile',
     'Set-NSTimeZone',
-    'Set-NSVPNVirtualServerTheme'
+    'Set-NSVPNVirtualServerTheme',
+    'Update-NSAppliance'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
