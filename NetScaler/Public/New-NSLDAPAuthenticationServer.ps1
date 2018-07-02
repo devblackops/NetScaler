@@ -60,8 +60,14 @@ function New-NSLDAPAuthenticationServer {
     .PARAMETER LoginAttributeName
         LDAP login name attribute. The NetScaler appliance uses the LDAP login name to query external LDAP servers or Active Directories
 
+    .PARAMETER SearchFilter
+        String to be combined with the default LDAP user search string to form the search value.
+
     .PARAMETER GroupAttributeName
         LDAP group attribute name used for group extraction on the LDAP server.
+
+    .PARAMETER SubAttributeName
+        LDAP group sub-attribute name. Used for group extraction from the LDAP server.
 
     .PARAMETER SSOAttributeName
         LDAP single signon (SSO) attribute. The NetScaler appliance uses the SSO name attribute to query external LDAP servers or Active Directory for an alternate username.
@@ -106,7 +112,11 @@ function New-NSLDAPAuthenticationServer {
 
         [string] $LoginAttributeName,
 
+        [string] $SearchFilter,
+
         [string] $GroupAttributeName,
+
+        [string] $SubAttributeName,
 
         [string] $SSOAttributeName,
 
@@ -142,8 +152,14 @@ function New-NSLDAPAuthenticationServer {
                 if ($PSBoundParameters.ContainsKey('LoginAttributeName')) {
                     $params.Add('ldaploginname', $LoginAttributeName)
                 }
+                if ($PSBoundParameters.ContainsKey('SearchFilter')) {
+                    $params.Add('searchfilter', $SearchFilter)
+                }
                 if ($PSBoundParameters.ContainsKey('GroupAttributeName')) {
                     $params.Add('groupattrname', $GroupAttributeName)
+                }
+                if ($PSBoundParameters.ContainsKey('SubAttributeName')) {
+                    $params.Add('subattributename', $SubAttributeName)
                 }
                 if ($PSBoundParameters.ContainsKey('SecurityType')) {
                     $params.Add('sectype', $SecurityType)
