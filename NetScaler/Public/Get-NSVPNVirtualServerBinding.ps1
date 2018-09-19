@@ -38,10 +38,10 @@ function Get-NSVPNVirtualServerBinding {
     .PARAMETER Name
         The name or names of the NetScaler Gateway virtual server to retrieve the bindings.
 
-    .PARAMETER binding
+    .PARAMETER Binding
         Type of policy binding to query.
 
-        Possible values: SessionPolicy, LDAPAuthenticationPolicy, STAServer
+        Possible values: SessionPolicy, LDAPAuthenticationPolicy, STAServer, RADIUSAuthenticationPolicy
 
     .PARAMETER PolicyName
         Name of the bound policy (or STA server) to retrieve from the NetScaler Gateway virtual server.
@@ -51,7 +51,7 @@ function Get-NSVPNVirtualServerBinding {
         $Session = $script:session,
 
         [parameter(Mandatory)]
-        [ValidateSet('SessionPolicy','LDAPAuthenticationPolicy','STAServer')]
+        [ValidateSet('SessionPolicy','LDAPAuthenticationPolicy','STAServer','RADIUSAuthenticationPolicy')]
         [string]$Binding,
 
         [parameter(Mandatory)]
@@ -66,6 +66,7 @@ function Get-NSVPNVirtualServerBinding {
                 'SessionPolicy' { $policyType = 'vpnvserver_vpnsessionpolicy_binding' }
                 'LDAPAuthenticationPolicy' { $policyType = 'vpnvserver_authenticationldappolicy_binding' }
                 'STAServer' { $policyType = 'vpnvserver_staserver_binding' }
+                'RADIUSAuthenticationPolicy' { $policyType = 'vpnvserver_authenticationradiuspolicy_binding' }
             }
 
             $filters = @{}
