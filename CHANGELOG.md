@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     * Added Get-NSRADIUSAuthenticationPolicy, New-NSRADIUSAuthenticationPolicy and Remove-NSRADIUSAuthenticationPolicy functions (via @iainbrighton)
     * Added -RADIUSAuthenticationPolicyName parameter to Add-NSVPNVirtualServerBinding function (via @iainbrighton)
     * Added RADIUSAuthenticationPolicy -Binding parameter to Get-NSVPNVirtualServerBinding function (via @iainbrighton)
+    * Added Get-NSDnsRecord, Add-NSDnsRecord and Remove-NSDnsRecord functions (via @iainbrighton)
 
 ## 1.7.0 (2018-07-02)
   # Features
