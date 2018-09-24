@@ -28,7 +28,7 @@ function Get-NSDnsRecord {
         Get all DNS host/address records.
 
     .EXAMPLE
-        Get-NSDnsSuffix -Hostname 'storefront.lab.local'
+        Get-NSDnsRecord -Hostname 'storefront.lab.local'
 
         Get the DNS revord object named 'storefront.lab.local'.
 
