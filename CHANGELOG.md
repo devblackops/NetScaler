@@ -6,6 +6,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+  # Features
+    * Added Get-NSRADIUSAuthenticationServer, New-NSRADIUSAuthenticationServer and Remove-NSRADIUSAuthenticationServer functions (via @iainbrighton)
+    * Added Get-NSRADIUSAuthenticationPolicy, New-NSRADIUSAuthenticationPolicy and Remove-NSRADIUSAuthenticationPolicy functions (via @iainbrighton)
+    * Added -RADIUSAuthenticationPolicyName parameter to Add-NSVPNVirtualServerBinding function (via @iainbrighton)
+    * Added RADIUSAuthenticationPolicy -Binding parameter to Get-NSVPNVirtualServerBinding function (via @iainbrighton)
+    * Added Get-NSDnsRecord, Add-NSDnsRecord and Remove-NSDnsRecord functions (via @iainbrighton)
+
 ## 1.7.0 (2018-07-02)
   # Features
     * PR88 - Add SearchFilter and SubAttributeName parameters to New-NSLDAPAuthenticationServer (via @iainbrighton)

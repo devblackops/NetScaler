@@ -28,6 +28,11 @@ function Add-NSVPNVirtualServerBinding {
         Bind the LDAP authentication policy named 'policy_ldap01' to the NetScaler Gateway virtual server 'ag01'.
 
     .EXAMPLE
+        Add-NSVPNVirtualServerBinding -Name 'ag01' -RADIUSAuthenticationPolicyName 'policy_radius_nps01' -Secondary
+
+        Bind the secondaty RADIUS authentication policy named 'policy_radius_nps01' to the NetScaler Gateway virtual server 'ag01'.
+
+    .EXAMPLE
         Add-NSVPNVirtualServerBinding -Name 'ag01' -SessionPolicyName 'policy_receiver'
 
         Bind the session named 'policy_receiver' to the NetScaler Gateway virtual server 'ag01'.
@@ -49,6 +54,9 @@ function Add-NSVPNVirtualServerBinding {
 
     .PARAMETER LDAPAuthenticationPolicyName
         The LDAP authentication policy name to bind to the NetScaler Gateway virtual server.
+
+    .PARAMETER RADIUSAuthenticationPolicyName
+        The RADIUS authentication policy name to bind to the NetScaler Gateway virtual server.
 
     .PARAMETER SessionPolicyName
         The LDAP authentication policy name to bind to the NetScaler Gateway virtual server.
@@ -82,6 +90,9 @@ function Add-NSVPNVirtualServerBinding {
         [parameter(Mandatory, ParameterSetName='ldapauthenticationpolicy')]
         [string]$LDAPAuthenticationPolicyName,
 
+        [parameter(Mandatory, ParameterSetName='radiusauthenticationpolicy')]
+        [string]$RADIUSAuthenticationPolicyName,
+
         [parameter(Mandatory, ParameterSetName='sessionpolicy')]
         [string]$SessionPolicyName,
 
@@ -89,11 +100,13 @@ function Add-NSVPNVirtualServerBinding {
         [string]$STAServer,
 
         [parameter(ParameterSetName='ldapauthenticationpolicy')]
+        [parameter(ParameterSetName='radiusauthenticationpolicy')]
         [parameter(ParameterSetName='sessionpolicy')]
         [ValidateRange(1, 1000)]
         [int]$Priority,
 
         [parameter(ParameterSetName='ldapauthenticationpolicy')]
+        [parameter(ParameterSetName='radiusauthenticationpolicy')]
         [parameter(ParameterSetName='sessionpolicy')]
         [Switch]$Secondary,
 
@@ -123,6 +136,13 @@ function Add-NSVPNVirtualServerBinding {
                     _InvokeNSRestApi -Session $Session -Method PUT -Type vpnvserver_authenticationldappolicy_binding -Payload $params
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSVPNVirtualServerBinding -Session $Session -Name $Name -Binding LDAPAuthenticationPolicy -PolicyName $LDAPAuthenticationPolicyName
+                    }
+                }
+                elseif ($PSBoundParameters.ContainsKey('RADIUSAuthenticationPolicyName')) {
+                    $params.Add('policy', $RADIUSAuthenticationPolicyName)
+                    _InvokeNSRestApi -Session $Session -Method PUT -Type vpnvserver_authenticationradiuspolicy_binding -Payload $params
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSVPNVirtualServerBinding -Session $Session -Name $Name -Binding RADIUSAuthenticationPolicy -PolicyName $RADIUSAuthenticationPolicyName
                     }
                 }
                 elseif ($PSBoundParameters.ContainsKey('SessionPolicyName')) {
