@@ -14,31 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSRADIUSAuthenticationServer {
+function Remove-NSTACACSAuthenticationPolicyGlobalBinding {
     <#
     .SYNOPSIS
-        Removes an existing RADIUS authentication server.
+        Removes a global TACACS+ authentication policy binding.
 
     .DESCRIPTION
-        Removes an existing RADIUS authentication server.
+        Removes a global TACACS+ authentication policy binding.
 
     .EXAMPLE
-        Remove-NSRADIUSAuthenticationServer -Name 'NPS01'
+        Remove-NSTACACSAuthenticationPolicyGlobalBinding -Name 'policy_tacacs_cisco01'
 
-        Removes the RADIUS authentication server named 'NPS01'.
+        Unbinds the global TACACS+ authentication policy 'policy_tacacs_cisco01' from the system.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name of the RADIUS authentication server to remove.
-
+        The name of the TACACS+ authentication policy to unbind.
+    
     .PARAMETER Force
-        Suppress confirmation when removing a responder action.
+        Suppress confirmation when removing object.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     param(
-        $Session = $script:session,
+        $Session = $Script:Session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Name,
@@ -52,9 +52,9 @@ function Remove-NSRADIUSAuthenticationServer {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete RADIUS Authentication Server')) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete global TACACS+ Authentication Policy binding')) {
                 try {
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type authenticationradiusaction -Resource $item -Action delete
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type systemglobal_authenticationtacacspolicy_binding -Arguments @{ policyname = $item }
                 }
                 catch {
                     throw $_
