@@ -62,7 +62,7 @@ function Add-NSDnsSuffix {
                     $params = @{
                          dnssuffix = $item;
                     }
-                    _InvokeNSRestApi -Session $Session -Method POST -Type dnssuffix -Payload $params -Action add > Out-Null
+                    _InvokeNSRestApi -Session $Session -Method POST -Type dnssuffix -Payload $params -Action add | Out-Null
                 }
                 catch {
                     throw $_

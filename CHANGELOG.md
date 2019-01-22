@@ -7,15 +7,29 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
-  # Features
+  * Features
     * Added Get-NSRADIUSAuthenticationServer, New-NSRADIUSAuthenticationServer and Remove-NSRADIUSAuthenticationServer functions (via @iainbrighton)
     * Added Get-NSRADIUSAuthenticationPolicy, New-NSRADIUSAuthenticationPolicy and Remove-NSRADIUSAuthenticationPolicy functions (via @iainbrighton)
     * Added -RADIUSAuthenticationPolicyName parameter to Add-NSVPNVirtualServerBinding function (via @iainbrighton)
     * Added RADIUSAuthenticationPolicy -Binding parameter to Get-NSVPNVirtualServerBinding function (via @iainbrighton)
     * Added Get-NSDnsRecord, Add-NSDnsRecord and Remove-NSDnsRecord functions (via @iainbrighton)
+    * Added Get-NSTACACSAuthenticationPolicy, New-NSTACACSAuthenticationPolicy and Remove-NSTACACSAuthenticationPolicy functions (via @iainbrighton)
+    * Added Get-NSTACACSAuthenticationServer, New-NSTACACSAuthenticationServer and Remove-NSTACACSAuthenticationServer functions (via @iainbrighton)
+    * Added LDAP nested group extraction parameters to New-NSLDAPAuthenticationServer (via @iainbrighton)
+    * Added RfWebUI option to Set-NSVPNVirtualServerTheme (via @iainbrighton)
+    * Added Add-NSAuthenticationPolicyGlobalBinding, Get-NSAuthenticationPolicyGlobalBinding, Remove-NSAuthenticationPolicyGlobalBinding functions (via @iainbrighton)
+    * Added Get-NSRDPClientProfile, New-NSRDPClientProfile and Remove-NSRDPClientProfile functions (via @iainbrighton)
+    * Added -RDPServerProfileName parameter to New-NSVPNVirtualServer and New-NSVPNSessionProfile (via @iainbrighton)
+    * Added Get-NSVPNUrl, New-NSVPNUrl and Remove-NSVPNUrl functions (via @iainbrighton)
+    * Added New-NSSAMLAuthenticationPolicy and Remove-NSSAMLAuthenticationPolicy functions (via @iainbrighton)
+    * Added New-NSSAMLAuthenticationServer and Remove-NSSAMLAuthenticationServer functions (via @iainbrighton)
+    * Added -SAMLAuthenticationPolicyName and -VPNUrlName parameters to Add-NSVPNVirtualServerBinding and Get-NSVPNVirtualServerBinding (via @iainbrighton)
+
+  * Bug fixes
+    * Fixed bug where extraneous Out-Null files were created when calling some functions (via @iainbrighton)
 
 ## 1.7.0 (2018-07-02)
-  # Features
+  * Features
     * PR88 - Add SearchFilter and SubAttributeName parameters to New-NSLDAPAuthenticationServer (via @iainbrighton)
 
 ## 1.6.0 (2017-10-31)
@@ -27,8 +41,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     * PR57 - Added -Graceful parameter to the Disable-NSLBServer (via @daimhin)
     * PR59 - Added New-NSRewriteAction and New-NSRewritePolicy functions (via @dbroeglin)
     * PR61 - Added Clear-NSAAASession function (via @dbroeglin)
-    * PR66 - Added Add-NSLBVirtualServerTrafficPolicyBinding and Get-NSLBVirtualServerTrafficPolicyBinding functions (via @dbroeglin
-    )
+    * PR66 - Added Add-NSLBVirtualServerTrafficPolicyBinding and Get-NSLBVirtualServerTrafficPolicyBinding functions (via @dbroeglin)
     * PR72 - Added Get-NSHardware and Remove-NSSystemFile functions (via @daimhin)
     * PR77 - Added Enable-NSHighAvailability and Get-HANode functions (via @dbroeglin)
 

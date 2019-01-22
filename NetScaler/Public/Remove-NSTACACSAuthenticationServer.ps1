@@ -14,27 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSRADIUSAuthenticationServer {
+function Remove-NSTACACSAuthenticationServer {
     <#
     .SYNOPSIS
-        Removes an existing RADIUS authentication server.
+        Removes an existing TACACS+ authentication server.
 
     .DESCRIPTION
-        Removes an existing RADIUS authentication server.
+        Removes an existing TACACS+ authentication server.
 
     .EXAMPLE
-        Remove-NSRADIUSAuthenticationServer -Name 'NPS01'
+        Remove-NSTACACSAuthenticationServer -Name 'CISCO01'
 
-        Removes the RADIUS authentication server named 'NPS01'.
+        Removes the TACACS+ authentication server named 'CISCO01'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name of the RADIUS authentication server to remove.
+        The name of the TACACS+ authentication server to remove.
 
     .PARAMETER Force
-        Suppress confirmation when removing a responder action.
+        Suppress confirmation when removing object.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     param(
@@ -52,9 +52,9 @@ function Remove-NSRADIUSAuthenticationServer {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete RADIUS Authentication Server')) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete TACACS+ Authentication Server')) {
                 try {
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type authenticationradiusaction -Resource $item -Action delete
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type authenticationtacacsaction -Resource $item -Action delete
                 }
                 catch {
                     throw $_

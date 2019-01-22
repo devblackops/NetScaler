@@ -54,7 +54,7 @@ function Set-NSVPNVirtualServerTheme {
         [string[]]$Name,
 
         [parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [ValidateSet('Default','GreenBubble','X1')]
+        [ValidateSet('Default', 'GreenBubble', 'X1', 'RfWebUI')]
         [string]$Theme,
 
         [Switch]$Force,

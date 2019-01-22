@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSRADIUSAuthenticationServer {
+function Remove-NSRDPClientProfile {
     <#
     .SYNOPSIS
-        Removes an existing RADIUS authentication server.
+        Removes an existing RDP client profile.
 
     .DESCRIPTION
-        Removes an existing RADIUS authentication server.
+        Removes an existing RDP client profile.
 
     .EXAMPLE
-        Remove-NSRADIUSAuthenticationServer -Name 'NPS01'
+        Remove-NSRDPClientProfile -Name 'RDP01'
 
-        Removes the RADIUS authentication server named 'NPS01'.
+        Removes the RDP client profile named 'RDP01'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name of the RADIUS authentication server to remove.
+        The name of the RDP client profile to remove.
 
     .PARAMETER Force
         Suppress confirmation when removing a responder action.
@@ -41,9 +41,9 @@ function Remove-NSRADIUSAuthenticationServer {
         $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name,
+        [string[]] $Name,
 
-        [switch]$Force
+        [switch] $Force
     )
 
     begin {
@@ -52,9 +52,9 @@ function Remove-NSRADIUSAuthenticationServer {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete RADIUS Authentication Server')) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete RDP client profile')) {
                 try {
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type authenticationradiusaction -Resource $item -Action delete
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type rdpclientprofile -Resource $item -Action delete
                 }
                 catch {
                     throw $_

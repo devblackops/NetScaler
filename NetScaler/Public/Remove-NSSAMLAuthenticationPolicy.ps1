@@ -1,5 +1,5 @@
 <#
-Copyright 2018 Iain Brighton
+Copyright 2019 Iain Brighton
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,27 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSRADIUSAuthenticationServer {
+function Remove-NSSAMLAuthenticationPolicy {
     <#
     .SYNOPSIS
-        Removes an existing RADIUS authentication server.
+        Removes an existing SAML authentication policy.
 
     .DESCRIPTION
-        Removes an existing RADIUS authentication server.
+        Removes an existing SAML authentication policy.
 
     .EXAMPLE
-        Remove-NSRADIUSAuthenticationServer -Name 'NPS01'
+        Remove-NSSAMLAuthenticationPolicy -Name 'policy_saml_sso'
 
-        Removes the RADIUS authentication server named 'NPS01'.
+        Removes the SAML authentication policy named 'policy_saml_sso'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name of the RADIUS authentication server to remove.
+        The name of the SAML authentication policy to remove.
 
     .PARAMETER Force
-        Suppress confirmation when removing a responder action.
+        Suppress confirmation when removing a SAML authentication policy.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     param(
@@ -52,9 +52,9 @@ function Remove-NSRADIUSAuthenticationServer {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete RADIUS Authentication Server')) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete SAML Authentication Policy')) {
                 try {
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type authenticationradiusaction -Resource $item -Action delete
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type authenticationsamlpolicy -Resource $item -Action delete
                 }
                 catch {
                     throw $_

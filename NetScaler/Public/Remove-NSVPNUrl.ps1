@@ -1,5 +1,5 @@
 <#
-Copyright 2018 Iain Brighton
+Copyright 2019 Iain Brighton
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,36 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSRADIUSAuthenticationServer {
+function Remove-NSVPNUrl {
     <#
     .SYNOPSIS
-        Removes an existing RADIUS authentication server.
+        Removes an existing SSL VPN url/bookmark.
 
     .DESCRIPTION
-        Removes an existing RADIUS authentication server.
+        Removes an existing SSL VPN url/bookmark.
 
     .EXAMPLE
-        Remove-NSRADIUSAuthenticationServer -Name 'NPS01'
+        Remove-NSVPNUrl -Name 'SalesForce'
 
-        Removes the RADIUS authentication server named 'NPS01'.
+        Removes the SSL VPN link/bookmark named 'SalesForce'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name of the RADIUS authentication server to remove.
+        The name of the SSL VPN link/bookmark to remove.
 
     .PARAMETER Force
-        Suppress confirmation when removing a responder action.
+        Suppress confirmation when removing a SSL VPN url/bookmark.
     #>
     [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     param(
         $Session = $script:session,
 
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [string[]]$Name,
+        [string[]] $Name,
 
-        [switch]$Force
+        [switch] $Force
     )
 
     begin {
@@ -52,9 +52,9 @@ function Remove-NSRADIUSAuthenticationServer {
 
     process {
         foreach ($item in $Name) {
-            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete RADIUS Authentication Server')) {
+            if ($Force -or $PSCmdlet.ShouldProcess($item, 'Delete url/bookmark')) {
                 try {
-                    _InvokeNSRestApi -Session $Session -Method DELETE -Type authenticationradiusaction -Resource $item -Action delete
+                    _InvokeNSRestApi -Session $Session -Method DELETE -Type vpnurl -Resource $item -Action delete
                 }
                 catch {
                     throw $_
