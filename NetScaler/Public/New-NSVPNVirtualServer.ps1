@@ -54,6 +54,12 @@ function New-NSVPNVirtualServer {
         User can log on in Basic mode only, through either Citrix Receiver or a browser. Users are not allowed to connect by using the NetScaler Gateway Plug-in.
 
         Default value: OFF
+    
+    .PARAMETER RDPServerProfileName
+        Name of the RDP server profile associated with the vserver.
+        
+        Minimum length = 1
+        Maximum length = 31
 
     .EXAMPLE
         New-NSVPNVirtualServer -Name 'ag01' -IPAddress '192.168.0.100'
@@ -70,7 +76,7 @@ function New-NSVPNVirtualServer {
         [parameter(Mandatory)]
         [string]$Name,
 
-        [parameter(Mandatory)]
+        [parameter()]
         [string]$IPAddress,
 
         [ValidateRange(1,65535)]
@@ -84,6 +90,9 @@ function New-NSVPNVirtualServer {
         [ValidateLength(0, 256)]
         [string]$Comment,
 
+        [ValidateLength(1, 31)]
+        [string]$RDPServerProfileName,
+
         [Switch]$PassThru
     )
 
@@ -96,9 +105,11 @@ function New-NSVPNVirtualServer {
             try {
                 $params = @{
                     name = $Name
-                    ipv46 = $IPAddress
                     servicetype = 'SSL'
                     port = $Port
+                }
+                if ($PSBoundParameters.ContainsKey('IPAddress')) {
+                    $params.Add('ipv46', $IPAddress)
                 }
                 if ($PSBoundParameters.ContainsKey('Authentication')) {
                     $params.Add('authentication', $Authentication)

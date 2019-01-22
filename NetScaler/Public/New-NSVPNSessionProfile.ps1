@@ -80,6 +80,18 @@ function New-NSVPNSessionProfile {
     .PARAMETER WIHome
         Web address of the Web Interface server, such as http:///Citrix/XenApp, or Receiver for Web, which enumerates the virtualized resources, such as XenApp, XenDesktop, and cloud applications.
 
+    .PARAMETER RDPClientProfileName
+        Name of the RDP profile associated with the vserver.
+        
+        Minimum length = 1
+        Maximum length = 31
+
+    .PARAMETER PCOIPProfileName
+        Name of the PCOIP profile associated with the session action. The builtin profile named none can be used to explicitly disable PCOIP for the session action.
+        
+        Minimum length = 1
+        Maximum length = 31
+
     .PARAMETER Passthru
         Return the NetScaler Gateway session profile object.
 
@@ -125,6 +137,12 @@ function New-NSVPNSessionProfile {
 
         [string]$WIHome,
 
+        [ValidateLength(1, 31)]
+        [string]$RDPClientProfileName,
+
+        [ValidateLength(1, 31)]
+        [string]$PCOIPProfileName,
+
         [switch]$Force,
 
         [switch]$PassThru
@@ -169,6 +187,12 @@ function New-NSVPNSessionProfile {
                 }
                 if ($PSBoundParameters.ContainsKey('StoreFrontUrl')) {
                     $params.Add('storefronturl', $StoreFrontUrl)
+                }
+                if ($PSBoundParameters.ContainsKey('RDPClientProfileName')) {
+                    $params.Add('rdpclientprofilename', $RDPClientProfileName)
+                }
+                if ($PSBoundParameters.ContainsKey('PCOIPProfileName')) {
+                    $params.Add('pcoipprofilename', $PCOIPProfileName)
                 }
 
                 _InvokeNSRestApi -Session $Session -Method POST -Type vpnsessionaction -Payload $params

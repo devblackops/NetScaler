@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     * Added LDAP nested group extraction parameters to New-NSLDAPAuthenticationServer (via @iainbrighton)
     * Added RfWebUI option to Set-NSVPNVirtualServerTheme (via @iainbrighton)
     * Added Add-NSAuthenticationPolicyGlobalBinding, Get-NSAuthenticationPolicyGlobalBinding, Remove-NSAuthenticationPolicyGlobalBinding functions (via @iainbrighton)
+    * Added Get-NSRDPClientProfile, New-NSRDPClientProfile and Remove-NSRDPClientProfile functions (via @iainbrighton)
+    * Added -RDPServerProfileName parameter to New-NSVPNVirtualServer and New-NSVPNSessionProfile (via @iainbrighton)
 
   * Bug fixes
     * Fixed bug where extraneous Out-Null files were created when calling some functions (via @iainbrighton)
@@ -35,8 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     * PR57 - Added -Graceful parameter to the Disable-NSLBServer (via @daimhin)
     * PR59 - Added New-NSRewriteAction and New-NSRewritePolicy functions (via @dbroeglin)
     * PR61 - Added Clear-NSAAASession function (via @dbroeglin)
-    * PR66 - Added Add-NSLBVirtualServerTrafficPolicyBinding and Get-NSLBVirtualServerTrafficPolicyBinding functions (via @dbroeglin
-    )
+    * PR66 - Added Add-NSLBVirtualServerTrafficPolicyBinding and Get-NSLBVirtualServerTrafficPolicyBinding functions (via @dbroeglin)
     * PR72 - Added Get-NSHardware and Remove-NSSystemFile functions (via @daimhin)
     * PR77 - Added Enable-NSHighAvailability and Get-HANode functions (via @dbroeglin)
 
