@@ -67,6 +67,7 @@ PowerShellVersion = '3.0'
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @(
+    'Add-NSAuthenticationPolicyGlobalBinding',
     'Add-NSCertKeyPair',
     'Add-NSCSVirtualServerResponderPolicyBinding',
     'Add-NSDnsNameServer',
@@ -84,7 +85,6 @@ FunctionsToExport = @(
     'Add-NSServerCertificate',
     'Add-NSSSLCertificateLink',
     'Add-NSSystemFile',
-    'Add-NSTACACSAuthenticationPolicyGlobalBinding',
     'Add-NSVPNVirtualServerBinding',
     'Clear-NSAAASession',
     'Clear-NSConfig',
@@ -106,6 +106,7 @@ FunctionsToExport = @(
     'Get-NSAAAUser',
     'Get-NSAAAUserBinding',
     'Get-NSAAAVirtualServer',
+    'Get-NSAuthenticationPolicyGlobalBinding',
     'Get-NSAvailableTimeZone',
     'Get-NSBackup',
     'Get-NSConfig',
@@ -158,7 +159,6 @@ FunctionsToExport = @(
     'Get-NSStat',
     'Get-NSSystemFile',
     'Get-NSTACACSAuthenticationPolicy',
-    'Get-NSTACACSAuthenticationPolicyGlobalBinding',
     'Get-NSTACACSAuthenticationServer',
     'Get-NSTimeZone',
     'Get-NSVersion',
@@ -195,6 +195,7 @@ FunctionsToExport = @(
     'New-NSVPNSessionPolicy',
     'New-NSVPNSessionProfile',
     'New-NSVPNVirtualServer',
+    'Remove-NSAuthenticationPolicyGlobalBinding',
     'Remove-NSBackup',
     'Remove-NSDnsRecord',
     'Remove-NSDnsSuffix',
@@ -214,7 +215,6 @@ FunctionsToExport = @(
     'Remove-NSSSLProfile',
     'Remove-NSSystemFile',
     'Remove-NSTACACSAuthenticationPolicy',
-    'Remove-NSTACACSAuthenticationPolicyGlobalBinding',
     'Remove-NSTACACSAuthenticationServer',
     'Remove-NSVPNSessionPolicy',
     'Remove-NSVPNSessionProfile',
