@@ -58,6 +58,12 @@ function Add-NSVPNVirtualServerBinding {
     .PARAMETER RADIUSAuthenticationPolicyName
         The RADIUS authentication policy name to bind to the NetScaler Gateway virtual server.
 
+    .PARAMETER SAMLAuthenticationPolicyName
+        The SAML authentication policy name to bind to the NetScaler Gateway virtual server.
+
+    .PARAMETER VPNUrlName
+        The VPN Url/Bookmark name to bind to the NetScaler Gateway virtual server.
+
     .PARAMETER SessionPolicyName
         The LDAP authentication policy name to bind to the NetScaler Gateway virtual server.
 

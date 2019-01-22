@@ -32,15 +32,15 @@ function Get-NSVPNUrl {
         Get all SSL VPN url/bookmark objects.
 
     .EXAMPLE
-        Get-NSRDPClientProfile -Name 'foobar'
+        Get-NSVPNUrl -Name 'foobar'
     
-        Get the RDP client profile named 'foobar'.
+        Get the SSL VPN url/bookmark object named 'foobar'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the RDP client profiles to get.
+        The name or names of the SSL VPN url/bookmarks to get.
     #>
     [CmdletBinding()]
     param(

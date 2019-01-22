@@ -75,7 +75,7 @@ function New-NSVPNUrl {
         Suppress confirmation when creating the NetScaler Gateway VPN url/bookmark resource.
 
     .EXAMPLE
-        New-NSVPNUrl -Session $Session -Name 'MYRDPSERVER' -LinkName 'MyRDPServer' -Url 'rdp://myrdpserver.domain.com' -ClientlessAccess 'ON'
+        New-NSVPNUrl -Session $Session -Name 'MYRDPSERVER' -DisplayName 'MyRDPServer' -Url 'rdp://myrdpserver.domain.com' -ClientlessAccess 'ON'
 
         Creates a new NetScaler Gateway VPN RDP bookmark for the 'myrdpserver.domain.com' RDP server.
     #>
@@ -87,7 +87,7 @@ function New-NSVPNUrl {
         [string] $Name,
 
         [parameter(Mandatory)]
-        [string] $LinkName,
+        [string] $DisplayName,
 
         [parameter(Mandatory)]
         [string] $Url,

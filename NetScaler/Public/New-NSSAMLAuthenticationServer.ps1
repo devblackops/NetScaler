@@ -22,6 +22,9 @@ function New-NSSAMLAuthenticationServer {
     .DESCRIPTION
         Creates a new SAML authentication server object.
 
+    .PARAMETER Session
+        The NetScaler session object.
+
     .PARAMETER Name
         Name for the SAML server profile .
 
