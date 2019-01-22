@@ -92,21 +92,29 @@ function Add-NSVPNVirtualServerBinding {
 
         [parameter(Mandatory, ParameterSetName='radiusauthenticationpolicy')]
         [string]$RADIUSAuthenticationPolicyName,
+        
+        [parameter(Mandatory, ParameterSetName='samlauthenticationpolicy')]
+        [string]$SAMLAuthenticationPolicyName,
 
         [parameter(Mandatory, ParameterSetName='sessionpolicy')]
         [string]$SessionPolicyName,
+
+        [parameter(Mandatory, ParameterSetName='vpnurl')]
+        [string]$VPNUrlName,
 
         [parameter(Mandatory, ParameterSetName='staserver')]
         [string]$STAServer,
 
         [parameter(ParameterSetName='ldapauthenticationpolicy')]
         [parameter(ParameterSetName='radiusauthenticationpolicy')]
+        [parameter(ParameterSetName='samlauthenticationpolicy')]
         [parameter(ParameterSetName='sessionpolicy')]
         [ValidateRange(1, 1000)]
         [int]$Priority,
 
         [parameter(ParameterSetName='ldapauthenticationpolicy')]
         [parameter(ParameterSetName='radiusauthenticationpolicy')]
+        [parameter(ParameterSetName='samlauthenticationpolicy')]
         [parameter(ParameterSetName='sessionpolicy')]
         [Switch]$Secondary,
 
@@ -145,6 +153,13 @@ function Add-NSVPNVirtualServerBinding {
                         return Get-NSVPNVirtualServerBinding -Session $Session -Name $Name -Binding RADIUSAuthenticationPolicy -PolicyName $RADIUSAuthenticationPolicyName
                     }
                 }
+                elseif ($PSBoundParameters.ContainsKey('SAMLAuthenticationPolicyName')) {
+                    $params.Add('policy', $SAMLAuthenticationPolicyName)
+                    _InvokeNSRestApi -Session $Session -Method PUT -Type vpnvserver_authenticationsamlpolicy_binding -Payload $params
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSVPNVirtualServerBinding -Session $Session -Name $Name -Binding RADIUSAuthenticationPolicy -PolicyName $RADIUSAuthenticationPolicyName
+                    }
+                }
                 elseif ($PSBoundParameters.ContainsKey('SessionPolicyName')) {
                     $params.Add('policy', $SessionPolicyName)
                     _InvokeNSRestApi -Session $Session -Method PUT -Type vpnvserver_vpnsessionpolicy_binding -Payload $params
@@ -157,6 +172,13 @@ function Add-NSVPNVirtualServerBinding {
                     _InvokeNSRestApi -Session $Session -Method PUT -Type vpnvserver_staserver_binding -Payload $params
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSVPNVirtualServerBinding -Session $Session -Name $Name -Binding STAServer -PolicyName $SessionPolicyName
+                    }
+                }
+                elseif ($PSBoundParameters.ContainsKey('VPNUrlName')) {
+                    $params.Add('urlname', $VPNUrlName)
+                    _InvokeNSRestApi -Session $Session -Method PUT -Type vpnvserver_vpnurl_binding -Payload $params
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSVPNVirtualServerBinding -Session $Session -Name $Name -Binding VPNUrl -PolicyName $VPNUrlName
                     }
                 }
             }
