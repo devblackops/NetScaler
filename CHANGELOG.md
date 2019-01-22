@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     * Added Add-NSAuthenticationPolicyGlobalBinding, Get-NSAuthenticationPolicyGlobalBinding, Remove-NSAuthenticationPolicyGlobalBinding functions (via @iainbrighton)
     * Added Get-NSRDPClientProfile, New-NSRDPClientProfile and Remove-NSRDPClientProfile functions (via @iainbrighton)
     * Added -RDPServerProfileName parameter to New-NSVPNVirtualServer and New-NSVPNSessionProfile (via @iainbrighton)
+    * Added Get-NSVPNUrl, New-NSVPNUrl and Remove-NSVPNUrl functions (via @iainbrighton)
+    * Added New-NSSAMLAuthenticationPolicy and Remove-NSSAMLAuthenticationPolicy functions (via @iainbrighton)
+    * Added New-NSSAMLAuthenticationServer and Remove-NSSAMLAuthenticationServer functions (via @iainbrighton)
+    * Added -SAMLAuthenticationPolicyName and -VPNUrlName parameters to Add-NSVPNVirtualServerBinding and Get-NSVPNVirtualServerBinding (via @iainbrighton)
 
   * Bug fixes
     * Fixed bug where extraneous Out-Null files were created when calling some functions (via @iainbrighton)
