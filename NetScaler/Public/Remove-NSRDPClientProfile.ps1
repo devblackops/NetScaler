@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Remove-NSRRDPClientProfile {
+function Remove-NSRDPClientProfile {
     <#
     .SYNOPSIS
         Removes an existing RDP client profile.
