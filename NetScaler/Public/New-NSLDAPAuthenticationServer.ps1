@@ -72,6 +72,33 @@ function New-NSLDAPAuthenticationServer {
     .PARAMETER SSOAttributeName
         LDAP single signon (SSO) attribute. The NetScaler appliance uses the SSO name attribute to query external LDAP servers or Active Directory for an alternate username.
 
+    .PARAMETER NestedGroupExtraction
+        Allow nested group extraction, in which the NetScaler appliance queries external LDAP servers to determine whether a group is part of another group.
+        
+        Default value: OFF
+        Possible values = ON, OFF
+
+    .PARAMETER MaxNestingLevel
+        If nested group extraction is ON, specifies the number of levels up to which group extraction is performed.
+        
+        Default value: 2
+        Minimum value = 2
+
+    .PARAMETER GroupNameIdentifier
+        If nested group extraction is ON, specifies the name that uniquely identifies a group in LDAP or Active Directory.
+   
+    .PARAMETER GroupSearchAttribute
+        If nested group extraction is ON, specifies the LDAP group search attribute. Used to determine to which groups a group belongs.
+
+    .PARAMETER GroupSearchSubattribute
+        If nested group extraction is ON, specifies the LDAP group search subattribute. Used to determine to which groups a group belongs.
+
+    .PARAMETER GroupSearchFilter
+        If nested group extraction is ON, specifies the string to be combined with the default LDAP group search string to form the search value.
+
+    .PARAMETER DefaultAuthenticationGroup
+        If nested group extraction is ON, specifies the default group that is chosen when the authentication succeeds in addition to extracted groups.
+
     .PARAMETER Passthru
         Return the LDAP authentication server object.
 
@@ -119,6 +146,21 @@ function New-NSLDAPAuthenticationServer {
         [string] $SubAttributeName,
 
         [string] $SSOAttributeName,
+
+        [ValidateSet('ON', 'OFF')]
+        [string] $NestedGroupExtraction,
+
+        [int] $MaxNestingLevel,
+
+        [string] $GroupNameIdentifier,
+
+        [string] $GroupSearchAttribute,
+
+        [string] $GroupSearchSubattribute,
+
+        [string] $GroupSearchFilter,
+
+        [string] $DefaultAuthenticationGroup,
 
         [switch] $PassThru
     )
@@ -169,6 +211,27 @@ function New-NSLDAPAuthenticationServer {
                 }
                 if ($PSBoundParameters.ContainsKey('SSOAttributeName')) {
                     $params.Add('ssonameattribute', $SSOAttributeName)
+                }
+                if ($PSBoundParameters.ContainsKey('NestedGroupExtraction')) {
+                    $params.Add('nestedgroupextraction', $NestedGroupExtraction)
+                }
+                if ($PSBoundParameters.ContainsKey('MaxNestingLevel')) {
+                    $params.Add('maxnestinglevel', $MaxNestingLevel)
+                }
+                if ($PSBoundParameters.ContainsKey('GroupNameIdentifier')) {
+                    $params.Add('groupnameidentifier', $GroupNameIdentifier)
+                }
+                if ($PSBoundParameters.ContainsKey('GroupSearchAttribute')) {
+                    $params.Add('groupsearchattribute', $GroupSearchAttribute)
+                }
+                if ($PSBoundParameters.ContainsKey('GroupSearchSubattribute')) {
+                    $params.Add('groupsearchsubattribute', $GroupSearchSubattribute)
+                }
+                if ($PSBoundParameters.ContainsKey('GroupSearchFilter')) {
+                    $params.Add('groupsearchfilter', $GroupSearchFilter)
+                }
+                if ($PSBoundParameters.ContainsKey('DefaultAuthenticationGroup')) {
+                    $params.Add('defaultauthenticationgroup', $DefaultAuthenticationGroup)
                 }
 
                 _InvokeNSRestApi -Session $Session -Method POST -Type authenticationldapaction -Payload $params -Action add

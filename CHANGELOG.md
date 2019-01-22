@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     * Added Get-NSTACACSAuthenticationPolicy, New-NSTACACSAuthenticationPolicy and Remove-NSTACACSAuthenticationPolicy functions (via @iainbrighton)
     * Added Get-NSTACACSAuthenticationPolicyGlobalBinding, New-NSTACACSAuthenticationPolicyGlobalBinding and Remove-NSTACACSAuthenticationPolicyGlobalBinding functions (via @iainbrighton)
     * Added Get-NSTACACSAuthenticationServer, New-NSTACACSAuthenticationServer and Remove-NSTACACSAuthenticationServer functions (via @iainbrighton)
+    * Added LDAP nested group extraction parameters to New-NSLDAPAuthenticationServer (via @iainbrighton)
 
   * Bug fixes
     * Fixed bug where extraneous Out-Null files were created when calling some functions (via @iainbrighton)
