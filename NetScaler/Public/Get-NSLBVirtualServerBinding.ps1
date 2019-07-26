@@ -77,13 +77,13 @@ function Get-NSLBVirtualServerBinding {
                 $response += _InvokeNSRestApi -Session $Session -Method Get -Type lbvserver_service_binding -Resource $item.name
 
                 foreach ($entry in $response) {
-					if ($entry.PSobject.Properties.name -contains 'lbvserver_servicegroup_binding') {
-						$result += $entry.lbvserver_servicegroup_binding
-					}
-					if ($entry.PSobject.Properties.name -contains 'lbvserver_service_binding') {
-						$result += $entry.lbvserver_service_binding
-					}
-				}
+                    if ($entry.PSobject.Properties.name -contains 'lbvserver_servicegroup_binding') {
+                        $result += $entry.lbvserver_servicegroup_binding
+                    }
+                    if ($entry.PSobject.Properties.name -contains 'lbvserver_service_binding') {
+                        $result += $entry.lbvserver_service_binding
+                    }
+                }
             }
         }
         return $result
