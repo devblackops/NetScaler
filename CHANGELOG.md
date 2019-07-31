@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     * Added New-NSSAMLAuthenticationPolicy and Remove-NSSAMLAuthenticationPolicy functions (via @iainbrighton)
     * Added New-NSSAMLAuthenticationServer and Remove-NSSAMLAuthenticationServer functions (via @iainbrighton)
     * Added -SAMLAuthenticationPolicyName and -VPNUrlName parameters to Add-NSVPNVirtualServerBinding and Get-NSVPNVirtualServerBinding (via @iainbrighton)
+    * Added Add-NSSystemGroup, Get-NSSystemGroup and Remove-NSSystemGroup functions (via @iainbrighton)
+    * Added Add-NSSystemGroupCommandPolicyBinding, Get-NSSystemGroupCommandPolicyBinding and Remove-NSSystemGroupCommandPolicyBinding functions (via @iainbrighton)
 
   * Bug fixes
     * Fixed bug where extraneous Out-Null files were created when calling some functions (via @iainbrighton)

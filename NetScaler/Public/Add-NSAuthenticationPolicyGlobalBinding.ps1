@@ -79,36 +79,45 @@ function Add-NSAuthenticationPolicyGlobalBinding {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($Name, 'Add Authentication Policy Global Binding')) {
-            try {
-                $params = @{
-                    priority = $Priority
-                    globalbindtype = $Type
+        try {
+            $params = @{
+                priority = $Priority
+                globalbindtype = $Type
+            }
+            switch ($PSCmdlet.ParameterSetName) {
+                'ldapauthenticationpolicy' {
+                    $params['policyname'] = $LDAPAuthenticationPolicyName
+                    $bindingType = 'systemglobal_authenticationldappolicy_binding'
+                    $getParams = @{ LDAPAuthenticationPolicyName = $LDAPAuthenticationPolicyName }
                 }
-                switch ($PSCmdlet.ParameterSetName) {
-                    'ldapauthenticationpolicy' {
-                        $params['policyname'] = $LDAPAuthenticationPolicyName
-                        $bindingType = 'systemglobal_authenticationldappolicy_binding'
-                    }
-                    'radiusauthenticationpolicy' {
-                        $params['policyname'] = $RADIUSAuthenticationPolicyName
-                        $bindingType = 'systemglobal_authenticationradiusspolicy_binding'
-                    }
-                    'tacacsauthenticationpolicy' {
-                        $params['policyname'] = $TACACSAuthenticationPolicyName
-                        $bindingType = 'systemglobal_authenticationtacacspolicy_binding'
-                    }
+                'radiusauthenticationpolicy' {
+                    $params['policyname'] = $RADIUSAuthenticationPolicyName
+                    $bindingType = 'systemglobal_authenticationradiusspolicy_binding'
+                    $getParams = @{ RADIUSAuthenticationPolicyName = $RADIUSAuthenticationPolicyName }
                 }
-
-                _InvokeNSRestApi -Session $Session -Method POST -Type $bindingType -Payload $params -Action add
-
-                if ($PSBoundParameters.ContainsKey('PassThru')) {
-                    return Get-NSTACACSAuthenticationPolicyGlobalBinding -Session $Session -Name $Name
+                'tacacsauthenticationpolicy' {
+                    $params['policyname'] = $TACACSAuthenticationPolicyName
+                    $bindingType = 'systemglobal_authenticationtacacspolicy_binding'
+                    $getParams = @{ TACACSAuthenticationPolicyName = $TACACSAuthenticationPolicyName }
                 }
             }
-            catch {
-                throw $_
+            
+            if ($PSCmdlet.ShouldProcess($params['policyname'], 'Add Authentication Policy Global Binding')) {
+                try {
+
+                    _InvokeNSRestApi -Session $Session -Method POST -Type $bindingType -Payload $params -Action add
+                 
+                    if ($PSBoundParameters.ContainsKey('PassThru')) {
+                        return Get-NSAuthenticationPolicyGlobalBinding -Session $Session @getParams
+                    }
+                }
+                catch {
+                    throw $_
+                }
             }
+        }
+        catch {
+            throw $_
         }
     }
 }
