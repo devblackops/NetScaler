@@ -49,7 +49,7 @@ function Disable-NSLBServer {
         The name or names of the load balancer servers to disable.
 
     .PARAMETER Graceful
-        Indicates graceful shutdown of the server. System will wait for all outstanding connections to this server to be closed before disabling the server.
+        Does a graceful shutdown of the server after the number of seconds. System will wait for all outstanding connections to this server to be closed before disabling the server.
 
     .PARAMETER Delay
         How many seconds to wait before disabling this server.
@@ -67,8 +67,10 @@ function Disable-NSLBServer {
         [parameter(Mandatory,ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
         [string[]]$Name = (Read-Host -Prompt 'LB server name'),
         
+        [Parameter(ParameterSetName="Delay")]
         [int]$Delay,
 
+        [Parameter(ParameterSetName="Graceful")]
         [int]$Graceful,
         
         [switch]$Force,
@@ -89,21 +91,10 @@ function Disable-NSLBServer {
                     }
                     if ($PSBoundParameters.ContainsKey('Graceful')) {
                         $params.Add('graceful', 'YES')
-                        if ($Graceful -gt 0) {
-                            $params.Add('delay', $Graceful)
-                        } else {
-                            if ($PSBoundParameters.ContainsKey('Delay')) {
-                                $params.Add('delay', $Delay)
-                            } else {
-                                $params.Add('delay', 0)
-                            }
-                        }
-                    } else {
-                        if ($PSBoundParameters.ContainsKey('Delay')) {
-                            if ($Delay -gt 0) {
-                                $params.Add('delay', $Delay)
-                            }
-                        }
+                        $params.Add('delay', $Graceful)
+                    }
+                    if ($PSBoundParameters.ContainsKey('Delay')) {
+                        $params.Add('delay', $Delay)
                     }
                     _InvokeNSRestApi -Session $Session -Method POST -Type server -Payload $params -Action disable
 
