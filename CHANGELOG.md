@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
   * Bug fixes
     * Fixed bug where extraneous Out-Null files were created when calling some functions (via @iainbrighton)
+    * Fixed bug where Get-NSLBVirtualServerBinding didn't return lbvserver_service_binding objects (via @myllyja)
 
 ## 1.7.0 (2018-07-02)
   * Features
