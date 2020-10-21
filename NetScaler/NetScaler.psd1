@@ -101,6 +101,7 @@ FunctionsToExport = @(
     'Enable-NSMode',
     'Get-NSAAAGroup',
     'Get-NSAAAGroupBinding',
+    'Get-NSAAASession'
     'Get-NSAAAUser',
     'Get-NSAAAUserBinding',
     'Get-NSAAAVirtualServer',
