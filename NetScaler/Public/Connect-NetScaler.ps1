@@ -102,7 +102,14 @@ function Connect-NetScaler {
                 timeout = $Timeout
             }
         }
-        $loginJson = ConvertTo-Json -InputObject $login
+        $loginJson = ConvertTo-Json -InputObject $login | % {
+            [Regex]::Replace($_, 
+                "\\u(?<Value>[a-zA-Z0-9]{4})", {
+                    param($m) ([char]([int]::Parse($m.Groups['Value'].Value,
+                                [System.Globalization.NumberStyles]::HexNumber))).ToString() 
+                }
+            )
+        }
 
         $saveSession = @{}
         $params = @{
