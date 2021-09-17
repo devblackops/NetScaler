@@ -34,7 +34,7 @@ Describe "Netscaler Get-*" {
         $Cert = Get-NSSSLCertificate -Name "ns-server-certificate"
 
         $Cert | Should Not BeNullOrEmpty
-        $Cert.certkey | Should Be "ns-server-certificate"
+        $Cert.certkey | Should -Be "ns-server-certificate"
     }
 
     It "should list certificates" {
