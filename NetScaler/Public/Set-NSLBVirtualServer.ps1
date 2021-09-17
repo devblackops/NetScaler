@@ -99,7 +99,7 @@ function Set-NSLBVirtualServer {
                     $params.Add('ipv46', $IPAddress)
                 }
 
-                _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver -Payload $params -Action update
+                _InvokeNSRestApi -Session $Session -Method PUT -Type lbvserver -Payload $params # -Action update
 
                 if ($PSBoundParameters.ContainsKey('PassThru')) {
                     return Get-NSLBVirtualServer -Session $Session -Name $item
