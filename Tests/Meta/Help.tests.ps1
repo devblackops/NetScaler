@@ -24,7 +24,7 @@ foreach ($command in $commands) {
             $help.Synopsis | Should Not BeLike '*`[`<CommonParameters`>`]*'
         }
 
-        # Should be a description for every function
+        # Should -Be a description for every function
         It "gets description for $commandName" {
             $help.Description | Should Not BeNullOrEmpty
         }
@@ -33,9 +33,9 @@ foreach ($command in $commands) {
 
             $examples = @($help.examples.example)
 
-            # Should be at least one example
+            # Should -Be at least one example
             It "$commandName contains at least one examplegets example code from $commandName" {
-                $examples.Count -ge 1 | Should Be $true
+                $examples.Count -ge 1 | Should -Be $true
             }
 
             for ($i = 0; $i -lt $examples.Count; $i++) {
@@ -74,7 +74,7 @@ foreach ($command in $commands) {
                 $parameterName = $parameter.Name
                 $parameterHelp = $help.parameters.parameter | Where-Object Name -EQ $parameterName
 
-                # Should be a description for every parameter
+                # Should -Be a description for every parameter
                 It "gets help for parameter: $parameterName : in $commandName" {
                     $parameterHelp.Description.Text | Should Not BeNullOrEmpty
                 }
@@ -82,7 +82,7 @@ foreach ($command in $commands) {
                 # Required value in Help should match IsMandatory property of parameter
                 It "help for $parameterName parameter in $commandName has correct Mandatory value" {
                     $codeMandatory = $parameter.IsMandatory.toString()
-                    $parameterHelp.Required | Should Be $codeMandatory
+                    $parameterHelp.Required | Should -Be $codeMandatory
                 }
 
                 # Parameter type in Help should match code
@@ -90,19 +90,19 @@ foreach ($command in $commands) {
                 #     $codeType = $parameter.ParameterType.Name
                 #     # To avoid calling Trim method on a null object.
                 #     $helpType = if ($parameterHelp.parameterValue) { $parameterHelp.parameterValue.Trim() }
-                #     $helpType | Should be $codeType
+                #     $helpType | Should -Be $codeType
                 # }
             }
 
             foreach ($helpParm in $HelpParameterNames) {
                 # Shouldn't find extra parameters in help.
                 It "finds help parameter in code: $helpParm" {
-                    $helpParm -in $parameterNames | Should Be $true
+                    $helpParm -in $parameterNames | Should -Be $true
                 }
             }
         }
 
-        Context "Help Links should be Valid for $commandName" {
+        Context "Help Links Should -Be Valid for $commandName" {
             $link = $help.relatedLinks.navigationLink.uri
 
             foreach ($link in $links) {
@@ -110,7 +110,7 @@ foreach ($command in $commands) {
                     # Should have a valid uri if one is provided.
                     it "[$link] should have 200 Status Code for $commandName" {
                         $Results = Invoke-WebRequest -Uri $link -UseBasicParsing
-                        $Results.StatusCode | Should Be '200'
+                        $Results.StatusCode | Should -Be '200'
                     }
                 }
             }

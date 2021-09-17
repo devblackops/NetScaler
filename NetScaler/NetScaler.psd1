@@ -208,6 +208,7 @@ FunctionsToExport = @(
     'Set-NSLBSSLVirtualServer',
     'Set-NSLBSSLVirtualServerProfile',
     'Set-NSLBVirtualServer',
+    'Set-NSLBVirtualServerNewName',
     'Set-NSResponderAction',
     'Set-NSSSLProfile',
     'Set-NSTimeZone',
