@@ -52,6 +52,8 @@ function Add-NSLBSSLVirtualServerCertificateBinding {
         [parameter(Mandatory=$True)]
         [string]$Certificate,
 
+        [bool]$snicert = $false,
+
         [Switch]$PassThru,
 
         [switch]$Force
@@ -68,6 +70,7 @@ function Add-NSLBSSLVirtualServerCertificateBinding {
                 $params = @{
                     vservername = $VirtualServerName
                     certkeyname = $Certificate
+                    snicert = $snicert
                 }
 
                 _InvokeNSRestApi -Session $Session -Method PUT -Type sslvserver_sslcertkey_binding -Payload $params
