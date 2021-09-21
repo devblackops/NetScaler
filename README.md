@@ -148,6 +148,8 @@ For a more complete example you can take a look ad [NSConfig.ps1](https://github
 # Deploy the PS module
 
 ```powershell
+#Set the key first
+$ENV:PSGalleryApiKey=""
  .\build.ps1 -Task Deploy
  ```
 
