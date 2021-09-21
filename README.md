@@ -139,4 +139,15 @@ For a more complete example you can take a look ad [NSConfig.ps1](https://github
 - Santiago Cardenas wrote a series of posts about [setting up NetScaler for StoreFront](https://www.citrix.com/blogs/2014/09/19/scripting-automating-netscaler-configurations-using-nitro-rest-api-and-powershell-part-1/) with load balancing and high-availability.
 - Esther Barthel has done a few [talks](https://www.citrix.com/blogs/2016/04/29/automate-netscaler-using-nitro-api-and-powershell/) about automating NetScaler configuration through Nitro.
 
+# Run test
+
+```powershell
+.\build.ps1
+```
+
+# Deploy the PS module
+
+```powershell
+ .\build.ps1 -Task Deploy
+ ```
 

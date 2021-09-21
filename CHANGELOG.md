@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.7.1 (2021-09-2112)
+  # Features
+    * Add snicert support for Add-NSLBSSLVirtualServerCertificateBinding function
+    * Add Set-NSLBVirtualServerNewName function to change the LB VS anme
+
 ## 1.7.0 (2018-07-02)
   # Features
     * PR88 - Add SearchFilter and SubAttributeName parameters to New-NSLDAPAuthenticationServer (via @iainbrighton)
