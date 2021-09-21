@@ -75,8 +75,7 @@ task Pester-Module -depends Init {
 task Deploy -depends Test { #, GenerateHelp {
     # Gate deployment
     if( #$ENV:BHBuildSystem -ne 'Unknown' -and
-        $ENV:BHBranchName -eq "master" -and
-        $ENV:BHCommitMessage -match '!deploy'
+        $ENV:BHBranchName -eq "master" #-and $ENV:BHCommitMessage -match '!deploy'
     ) {
         $params = @{
             Path = "$projectRoot\module.psdeploy.ps1"
@@ -87,8 +86,8 @@ task Deploy -depends Test { #, GenerateHelp {
         Invoke-PSDeploy @Params
     } else {
         "Skipping deployment: To deploy, ensure that...`n" +
-        "`t* You are in a known build system (Current: $ENV:BHBuildSystem)`n" +
-        "`t* You are committing to the master branch (Current: $ENV:BHBranchName) `n" +
-        "`t* Your commit message includes !deploy (Current: $ENV:BHCommitMessage)"
+        #"`t* You are in a known build system (Current: $ENV:BHBuildSystem)`n" +
+        "`t* You are committing to the master branch (Current: $ENV:BHBranchName) `n" # +
+        #"`t* Your commit message includes !deploy (Current: $ENV:BHCommitMessage)"
     }
 }
