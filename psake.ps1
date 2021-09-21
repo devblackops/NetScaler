@@ -23,7 +23,7 @@ task Init {
     Write-Host $sut
 }
 
-task Test -Depends Init, Analyze, Pester-Meta, Pester-Module
+task Test -Depends Init, Analyze, Pester-Meta #, Pester-Module
 
 task Analyze -Depends Init {
     $saResults = Invoke-ScriptAnalyzer -Path $sut -Severity Error -Recurse -Verbose:$false
@@ -72,7 +72,7 @@ task Pester-Module -depends Init {
     Remove-Module $ENV:BHProjectName -ErrorAction SilentlyContinue
 }
 
-task Deploy -depends Test, GenerateHelp {
+task Deploy -depends Test { #, GenerateHelp {
     # Gate deployment
     if( $ENV:BHBuildSystem -ne 'Unknown' -and
         $ENV:BHBranchName -eq "master" -and

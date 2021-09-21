@@ -13,11 +13,11 @@ Describe 'Module manifest' {
         }
 
         It "has a valid name in the manifest" {
-            $script:manifest.Name | Should -Be $moduleName
+            $script:manifest.Name | Should Be $moduleName
         }
 
         It 'has a valid root module' {
-            $script:manifest.RootModule | Should -Be "$moduleName.psm1"
+            $script:manifest.RootModule | Should Be "$moduleName.psm1"
         }
 
         It "has a valid version in the manifest" {
@@ -61,7 +61,7 @@ Describe 'Module manifest' {
         }
 
         It "changelog and manifest versions are the same" {
-            $script:changelogVersion -as [Version] | Should -Be ( $script:manifest.Version -as [Version] )
+            $script:changelogVersion -as [Version] | Should Be ( $script:manifest.Version -as [Version] )
         }
 
         if (Get-Command git.exe -ErrorAction SilentlyContinue) {
@@ -78,8 +78,8 @@ Describe 'Module manifest' {
             }
 
             It "all versions are the same" {
-                $script:changelogVersion -as [Version] | Should -Be ( $script:manifest.Version -as [Version] )
-                #$script:manifest.Version -as [Version] | Should -Be ( $script:tagVersion -as [Version] )
+                $script:changelogVersion -as [Version] | Should Be ( $script:manifest.Version -as [Version] )
+                #$script:manifest.Version -as [Version] | Should Be ( $script:tagVersion -as [Version] )
             }
         }
     }
