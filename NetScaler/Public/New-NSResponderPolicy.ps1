@@ -42,6 +42,13 @@ function New-NSResponderPolicy {
         * RESET - Reset the client connection by closing it. The client program, such as a browser, will handle this and may inform the user. The client may then resend the request if desired.
         * DROP - Drop the request without sending a response to the user.
 
+    .PARAMETER DefaultAction
+        Name of the responder default action to perform if the request does not match this responder policy. The Citrix ADC appliance generates an undefined event (UNDEF event) when a request does not match a responder policy.
+        There are some built-in actions which can be used. These are:
+        * NOOP - Send the request to the protected server instead of responding to it.
+        * RESET - Reset the client connection by closing it. The client program, such as a browser, will handle this and may inform the user. The client may then resend the request if desired.
+        * DROP - Drop the request without sending a response to the user.
+
     .PARAMETER Passthru
         Return the newly created responder policy.
     #>
@@ -60,6 +67,10 @@ function New-NSResponderPolicy {
         [string]
         $Action,
 
+        [Parameter(Mandatory=$False)]
+        [string]
+        $DefaultAction,
+
         [Switch]$PassThru
     )
 
@@ -76,8 +87,12 @@ function New-NSResponderPolicy {
                         rule = $Rule
                         action = $Action
                     }
+                    if ($DefaultAction) {
+                        $params += @{
+                            undefAction = $DefaultAction
+                        }
+                    }
                     _InvokeNSRestApi -Session $Session -Method POST -Type responderpolicy -Payload $params -Action add
-
                     if ($PSBoundParameters.ContainsKey('PassThru')) {
                         return Get-NSResponderPolicy -Session $session -Name $item
                     }
